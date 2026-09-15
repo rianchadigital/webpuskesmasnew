@@ -1,0 +1,224 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" width="100%" height="100%">
+  <defs>
+    <!-- Background Green Studio Backdrop -->
+    <linearGradient id="studioGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#15803d" />
+      <stop offset="50%" stop-color="#16a34a" />
+      <stop offset="100%" stop-color="#14532d" />
+    </linearGradient>
+    
+    <!-- Uniform Khaki Color Gradients -->
+    <linearGradient id="khakiUniform" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#d4b483" />
+      <stop offset="50%" stop-color="#c19f6b" />
+      <stop offset="100%" stop-color="#a88654" />
+    </linearGradient>
+    <linearGradient id="khakiDark" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#b59361" />
+      <stop offset="100%" stop-color="#8f6f3e" />
+    </linearGradient>
+
+    <!-- Skin Tone Gradients -->
+    <radialGradient id="skinFace" cx="50%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#f8cfb4" />
+      <stop offset="65%" stop-color="#e8b593" />
+      <stop offset="100%" stop-color="#c9916e" />
+    </radialGradient>
+    <linearGradient id="skinNeck" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#b88360" />
+      <stop offset="50%" stop-color="#cf9c7b" />
+      <stop offset="100%" stop-color="#c48e6c" />
+    </linearGradient>
+
+    <!-- Hair Tone -->
+    <linearGradient id="hairGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1c1917" />
+      <stop offset="100%" stop-color="#0c0a09" />
+    </linearGradient>
+
+    <!-- Gold Pin Gradient -->
+    <linearGradient id="goldPin" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="50%" stop-color="#eab308" />
+      <stop offset="100%" stop-color="#a16207" />
+    </linearGradient>
+
+    <!-- Filter for soft studio lighting -->
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <!-- 1. Background (Studio Pas Foto 3x4 Hijau Resmi) -->
+  <rect width="300" height="400" fill="url(#studioGreen)" />
+
+  <!-- Vignette overlay for photographic realism -->
+  <radialGradient id="vignette" cx="50%" cy="40%" r="65%">
+    <stop offset="40%" stop-color="#ffffff" stop-opacity="0.12" />
+    <stop offset="100%" stop-color="#000000" stop-opacity="0.35" />
+  </radialGradient>
+  <rect width="300" height="400" fill="url(#vignette)" />
+
+  <!-- 2. Body / Uniform PNS Pemda DKI Khaki -->
+  <g id="uniform">
+    <!-- Shoulders & Torso -->
+    <path d="M 40 400 L 45 285 Q 75 250 115 240 L 150 255 L 185 240 Q 225 250 255 285 L 260 400 Z" fill="url(#khakiUniform)" />
+
+    <!-- Sleeves and Shoulder Seams -->
+    <path d="M 45 285 Q 75 270 115 260" stroke="#8f6f3e" stroke-width="2" fill="none" />
+    <path d="M 255 285 Q 225 270 185 260" stroke="#8f6f3e" stroke-width="2" fill="none" />
+
+    <!-- Shoulder Epaulets (Lidah Pundak PNS) -->
+    <polygon points="50,285 75,268 115,258 112,268 70,278 48,290" fill="url(#khakiDark)" stroke="#78592c" stroke-width="1" />
+    <circle cx="108" cy="263" r="2.5" fill="#eab308" />
+
+    <polygon points="250,285 225,268 185,258 188,268 230,278 252,290" fill="url(#khakiDark)" stroke="#78592c" stroke-width="1" />
+    <circle cx="192" cy="263" r="2.5" fill="#eab308" />
+
+    <!-- Center Placket & Buttons -->
+    <path d="M 140 255 L 140 400 L 160 400 L 160 255 Z" fill="url(#khakiDark)" opacity="0.4" />
+    <line x1="150" y1="255" x2="150" y2="400" stroke="#78592c" stroke-width="1.5" />
+    
+    <!-- Uniform Buttons -->
+    <circle cx="150" cy="310" r="5" fill="#e2c499" stroke="#8f6f3e" stroke-width="1.5" />
+    <circle cx="150" cy="310" r="2" fill="#8f6f3e" />
+    <circle cx="150" cy="355" r="5" fill="#e2c499" stroke="#8f6f3e" stroke-width="1.5" />
+    <circle cx="150" cy="355" r="2" fill="#8f6f3e" />
+
+    <!-- Right Chest Pocket (viewer's left) -->
+    <path d="M 70 345 L 120 345 L 120 395 Q 95 405 70 395 Z" fill="url(#khakiDark)" opacity="0.35" stroke="#8f6f3e" stroke-width="1.5" />
+    <polygon points="68,340 95,350 122,340 120,335 70,335" fill="url(#khakiUniform)" stroke="#8f6f3e" stroke-width="1.2" />
+    <circle cx="95" cy="342" r="3" fill="#e2c499" stroke="#8f6f3e" stroke-width="1" />
+
+    <!-- Left Chest Pocket (viewer's right) -->
+    <path d="M 180 345 L 230 345 L 230 395 Q 205 405 180 395 Z" fill="url(#khakiDark)" opacity="0.35" stroke="#8f6f3e" stroke-width="1.5" />
+    <polygon points="178,340 205,350 232,340 230,335 180,335" fill="url(#khakiUniform)" stroke="#8f6f3e" stroke-width="1.2" />
+    <circle cx="205" cy="342" r="3" fill="#e2c499" stroke="#8f6f3e" stroke-width="1" />
+
+    <!-- Papan Nama "IGN DENDY P" (Right Chest - Viewer's Left) -->
+    <g id="nametag" transform="translate(68, 315)">
+      <rect x="0" y="0" width="56" height="15" rx="2" fill="#0f172a" stroke="#334155" stroke-width="0.8" filter="url(#softShadow)" />
+      <text x="28" y="10.5" fill="#ffffff" font-size="7.2" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" text-anchor="middle" letter-spacing="0.3">IGN DENDY P</text>
+    </g>
+
+    <!-- Lencana KORPRI / Logo Emas (Left Chest - Viewer's Right) -->
+    <g id="korpri-pin" transform="translate(210, 323)">
+      <circle cx="0" cy="0" r="9" fill="url(#goldPin)" stroke="#854d0e" stroke-width="0.8" filter="url(#softShadow)" />
+      <!-- Emblem detail -->
+      <polygon points="0,-6 4,-2 6,4 0,7 -6,4 -4,-2" fill="#ca8a04" />
+      <circle cx="0" cy="0" r="3" fill="#fef08a" />
+    </g>
+
+    <!-- Logo Pemda DKI Jakarta di Lengan Kiri (Viewer's Right) -->
+    <g id="dki-patch" transform="translate(248, 305)">
+      <!-- Shield Base -->
+      <path d="M 0 0 L 22 0 L 22 18 Q 22 28 11 34 Q 0 28 0 18 Z" fill="#1d4ed8" stroke="#facc15" stroke-width="1.5" filter="url(#softShadow)" />
+      <!-- Jaya Raya banner -->
+      <rect x="2" y="3" width="18" height="5" rx="1" fill="#dc2626" />
+      <text x="11" y="7" fill="#ffffff" font-size="3.5" font-weight="bold" text-anchor="middle">JAYA RAYA</text>
+      <!-- Monument Monas & gate silhouette -->
+      <polygon points="11,10 9.5,23 12.5,23" fill="#ffffff" />
+      <circle cx="11" cy="10" r="1.5" fill="#facc15" />
+      <!-- Waves -->
+      <path d="M 4 25 Q 11 23 18 25" stroke="#60a5fa" stroke-width="1" fill="none" />
+    </g>
+
+    <!-- Shirt Collars (Open Neck Kerah Rebah) -->
+    <!-- Left Collar (Viewer's Left) -->
+    <polygon points="120,236 150,256 128,276 96,252" fill="url(#khakiUniform)" stroke="#8f6f3e" stroke-width="1.5" />
+    <!-- Right Collar (Viewer's Right) -->
+    <polygon points="180,236 150,256 172,276 204,252" fill="url(#khakiUniform)" stroke="#8f6f3e" stroke-width="1.5" />
+  </g>
+
+  <!-- 3. Neck -->
+  <g id="neck">
+    <path d="M 124 195 L 124 248 Q 150 258 176 248 L 176 195 Z" fill="url(#skinNeck)" />
+    <!-- Neck shadow under chin -->
+    <ellipse cx="150" cy="202" rx="22" ry="7" fill="#9a6547" opacity="0.4" />
+    <!-- Adam's apple subtle shadow -->
+    <path d="M 147 220 Q 150 225 153 220" stroke="#854f34" stroke-width="1.2" fill="none" opacity="0.4" />
+  </g>
+
+  <!-- 4. Head & Face -->
+  <g id="head">
+    <!-- Ears -->
+    <ellipse cx="98" cy="155" rx="9" ry="18" fill="#d99f7d" stroke="#ad7050" stroke-width="1" />
+    <path d="M 98 146 Q 94 155 99 164" stroke="#8f5739" stroke-width="1.2" fill="none" />
+    
+    <ellipse cx="202" cy="155" rx="9" ry="18" fill="#d99f7d" stroke="#ad7050" stroke-width="1" />
+    <path d="M 202 146 Q 206 155 201 164" stroke="#8f5739" stroke-width="1.2" fill="none" />
+
+    <!-- Face Oval -->
+    <path d="M 104 135 C 104 80, 196 80, 196 135 C 196 175, 178 206, 150 206 C 122 206, 104 175, 104 135 Z" fill="url(#skinFace)" />
+
+    <!-- Cheek & jaw shading -->
+    <path d="M 112 170 Q 150 210 188 170" stroke="#b07755" stroke-width="1" fill="none" opacity="0.3" />
+
+    <!-- 5. Hair (Neat, Short Combed Black Hair) -->
+    <path d="M 96 135 C 92 100, 105 60, 150 58 C 195 60, 208 100, 204 135 C 200 120, 190 85, 150 82 C 110 85, 100 120, 96 135 Z" fill="url(#hairGrad)" />
+    <!-- Hair Texture / Top Volume -->
+    <path d="M 102 110 C 106 82, 130 65, 150 64 C 172 65, 194 80, 198 110 C 185 92, 168 85, 150 85 C 132 85, 115 92, 102 110 Z" fill="#292524" />
+    <path d="M 104 118 Q 112 100 130 92 Q 150 89 170 94 Q 186 102 195 118" stroke="#1c1917" stroke-width="3" fill="none" />
+
+    <!-- 6. Eyebrows -->
+    <!-- Left Brow -->
+    <path d="M 116 128 Q 130 124 140 127" stroke="#1c1917" stroke-width="3.2" stroke-linecap="round" fill="none" />
+    <!-- Right Brow -->
+    <path d="M 160 127 Q 170 124 184 128" stroke="#1c1917" stroke-width="3.2" stroke-linecap="round" fill="none" />
+
+    <!-- 7. Eyes (Gentle, Friendly Expression) -->
+    <!-- Eye Whites -->
+    <ellipse cx="130" cy="139" rx="8" ry="4.5" fill="#f8fafc" />
+    <ellipse cx="170" cy="139" rx="8" ry="4.5" fill="#f8fafc" />
+    <!-- Irises (Dark Brown) -->
+    <circle cx="130" cy="139" r="4" fill="#3f2e22" />
+    <circle cx="170" cy="139" r="4" fill="#3f2e22" />
+    <!-- Pupils -->
+    <circle cx="130" cy="139" r="2" fill="#000000" />
+    <circle cx="170" cy="139" r="2" fill="#000000" />
+    <!-- Catchlights -->
+    <circle cx="131.5" cy="137.5" r="1" fill="#ffffff" />
+    <circle cx="171.5" cy="137.5" r="1" fill="#ffffff" />
+    <!-- Eyelids -->
+    <path d="M 121 138 Q 130 133 139 138" stroke="#683d25" stroke-width="1.2" fill="none" />
+    <path d="M 161 138 Q 170 133 179 138" stroke="#683d25" stroke-width="1.2" fill="none" />
+
+    <!-- 8. Rectangular Eyeglasses (Signature Thick Black Frames) -->
+    <g id="glasses">
+      <!-- Left Rim -->
+      <rect x="110" y="126" width="37" height="26" rx="5" fill="#000000" fill-opacity="0.06" stroke="#09090b" stroke-width="3.2" />
+      <rect x="112" y="128" width="33" height="22" rx="3" fill="#ffffff" fill-opacity="0.1" />
+      <!-- Right Rim -->
+      <rect x="153" y="126" width="37" height="26" rx="5" fill="#000000" fill-opacity="0.06" stroke="#09090b" stroke-width="3.2" />
+      <rect x="155" y="128" width="33" height="22" rx="3" fill="#ffffff" fill-opacity="0.1" />
+      <!-- Bridge -->
+      <path d="M 147 136 Q 150 134 153 136" stroke="#09090b" stroke-width="3.5" fill="none" stroke-linecap="round" />
+      <!-- Frame temples (Arms going to ears) -->
+      <line x1="110" y1="134" x2="98" y2="140" stroke="#09090b" stroke-width="3.2" stroke-linecap="round" />
+      <line x1="190" y1="134" x2="202" y2="140" stroke="#09090b" stroke-width="3.2" stroke-linecap="round" />
+      <!-- Lens Reflections -->
+      <line x1="115" y1="132" x2="128" y2="148" stroke="#ffffff" stroke-width="1" stroke-opacity="0.4" stroke-linecap="round" />
+      <line x1="158" y1="132" x2="171" y2="148" stroke="#ffffff" stroke-width="1" stroke-opacity="0.4" stroke-linecap="round" />
+    </g>
+
+    <!-- 9. Nose -->
+    <path d="M 149 135 L 148 160 Q 144 167 150 168 Q 156 167 152 160" stroke="#9a6042" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <path d="M 142 165 Q 146 167 150 167 Q 154 167 158 165" stroke="#9a6042" stroke-width="1.2" fill="none" />
+    <ellipse cx="145" cy="166" rx="1.5" ry="1" fill="#754329" opacity="0.5" />
+    <ellipse cx="155" cy="166" rx="1.5" ry="1" fill="#754329" opacity="0.5" />
+
+    <!-- 10. Mustache & Goatee / Facial Stubble -->
+    <!-- Light Mustache under nose -->
+    <path d="M 140 174 Q 150 173 160 174" stroke="#292524" stroke-width="2" stroke-linecap="round" opacity="0.65" />
+    <!-- Smile Line / Mouth -->
+    <path d="M 137 182 Q 150 188 163 182" stroke="#884832" stroke-width="2.2" stroke-linecap="round" fill="none" />
+    <path d="M 140 183 Q 150 187 160 183" stroke="#fecdd3" stroke-width="1" fill="none" opacity="0.5" />
+    <!-- Lower Lip Shadow -->
+    <ellipse cx="150" cy="189" rx="6" ry="1.5" fill="#a16246" opacity="0.4" />
+    <!-- Goatee Stubble on Chin -->
+    <ellipse cx="150" cy="198" rx="8" ry="4" fill="#292524" opacity="0.4" />
+    <circle cx="148" cy="197" r="0.8" fill="#1c1917" opacity="0.7" />
+    <circle cx="152" cy="197" r="0.8" fill="#1c1917" opacity="0.7" />
+    <circle cx="150" cy="199" r="0.8" fill="#1c1917" opacity="0.7" />
+  </g>
+</svg>

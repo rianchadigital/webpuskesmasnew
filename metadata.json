@@ -1,0 +1,6 @@
+{
+  "name": "Puskesmas Kepulauan Seribu Selatan",
+  "description": "Portal Informasi Resmi dan Integrasi Layanan Primer (ILP) Puskesmas Kepulauan Seribu Selatan (puskesmasseribuselatan.com) - Kesehatan Anda Tujuan Kami, Kebahagiaan Anda Kepuasan Kami",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

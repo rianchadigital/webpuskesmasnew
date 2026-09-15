@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="navyBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#152642" />
+      <stop offset="40%" stop-color="#1b355a" />
+      <stop offset="100%" stop-color="#0f1d33" />
+    </linearGradient>
+
+    <!-- Green Banner Gradient -->
+    <linearGradient id="greenBanner" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#047857" />
+      <stop offset="50%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+
+    <!-- Gold Foil Gradient -->
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000" flood-opacity="0.25" />
+    </filter>
+
+    <filter id="bannerGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#047857" flood-opacity="0.4" />
+    </filter>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="1200" height="900" fill="url(#navyBg)" />
+
+  <!-- Geometric Abstract Waves (Matching Original Photo) -->
+  <path d="M 0 350 Q 300 420 600 360 T 1200 400 L 1200 900 L 0 900 Z" fill="#0b1728" opacity="0.6" />
+  <path d="M 0 450 Q 350 300 700 480 T 1200 440 L 1200 900 L 0 900 Z" fill="#134e4a" opacity="0.3" />
+
+  <!-- Diagonal Green & White Corner Stripes (Matching Document) -->
+  <!-- Bottom Left Corner -->
+  <path d="M -50 950 L 250 950 L -50 650 Z" fill="#10b981" />
+  <path d="M -50 820 L 120 950 L -50 950 Z" fill="#047857" />
+  <path d="M 40 950 L -50 860 L -50 840 L 60 950 Z" fill="#ffffff" />
+  
+  <!-- Bottom Right Corner -->
+  <path d="M 1250 950 L 950 950 L 1250 650 Z" fill="#10b981" />
+  <path d="M 1250 820 L 1080 950 L 1250 950 Z" fill="#047857" />
+  <path d="M 1160 950 L 1250 860 L 1250 840 L 1140 950 Z" fill="#ffffff" />
+
+  <!-- Top Decorative Frame Lines -->
+  <path d="M -50 -50 L 200 -50 L -50 200 Z" fill="#10b981" opacity="0.7" />
+  <path d="M 1250 -50 L 1000 -50 L 1250 200 Z" fill="#10b981" opacity="0.7" />
+
+  <!-- Center White Document Container -->
+  <g filter="url(#cardShadow)">
+    <path d="M 100 800 C 100 380, 200 200, 600 200 C 1000 200, 1100 380, 1100 800 Z" fill="#f8fafc" />
+  </g>
+
+  <!-- DKI Jakarta Logo (Jaya Raya) -->
+  <g transform="translate(600, 105)">
+    <!-- Outer Shield -->
+    <path d="M -38 -55 L 38 -55 L 38 0 C 38 35, 0 52, 0 52 C 0 52, -38 35, -38 0 Z" fill="#f8fafc" stroke="#d97706" stroke-width="3" />
+    <path d="M -33 -50 L 33 -50 L 33 -2 C 33 30, 0 45, 0 45 C 0 45, -33 30, -33 -2 Z" fill="#0284c7" />
+    <!-- Monas Monument Shape -->
+    <path d="M -6 18 L 6 18 L 4 -20 L -4 -20 Z" fill="#f8fafc" />
+    <polygon points="0,-35 -4,-20 4,-20" fill="#fbbf24" stroke="#d97706" stroke-width="1" />
+    <rect x="-14" y="18" width="28" height="6" fill="#f8fafc" rx="1" />
+    <!-- Blue Waves at Base -->
+    <path d="M -26 28 Q -13 22 0 28 Q 13 34 26 28" stroke="#ffffff" stroke-width="2.5" fill="none" />
+    <path d="M -22 34 Q -11 30 0 34 Q 11 38 22 34" stroke="#ffffff" stroke-width="2" fill="none" />
+    <!-- Banner Ribbon Jaya Raya -->
+    <rect x="-38" y="-70" width="76" height="16" fill="#e11d48" rx="3" stroke="#b91c1c" stroke-width="1.5" />
+    <text x="0" y="-58" fill="#ffffff" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9" font-weight="900" letter-spacing="1.5" text-anchor="middle">JAYA RAYA</text>
+  </g>
+
+  <!-- Institution Header Text -->
+  <text x="600" y="215" fill="#0f172a" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="21" font-weight="800" text-anchor="middle" letter-spacing="1">PUSAT KESEHATAN MASYARAKAT</text>
+  <text x="600" y="244" fill="#0f172a" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle" letter-spacing="1">KECAMATAN KEPULAUAN SERIBU SELATAN</text>
+  <text x="600" y="271" fill="#0f172a" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" text-anchor="middle" letter-spacing="1">DINAS KESEHATAN</text>
+  <text x="600" y="297" fill="#0f172a" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle" letter-spacing="1">PROVINSI DAERAH KHUSUS IBUKOTA JAKARTA</text>
+
+  <!-- Green Header Banner: MAKLUMAT PELAYANAN -->
+  <g filter="url(#bannerGlow)" transform="translate(600, 385)">
+    <!-- Curving oval banner -->
+    <ellipse cx="0" cy="0" rx="360" ry="46" fill="url(#greenBanner)" stroke="#ffffff" stroke-width="5" />
+    <!-- Inner subtle outline -->
+    <ellipse cx="0" cy="0" rx="348" ry="38" fill="none" stroke="#6ee7b7" stroke-width="1.5" opacity="0.8" />
+    <text x="0" y="14" fill="#ffffff" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="34" font-weight="900" letter-spacing="3" text-anchor="middle">MAKLUMAT PELAYANAN</text>
+  </g>
+
+  <!-- Body Pledge Text (Exact match with provided document) -->
+  <g font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" text-anchor="middle">
+    <!-- First Paragraph -->
+    <text x="600" y="475" fill="#0f172a" font-size="20" font-weight="800" letter-spacing="0.5">
+      “DENGAN INI, KAMI MENYATAKAN SANGGUP
+    </text>
+    <text x="600" y="505" fill="#0f172a" font-size="20" font-weight="800" letter-spacing="0.5">
+      MENYELENGGARAKAN PELAYANAN SESUAI STANDAR PELAYANAN
+    </text>
+    <text x="600" y="535" fill="#0f172a" font-size="20" font-weight="800" letter-spacing="0.5">
+      YANG TELAH DITETAPKAN.
+    </text>
+
+    <!-- Second Paragraph -->
+    <text x="600" y="590" fill="#0f172a" font-size="19" font-weight="800" letter-spacing="0.5">
+      DAN APABILA DALAM PENYELENGGARAAN PELAYANAN KAMI, TIDAK
+    </text>
+    <text x="600" y="620" fill="#0f172a" font-size="19" font-weight="800" letter-spacing="0.5">
+      SESUAI DENGAN STANDAR PELAYANAN YANG TELAH DITETAPKAN, KAMI
+    </text>
+    <text x="600" y="650" fill="#0f172a" font-size="19" font-weight="800" letter-spacing="0.5">
+      BERSEDIA MENERIMA SANKSI SESUAI KETENTUAN PERUNDANG-UNDANGAN
+    </text>
+    <text x="600" y="680" fill="#0f172a" font-size="19" font-weight="800" letter-spacing="0.5">
+      YANG BERLAKU”
+    </text>
+  </g>
+
+  <!-- Official Signature and Seal Section (Bottom Right) -->
+  <g transform="translate(850, 715)">
+    <text x="0" y="0" fill="#0f172a" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" font-weight="800" text-anchor="middle">
+      KEPALA PUSAT KESEHATAN MASYARAKAT
+    </text>
+    <text x="0" y="20" fill="#0f172a" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" font-weight="800" text-anchor="middle">
+      KECAMATAN KEPULAUAN SERIBU SELATAN
+    </text>
+
+    <!-- Official Round Stamp (Stempel Dinas Kesehatan Pemprov DKI) -->
+    <g transform="translate(-50, 68) scale(0.9)" opacity="0.85">
+      <circle cx="0" cy="0" r="54" fill="none" stroke="#1d4ed8" stroke-width="3" stroke-dasharray="2 1" />
+      <circle cx="0" cy="0" r="50" fill="none" stroke="#1d4ed8" stroke-width="2" />
+      <circle cx="0" cy="0" r="32" fill="none" stroke="#1d4ed8" stroke-width="1.5" />
+      
+      <!-- Stamp Curving Text Representation -->
+      <path id="stampUpper" d="M -42 0 A 42 42 0 0 1 42 0" fill="none" />
+      <text font-size="7.5" font-weight="bold" fill="#1d4ed8" font-family="Arial, sans-serif" letter-spacing="1">
+        <textPath href="#stampUpper" startOffset="50%" text-anchor="middle">PEMERINTAH PROV. DKI JAKARTA</textPath>
+      </text>
+      
+      <path id="stampLower" d="M 42 0 A 42 42 0 0 1 -42 0" fill="none" />
+      <text font-size="7.5" font-weight="bold" fill="#1d4ed8" font-family="Arial, sans-serif" letter-spacing="1">
+        <textPath href="#stampLower" startOffset="50%" text-anchor="middle">★ DINAS KESEHATAN ★</textPath>
+      </text>
+
+      <text x="0" y="4" font-size="8" font-weight="900" fill="#1d4ed8" text-anchor="middle" font-family="Arial, sans-serif">PUSKESMAS</text>
+    </g>
+
+    <!-- Blue Ink Signature Path -->
+    <g stroke="#1e40af" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.95">
+      <path d="M -30 65 Q -15 30 5 60 T 45 45 Q 60 70 80 50 Q 95 35 110 65" />
+      <path d="M 0 50 L 30 75 L 70 52" />
+      <path d="M -10 70 L 105 70" stroke-width="1.5" />
+      <path d="M 60 40 L 75 75" />
+    </g>
+
+    <!-- Signer Name & NIP -->
+    <text x="0" y="115" fill="#0f172a" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" font-weight="800" text-anchor="middle">
+      dr. Ilmi Tri Indiarto, M. Kes
+    </text>
+    <text x="0" y="135" fill="#334155" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" text-anchor="middle">
+      NIP 198201292010011013
+    </text>
+  </g>
+</svg>
