@@ -120,7 +120,7 @@ export const AdminIslandsTab: React.FC<Props> = ({ onSuccessToast }) => {
               </div>
               <div className="flex items-center gap-1.5">
                 <Ship className="w-3.5 h-3.5 text-sky-600 shrink-0" />
-                <span className="text-sky-800 font-medium">Ambulans Laut: {isl.ambulanceBoat || 'Siaga Antar-Pulau'}</span>
+                <span className="text-sky-800 font-medium">Layanan Rujukan: {isl.ambulanceBoat || 'Siaga Antar-Pulau'}</span>
               </div>
             </div>
           </div>
@@ -197,7 +197,7 @@ export const AdminIslandsTab: React.FC<Props> = ({ onSuccessToast }) => {
                 </div>
 
                 <div>
-                  <label className="font-bold text-slate-700 block mb-1">Status Ambulans Laut</label>
+                  <label className="font-bold text-slate-700 block mb-1">Status Kapal Rujukan Medis</label>
                   <input
                     type="text"
                     value={ambulanceBoat}

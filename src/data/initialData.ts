@@ -46,7 +46,7 @@ NIP. 198503222010012031`,
   welcomeSpeechHighlights: [
     'Penerapan penuh Integrasi Layanan Primer (ILP) 5 Klaster Siklus Hidup',
     'Gedung Baru Representatif dengan Fasilitas Rawat Inap & Laboratorium Lengkap',
-    'Kesiapsiagaan Kapal Ambulans Laut & IGD 24 Jam Non-Stop Antar Pulau',
+    'Kesiapsiagaan Layanan Rujukan Medis & IGD 24 Jam Non-Stop Antar Pulau',
     'Budaya Kerja Berlandaskan Tata Nilai PRIMA dan Kepuasan Masyarakat Pesisir'
   ],
   vision: 'Menjadi Puskesmas Terdepan dalam mewujudkan pelayanan PRIMA menuju Kecamatan Kepulauan Seribu Selatan Sehat.',
@@ -90,7 +90,7 @@ NIP. 198503222010012031`,
       detail: 'Setiap proses pelayanan, pelaporan, dan penggunaan anggaran dapat dipertanggungjawabkan secara transparan dan berlandaskan hukum.'
     }
   ],
-  history: 'Puskesmas Kecamatan Kepulauan Seribu Selatan berdiri pada tahun 2002 seiring dengan terbentuknya Kabupaten Administrasi Kepulauan Seribu di Provinsi DKI Jakarta. Dulunya, puskesmas ini merupakan Puskesmas Kelurahan Pulau Tidung. Puskesmas berlokasi di Dermaga Pulau Tidung dan merupakan fasilitas puskesmas rawat inap utama. Puskesmas membawahi 2 Puskesmas Kelurahan (Puskesmas Kel. Pulau Pari dan Puskesmas Kel. Pulau Untung Jawa), serta 2 Pos Kesehatan di Pulau Payung dan Pulau Lancang. Pada Mei 2023, Puskesmas Kepulauan Seribu Selatan resmi beroperasi di gedung baru 2 lantai yang diperluas dari 520 m² menjadi 1.019 m², dengan penambahan ruang rawat inap laki-laki, perempuan, dan anak-anak, ruang isolasi, ruang pascapersalinan, laboratorium terpadu, dan dermaga kapal ambulans laut 24 jam.',
+  history: 'Puskesmas Kecamatan Kepulauan Seribu Selatan berdiri pada tahun 2002 seiring dengan terbentuknya Kabupaten Administrasi Kepulauan Seribu di Provinsi DKI Jakarta. Dulunya, puskesmas ini merupakan Puskesmas Kelurahan Pulau Tidung. Puskesmas berlokasi di Dermaga Pulau Tidung dan merupakan fasilitas puskesmas rawat inap utama. Puskesmas membawahi 2 Puskesmas Kelurahan (Puskesmas Kel. Pulau Pari dan Puskesmas Kel. Pulau Untung Jawa), serta 2 Pos Kesehatan di Pulau Payung dan Pulau Lancang. Pada Mei 2023, Puskesmas Kepulauan Seribu Selatan resmi beroperasi di gedung baru 2 lantai yang diperluas dari 520 m² menjadi 1.019 m², dengan penambahan ruang rawat inap laki-laki, perempuan, dan anak-anak, ruang isolasi, ruang pascapersalinan, laboratorium terpadu, dan dermaga kapal rujukan medis 24 jam.',
   workingAreaDescription: 'Wilayah kerja Puskesmas Kepulauan Seribu Selatan mencakup 3 kelurahan administratif yaitu Kelurahan Pulau Tidung, Kelurahan Pulau Pari, dan Kelurahan Pulau Untung Jawa, melayani pulau-pulau berpenghuni meliputi Pulau Tidung, Pulau Pari, Pulau Lancang, Pulau Untung Jawa, dan Pulau Payung dengan jejaring 2 Puskesmas Kelurahan dan 2 Pos Kesehatan terintegrasi.',
   address: 'Dermaga Pulau Tidung, Jl. Pantai Selatan RT 007/RW 001, Kelurahan Pulau Tidung, Kecamatan Kepulauan Seribu Selatan, Kabupaten Administrasi Kepulauan Seribu, Provinsi DKI Jakarta 14520',
   phone: '(021) 7552-3010 / 0859-6100-0003',
@@ -117,7 +117,8 @@ NIP. 198503222010012031`,
   organizationStructureCaption: 'Bagan Struktur Organisasi Integrasi Layanan Primer (ILP) Puskesmas Kecamatan Kepulauan Seribu Selatan Sesuai Kepmenkes RI No. 2014/2023',
   organizationStructureUpdated: 'Tahun 2025/2026',
   websiteUrl: 'https://puskesmasseribuselatan.com/',
-  instagram: '@puskesmas_seribuselatan',
+  instagram: 'https://instagram.com/puskesmaskepulauanseribuselatan',
+  facebook: 'https://www.facebook.com/puskesmas.kepulauanseribuselatan',
   youtube: 'Puskesmas Kepulauan Seribu Selatan'
 };
 
@@ -164,7 +165,7 @@ export const initialIslands: IslandFacility[] = [
     islandName: 'Pulau Tidung',
     address: 'Dermaga Pulau Tidung, Jl. Pantai Selatan RT 007/RW 001, Kelurahan Pulau Tidung',
     operatingHours: 'Senin: 12.00 - 18.00 WIB | Selasa - Kamis: 07.30 - 16.00 WIB | Jumat: 07.30 - 16.30 WIB | Layanan 24 Jam: Setiap Hari',
-    emergencyService: 'Layanan 24 Jam: Rawat Inap, Siaga, Ruang Bersalin, Gawat Darurat & Kapal Ambulans Laut',
+    emergencyService: 'Layanan 24 Jam: Rawat Inap, Siaga, Ruang Bersalin, Gawat Darurat & Layanan Rujukan',
     services: [
       'Pelayanan Umum',
       'Pelayanan Gigi',
@@ -347,7 +348,7 @@ export const initialILPClusters: ILPCluster[] = [
       },
       {
         q: 'Bagaimana jika ibu hamil membutuhkan rujukan persalinan berisiko tinggi?',
-        a: 'Puskesmas menyiagakan kapal ambulans laut berstandar medis untuk merujuk ibu hamil ke RSUD Kepulauan Seribu (Pulau Pramuka) atau RS Rujukan Darat Jakarta.'
+        a: 'Puskesmas menyiagakan kapal rujukan berstandar medis untuk merujuk ibu hamil ke RSUD Kepulauan Seribu (Pulau Pramuka) atau RS Rujukan Darat Jakarta.'
       }
     ],
     contact: 'Hotline KIA & Kebidanan: 0812-[DATA AKAN DIISI ADMIN]'
@@ -447,14 +448,14 @@ export const initialILPClusters: ILPCluster[] = [
     id: 'lintas-klaster',
     clusterNumber: 'Lintas',
     title: 'Lintas Klaster: Pelayanan Penunjang',
-    subtitle: 'Laboratorium, Farmasi, Gizi, Kesling, Ambulans Laut & Rujukan',
+    subtitle: 'Laboratorium, Farmasi, Gizi, Kesling, Layanan Rujukan Terpadu',
     icon: 'Activity',
     color: 'from-cyan-600 to-blue-700',
-    description: 'Unit Lintas Klaster memberikan dukungan diagnostik, terapi farmasi, gizi klinis, penyehatan sanitasi air/lingkungan pulau, rekam medis elektronik (RME), serta sistem rujukan gawat darurat 24 jam dengan armada Kapal Ambulans Laut terpadu.',
+    description: 'Unit Lintas Klaster memberikan dukungan diagnostik, terapi farmasi, gizi klinis, penyehatan sanitasi air/lingkungan pulau, rekam medis elektronik (RME), serta sistem rujukan gawat darurat 24 jam dengan sistem rujukan medis terpadu.',
     objectives: [
       'Menyediakan hasil pemeriksaan laboratorium yang presisi, cepat, dan terstandarisasi.',
       'Menjamin ketersediaan obat bermutu tinggi dan konseling farmasi yang ramah pasien.',
-      'Memastikan kesiapan 100% armada Ambulans Laut untuk evakuasi darurat pasien antar-pulau ke darat.',
+      'Memastikan kesiapan 100% sistem rujukan pasien untuk evakuasi darurat pasien antar-pulau ke darat.',
       'Meningkatkan sanitasi kepulauan, akses air bersih, dan sertifikasi kantin/warung sehat.'
     ],
     services: [
@@ -464,29 +465,29 @@ export const initialILPClusters: ILPCluster[] = [
       'Inspeksi Kesehatan Lingkungan (IKL), Depot Air Minum & Sanitasi Pulau',
       'Rekam Medis Elektronik (RME) Terintegrasi SatuSehat',
       'Pelayanan Gawat Darurat (IGD) & Tindakan Bedah Minor 24 Jam',
-      'Armada Ambulans Laut Evakuasi Medis Maritim 24 Jam',
+      'Layanan Evakuasi & Rujukan Medis Maritim 24 Jam',
       'Sistem Rujukan Terpadu (SISRUTE) ke RSUD Kepulauan Seribu & RS DKI Jakarta'
     ],
     targetAudience: 'Seluruh Pasien Puskesmas, Faskes Pustu Jejaring, Masyarakat Pesisir & Tamu Wisata',
     serviceFlow: 'Pengantar Dokter Klaster 1/2/3/4 → Pengambilan Sampel / Resep / Order Rujukan → Pemrosesan Standar Medis → Penyerahan Hasil & Edukasi / Mobilisasi Evakuasi',
-    schedule: 'IGD & Ambulans Laut: 24 Jam | Lab & Farmasi: 07.30 - 16.00 WIB (Siaga Darurat 24 Jam)',
+    schedule: 'IGD & Layanan Rujukan: 24 Jam | Lab & Farmasi: 07.30 - 16.00 WIB (Siaga Darurat 24 Jam)',
     picName: 'Penanggung Jawab: dr. [DATA AKAN DIISI ADMIN]',
     relatedDocs: [
-      'SOP Prosedur Evakuasi Medis Ambulans Laut Kepulauan',
+      'SOP Prosedur Evakuasi & Rujukan Medis Kepulauan',
       'Daftar Formularium Obat Puskesmas',
       'Pedoman Pengelolaan Sampah Medis B3 Pesisir'
     ],
     faq: [
       {
-        q: 'Bagaimana cara menghubungi Ambulans Laut saat terjadi keadaan darurat di pulau?',
-        a: 'Hubungi langsung hotline darurat Puskesmas 24 jam atau lapor ke nakes di Pustu pulau terdekat. Tim medis dan nakhoda ambulans laut akan segera meluncur ke dermaga penjemputan.'
+        q: 'Bagaimana cara menghubungi Layanan Rujukan Darurat saat terjadi keadaan darurat di pulau?',
+        a: 'Hubungi langsung hotline darurat Puskesmas 24 jam atau lapor ke nakes di Pustu pulau terdekat. Tim medis dan awak kapal rujukan akan segera meluncur ke dermaga penjemputan.'
       },
       {
         q: 'Apakah Puskesmas melayani tes darah lengkap dan kimia darah?',
         a: 'Ya, laboratorium Puskesmas melayani hematologi rutin, gula darah, fungsi ginjal/asam urat, profil lipid, urine rutin, rapid diagnostik, dan tes dahak.'
       }
     ],
-    contact: 'Call Center Ambulans Laut & IGD 24 Jam: 0813-[DATA AKAN DIISI ADMIN]'
+    contact: 'Call Center Layanan Rujukan & IGD 24 Jam: 0813-[DATA AKAN DIISI ADMIN]'
   }
 ];
 
@@ -625,7 +626,7 @@ export const initialHealthServices: HealthService[] = [
     fee: 'Ditanggung BPJS / Kedaruratan Publik',
     schedule: '24 Jam Non-Stop Setiap Hari',
     contact: 'Hotline IGD: 0813-[DATA AKAN DIISI ADMIN]',
-    icon: 'Ambulance',
+    icon: 'ShieldCheck',
     popular: true
   },
 
@@ -805,7 +806,7 @@ export const initialSchedules: ServiceSchedule[] = [
   {
     id: 'sch-10',
     day: 'Setiap Hari (Senin - Minggu)',
-    serviceName: 'IGD 24 Jam, Persalinan & Ambulans Laut',
+    serviceName: 'IGD 24 Jam, Persalinan & Layanan Rujukan Medis',
     hours: '24 Jam Non-Stop',
     location: 'Puskesmas Induk & Dermaga Utama',
     cluster: 'Lintas Klaster',
@@ -828,11 +829,11 @@ export const initialNews: NewsItem[] = [
   },
   {
     id: 'news-2',
-    title: 'Kesiapsiagaan Kapal Ambulans Laut Terpadu Hadapi Kondisi Cuaca dan Rujukan Pasien Pesisir',
+    title: 'Kesiapsiagaan Sistem Rujukan Medis Terpadu Hadapi Kondisi Cuaca dan Pasien Pesisir',
     date: '2026-08-20',
     category: 'Kegiatan Puskesmas',
-    summary: 'Armada ambulans laut Puskesmas Kepulauan Seribu Selatan dilengkapi fasilitas penanganan medis darurat berstandar tinggi.',
-    content: 'Untuk memastikan tidak ada keterlambatan penanganan pasien darurat di pulau, Puskesmas Kepulauan Seribu Selatan terus melakukan pemeliharaan rutin dan pelatihan simulasi evakuasi medis laut. Dilengkapi tabung oksigen, AED, brankar khusus, dan navigasi radar, kapal ambulans laut ini beroperasi 24 jam penuh untuk menghubungkan pulau-pulau dengan rumah sakit rujukan di darat.',
+    summary: 'Sistem rujukan medis Puskesmas Kepulauan Seribu Selatan dilengkapi fasilitas penanganan medis darurat berstandar tinggi.',
+    content: 'Untuk memastikan tidak ada keterlambatan penanganan pasien darurat di pulau, Puskesmas Kepulauan Seribu Selatan terus melakukan pemeliharaan rutin dan pelatihan simulasi evakuasi medis laut. Dilengkapi tabung oksigen, AED, brankar khusus, dan navigasi radar, kapal rujukan medis ini beroperasi 24 jam penuh untuk menghubungkan pulau-pulau dengan rumah sakit rujukan di darat.',
     author: 'Koordinator Pelayanan Rujukan',
     image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
     featured: true
@@ -1061,7 +1062,7 @@ export const initialDocuments: DocumentItem[] = [
   },
   {
     id: 'doc-2',
-    name: 'Standar Operasional Prosedur (SOP) Rujukan Pasien & Ambulans Laut 24 Jam',
+    name: 'Standar Operasional Prosedur (SOP) Rujukan Pasien Maritim 24 Jam',
     category: 'SOP publik',
     date: '2026-07-15',
     fileSize: '1.2 MB',
@@ -1115,7 +1116,7 @@ export const initialFaqs: FaqItem[] = [
   {
     id: 'faq-1',
     question: 'Berapa jam operasional pelayanan di Puskesmas Kepulauan Seribu Selatan?',
-    answer: 'Pelayanan Poliklinik Rawat Jalan dan Administrasi buka Senin - Jumat pukul 07.30 - 16.00 WIB. Untuk Instalasi Gawat Darurat (IGD), Pertolongan Persalinan (PONED), dan Kapal Ambulans Laut siaga 24 Jam Non-Stop setiap hari.',
+    answer: 'Pelayanan Poliklinik Rawat Jalan dan Administrasi buka Senin - Jumat pukul 07.30 - 16.00 WIB. Untuk Instalasi Gawat Darurat (IGD), Pertolongan Persalinan (PONED), dan Layanan Rujukan siaga 24 Jam Non-Stop setiap hari.',
     category: 'Umum'
   },
   {
@@ -1132,14 +1133,14 @@ export const initialFaqs: FaqItem[] = [
   },
   {
     id: 'faq-4',
-    question: 'Bagaimana prosedur evakuasi rujukan medis gawat darurat menggunakan Ambulans Laut?',
-    answer: 'Jika dokter/nakes menentukan pasien memerlukan rujukan darurat, tim medis Puskesmas akan menginput SISRUTE ke RS tujuan, menyiapkan pasien di brankar kapal ambulans laut dengan pendampingan dokter/perawat, dan berlayar langsung menuju dermaga darat terdekat (misal Marina Ancol / Muara Angke / Pantai Mutiara) untuk dilanjutkan ambulans darat.',
-    category: 'Rujukan & Ambulans'
+    question: 'Bagaimana prosedur evakuasi rujukan medis gawat darurat menggunakan Layanan Rujukan Maritim?',
+    answer: 'Jika dokter/nakes menentukan pasien memerlukan rujukan darurat, tim medis Puskesmas akan menginput SISRUTE ke RS tujuan, menyiapkan pasien di brankar kapal rujukan medis dengan pendampingan dokter/perawat, dan berlayar langsung menuju dermaga darat terdekat (misal Marina Ancol / Muara Angke / Pantai Mutiara) untuk diantar ke rumah sakit rujukan tujuan.',
+    category: 'Rujukan & Layanan Medis'
   },
   {
     id: 'faq-5',
     question: 'Apakah seluruh pelayanan kesehatan di Puskesmas gratis?',
-    answer: 'Ya, seluruh pelayanan kesehatan primer, obat, laboratorium dasar, rawat inap sementara, persalinan, dan rujukan ambulans laut ditanggung 100% GRATIS bagi peserta aktif BPJS Kesehatan dan warga ber-KTP DKI Jakarta.',
+    answer: 'Ya, seluruh pelayanan kesehatan primer, obat, laboratorium dasar, rawat inap sementara, persalinan, dan layanan rujukan medis ditanggung 100% GRATIS bagi peserta aktif BPJS Kesehatan dan warga ber-KTP DKI Jakarta.',
     category: 'BPJS & Administrasi'
   },
   {
@@ -1185,7 +1186,7 @@ export const initialStaff: StaffMember[] = [
   {
     id: 'staff-3',
     name: 'dr. Rizki Pratama',
-    role: 'Dokter Penanggung Jawab IGD & Ambulans Laut',
+    role: 'Dokter Penanggung Jawab IGD & Rujukan Medis',
     unit: 'Lintas Klaster (Kegawatdaruratan Maritim)',
     category: 'Medis',
     nip: '19900218 201802 1 004',
@@ -1337,11 +1338,11 @@ export const initialStaff: StaffMember[] = [
   {
     id: 'staff-15',
     name: 'Capt. M. Ridwan',
-    role: 'Nahkoda Kapal Ambulans Laut Evakuasi 24 Jam',
+    role: 'Nahkoda Kapal Rujukan Medis 24 Jam',
     unit: 'Instalasi Transportasi Medis Maritim',
     category: 'Penunjang & Manajemen',
     nip: '19820415 200902 1 006',
-    placement: 'Dermaga Khusus Ambulans Laut Pulau Tidung',
+    placement: 'Dermaga Khusus Kapal Rujukan Pulau Tidung',
     photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80',
     status: 'Siaga On-Call',
     qualification: 'Sertifikasi Pelaut ANT-IV & Navigasi Radar Kedaruratan Maritim'
@@ -1725,7 +1726,7 @@ export const initialSDMKData: SDMKItem[] = [
   },
   {
     id: 'sdmk-11',
-    jabatan: 'Tenaga Administrasi, IT, Pengemudi Ambulans & PJLP',
+    jabatan: 'Tenaga Administrasi, IT, Pengemudi Operasional & PJLP',
     kategori: 'Tenaga Administrasi & Penunjang',
     kualifikasi: 'D3 / S1 Komputer / Manajemen / Sertifikat Pelaut',
     standarABK: 8,

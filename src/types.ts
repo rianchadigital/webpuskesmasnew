@@ -9,6 +9,7 @@ export type TabType =
   | 'jadwal' 
   | 'agenda'
   | 'berita' 
+  | 'pengumuman'
   | 'edukasi' 
   | 'data'
   | 'data-kesehatan'
@@ -37,6 +38,8 @@ export interface ActivityAlbum {
   organizer: string;
   participantCount: number;
   highlights: string[];
+  googleDriveLink?: string;
+  googleDriveFolder?: string;
 }
 
 export interface MorbidityItem {
@@ -212,7 +215,7 @@ export interface FaqItem {
   id: string;
   question: string;
   answer: string;
-  category: 'Umum' | 'Pelayanan' | 'ILP' | 'Rujukan & Ambulans' | 'BPJS & Administrasi' | 'Pustu Kepulauan';
+  category: 'Umum' | 'Pelayanan' | 'ILP' | 'Rujukan & Layanan Medis' | 'Rujukan & Ambulans' | 'BPJS & Administrasi' | 'Pustu Kepulauan';
 }
 
 export type ScheduleItem = ServiceSchedule;
@@ -263,6 +266,7 @@ export interface PuskesmasProfile {
   organizationStructureUpdated: string;
   websiteUrl: string;
   instagram: string;
+  facebook?: string;
   youtube: string;
 }
 

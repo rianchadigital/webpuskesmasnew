@@ -5,6 +5,12 @@
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     color: #1e293b;
     background-color: #f8fafc;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  .dark body {
+    color: #f1f5f9;
+    background-color: #090d16;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -40,5 +46,39 @@
 
 .animate-float-slow {
   animation: floatSlow 4s ease-in-out infinite;
+}
+
+/* Running Marquee Text Animation - Kecepatan Normal, Halus & Mulus */
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee-normal {
+  display: inline-flex;
+  white-space: nowrap;
+  width: max-content;
+  will-change: transform;
+  animation: marquee-scroll 55s linear infinite;
+}
+
+.animate-marquee-normal:hover {
+  animation-play-state: paused;
+}
+
+/* Fallback Marquee - Normal Speed */
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 50s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
 }
 

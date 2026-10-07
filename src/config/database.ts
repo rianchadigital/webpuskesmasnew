@@ -83,7 +83,7 @@ export const databaseTablesInfo = [
   },
   {
     name: 'faq_kesehatan',
-    description: 'Tanya jawab umum seputar faskes, rujukan ambulans laut, dan persyaratan BPJS.',
+    description: 'Tanya jawab umum seputar faskes, rujukan medis terpadu, dan persyaratan BPJS.',
     columns: ['id', 'kategori', 'pertanyaan', 'jawaban']
   },
   {

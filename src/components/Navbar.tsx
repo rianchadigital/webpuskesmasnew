@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
+import { useTheme } from '../context/ThemeContext';
 import { TabType } from '../types';
 import { HealthLogo } from './HealthLogo';
 import { 
@@ -36,7 +37,10 @@ import {
   ShieldAlert,
   Lock,
   Activity,
-  Camera
+  Camera,
+  Megaphone,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 interface SubMenuItem {
@@ -57,6 +61,7 @@ interface NavMenuItem {
 
 export const Navbar: React.FC = () => {
   const { activeTab, navigateToTab, setIsSearchOpen, profile, openServiceDoc, isAdminAuthenticated } = useData();
+  const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openMobileAccordion, setOpenMobileAccordion] = useState<string | null>(null);
 
@@ -82,7 +87,7 @@ export const Navbar: React.FC = () => {
       label: 'WILAYAH KERJA',
       activeMatchTabs: ['wilayah'],
       subItems: [
-        { id: 'wilayah', label: 'Puskesmas Induk Pulau Tidung', desc: 'Pusat faskes rujukan dengan rawat inap & IGD 24 jam', icon: Building },
+        { id: 'wilayah', label: 'Puskesmas Kepulauan Seribu Selatan', desc: 'Pusat faskes rujukan dengan rawat inap & IGD 24 jam', icon: Building },
         { id: 'wilayah', label: 'Jejaring Pustu Pulau', desc: 'Pustu Pulau Lancang, Pulau Pari, dan Pulau Untung Jawa', icon: MapPin },
       ]
     },
@@ -111,9 +116,11 @@ export const Navbar: React.FC = () => {
     { 
       id: 'berita', 
       label: 'BERITA',
-      activeMatchTabs: ['berita', 'edukasi'],
+      activeMatchTabs: ['berita', 'pengumuman', 'edukasi', 'dokumentasi'],
       subItems: [
-        { id: 'berita', label: 'Warta & Berita Terkini', desc: 'Publikasi kegiatan resmi, prestasi & pengumuman', icon: Newspaper },
+        { id: 'berita', label: 'Warta & Berita Terkini', desc: 'Publikasi kegiatan resmi, prestasi & warta kesehatan', icon: Newspaper },
+        { id: 'pengumuman', label: 'Pengumuman', desc: 'Informasi pengumuman rekrutmen nakes & info dadakan/mendesak', icon: Megaphone, badge: 'Rekrutmen' },
+        { id: 'dokumentasi', label: 'Dokumentasi Kegiatan (Drive)', desc: 'Galeri album foto Google Drive & popup slider kegiatan', icon: Camera, badge: 'Drive' },
         { id: 'edukasi', label: 'Informasi & Edukasi Kesehatan', desc: 'Panduan PHBS, pencegahan penyakit & gizi pesisir', icon: BookOpen, badge: 'Promkes' },
       ]
     },
@@ -153,7 +160,7 @@ export const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs transition-all">
+    <header className="sticky top-0 z-40 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 shadow-xs transition-colors duration-200">
       {/* Main Header Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
@@ -173,11 +180,11 @@ export const Navbar: React.FC = () => {
 
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-extrabold tracking-tight text-slate-900 text-base sm:text-lg leading-tight uppercase group-hover:text-emerald-700 transition-colors">
+                <span className="font-extrabold tracking-tight text-slate-900 dark:text-white text-base sm:text-lg leading-tight uppercase group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
                   Puskesmas Kepulauan Seribu Selatan
                 </span>
               </div>
-              <p className="text-[11px] text-emerald-800 font-medium italic flex items-center gap-1 line-clamp-1 max-w-md">
+              <p className="text-[11px] text-emerald-800 dark:text-emerald-300 font-medium italic flex items-center gap-1 line-clamp-1 max-w-md">
                 <Heart className="w-3 h-3 text-rose-500 fill-rose-500 inline shrink-0" />
                 <span>"{profile.motto}"</span>
               </p>
@@ -185,15 +192,68 @@ export const Navbar: React.FC = () => {
           </button>
 
           {/* Desktop Search & Quick Actions */}
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-2.5">
+            {/* Social Media Link Buttons (Facebook & Instagram Puskesmas Kepulauan Seribu Selatan) */}
+            <div className="flex items-center gap-1.5 px-2 py-1 rounded-xl bg-slate-100/80 border border-slate-200/80">
+              <a
+                href={profile.facebook || "https://www.facebook.com/puskesmas.kepulauanseribuselatan"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-1.5 rounded-lg text-blue-600 hover:text-white hover:bg-blue-600 transition-all duration-200 shadow-2xs group relative cursor-pointer"
+                title="Facebook: Puskesmas Kepulauan Seribu Selatan"
+                aria-label="Facebook Puskesmas Kepulauan Seribu Selatan"
+              >
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+              </a>
+
+              <a
+                href={profile.instagram ? (profile.instagram.startsWith('http') ? profile.instagram : `https://instagram.com/${profile.instagram.replace('@', '')}`) : "https://instagram.com/puskesmaskepulauanseribuselatan"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-1.5 rounded-lg text-pink-600 hover:text-white hover:bg-gradient-to-tr hover:from-amber-500 hover:via-pink-600 hover:to-purple-600 transition-all duration-200 shadow-2xs group relative cursor-pointer"
+                title="Instagram: Puskesmas Kepulauan Seribu Selatan"
+                aria-label="Instagram Puskesmas Kepulauan Seribu Selatan"
+              >
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+              </a>
+            </div>
+
+            {/* Premium Dark Mode Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              className={`p-2 rounded-xl text-xs font-bold transition-all duration-300 flex items-center gap-1.5 border ${
+                theme === 'dark'
+                  ? 'bg-amber-400/20 text-amber-300 border-amber-400/50 hover:bg-amber-400/30'
+                  : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200 shadow-2xs'
+              }`}
+              title={theme === 'dark' ? 'Beralih ke Mode Terang (Siang)' : 'Beralih ke Mode Gelap (Malam)'}
+              aria-label="Toggle Mode Tampilan"
+            >
+              {theme === 'dark' ? (
+                <>
+                  <Sun className="w-4 h-4 text-amber-300 animate-spin-slow" />
+                  <span className="text-[11px] font-bold hidden xl:inline">Siang</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="w-4 h-4 text-indigo-600" />
+                  <span className="text-[11px] font-bold hidden xl:inline">Malam</span>
+                </>
+              )}
+            </button>
+
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-100/90 hover:bg-sky-50 text-slate-600 hover:text-sky-700 text-xs font-medium border border-slate-200/90 transition shadow-2xs group"
+              className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-100/90 hover:bg-sky-50 text-slate-600 hover:text-sky-700 text-xs font-medium border border-slate-200/90 transition shadow-2xs group"
               title="Pencarian Cepat Internal"
             >
               <Search className="w-4 h-4 text-sky-600 group-hover:scale-110 transition-transform" />
-              <span>Cari Informasi...</span>
-              <kbd className="bg-white border border-slate-300 text-[10px] text-slate-500 px-1.5 py-0.5 rounded font-mono shadow-2xs">
+              <span>Cari...</span>
+              <kbd className="bg-white border border-slate-300 text-[10px] text-slate-500 px-1 py-0.5 rounded font-mono shadow-2xs">
                 ⌘K
               </kbd>
             </button>
@@ -217,7 +277,7 @@ export const Navbar: React.FC = () => {
                 title="Panel Pengelolaan Konten Website"
               >
                 <Lock className="w-3.5 h-3.5 text-amber-600" />
-                <span>Admin Aktif</span>
+                <span>Admin</span>
               </button>
             )}
           </div>
@@ -243,7 +303,7 @@ export const Navbar: React.FC = () => {
         </div>
 
         {/* Secondary Desktop Horizontal Navigation Bar (Simpel, Terpadu & Elegan) */}
-        <nav className="hidden lg:flex items-center justify-between border-t border-slate-100 py-1">
+        <nav className="hidden lg:flex items-center justify-between border-t border-slate-100 dark:border-slate-800/80 py-1.5">
           <div className="flex items-center gap-1">
             {menuItems.map((item) => {
               const isActive = item.activeMatchTabs.includes(activeTab);
@@ -251,19 +311,19 @@ export const Navbar: React.FC = () => {
 
               return (
                 <div key={item.id} className="relative group">
-                  {/* Top-Level Menu Button */}
+                  {/* Top-Level Menu Button (Premium Styled) */}
                   <button
                     onClick={() => handleNavClick(item.id)}
-                    className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold tracking-wider uppercase transition-all whitespace-nowrap ${
+                    className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold tracking-wider uppercase transition-all duration-200 whitespace-nowrap cursor-pointer ${
                       isActive
-                        ? 'bg-sky-700 text-white shadow-xs'
-                        : 'text-slate-700 hover:text-sky-700 hover:bg-sky-50/80'
+                        ? 'bg-gradient-to-r from-sky-600 to-blue-700 text-white shadow-md shadow-sky-600/30'
+                        : 'text-slate-700 dark:text-slate-200 hover:text-sky-700 dark:hover:text-sky-300 hover:bg-sky-50/80 dark:hover:bg-slate-800/80'
                     }`}
                   >
                     <span>{item.label}</span>
                     {hasSub && (
                       <ChevronDown className={`w-3 h-3 transition-transform duration-200 group-hover:rotate-180 ${
-                        isActive ? 'text-white' : 'text-slate-400 group-hover:text-sky-700'
+                        isActive ? 'text-white' : 'text-slate-400 group-hover:text-sky-700 dark:group-hover:text-sky-300'
                       }`} />
                     )}
                   </button>
@@ -271,10 +331,10 @@ export const Navbar: React.FC = () => {
                   {/* Elegant Floating Dropdown Popover */}
                   {hasSub && (
                     <div className="absolute left-0 top-full pt-1.5 opacity-0 pointer-events-none translate-y-1.5 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-y-0 transition-all duration-200 z-50">
-                      <div className="w-72 sm:w-80 bg-white/98 backdrop-blur-xl rounded-2xl border border-slate-200/90 shadow-2xl p-2 space-y-1 ring-1 ring-black/5">
-                        <div className="px-3 py-1.5 text-[10px] font-bold tracking-wider text-slate-400 uppercase border-b border-slate-100 mb-1 flex items-center justify-between">
+                      <div className="w-72 sm:w-80 bg-white/98 dark:bg-slate-900/98 backdrop-blur-xl rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-2xl p-2 space-y-1 ring-1 ring-black/5">
+                        <div className="px-3 py-1.5 text-[10px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase border-b border-slate-100 dark:border-slate-800 mb-1 flex items-center justify-between">
                           <span>{item.label}</span>
-                          <span className="text-sky-600 font-normal lowercase">navigasi cepat</span>
+                          <span className="text-sky-600 dark:text-sky-400 font-normal lowercase">navigasi cepat</span>
                         </div>
 
                         {item.subItems!.map((sub) => {
@@ -288,32 +348,32 @@ export const Navbar: React.FC = () => {
                                 e.stopPropagation();
                                 handleNavClick(sub.id, sub.subTab);
                               }}
-                              className={`w-full flex items-start gap-3 p-2.5 rounded-xl text-left transition group/sub ${
+                              className={`w-full flex items-start gap-3 p-2.5 rounded-xl text-left transition duration-150 group/sub cursor-pointer ${
                                 isSubActive
-                                  ? 'bg-sky-50 text-sky-900 border border-sky-200/80'
-                                  : 'hover:bg-slate-50 text-slate-700'
+                                  ? 'bg-sky-50 dark:bg-sky-950/50 text-sky-900 dark:text-sky-200 border border-sky-200/80 dark:border-sky-800/80'
+                                  : 'hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-300'
                               }`}
                             >
                               <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
                                 isSubActive 
                                   ? 'bg-sky-600 text-white' 
-                                  : 'bg-slate-100 text-slate-600 group-hover/sub:bg-sky-100 group-hover/sub:text-sky-700'
+                                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 group-hover/sub:bg-sky-100 dark:group-hover/sub:bg-sky-900/60 group-hover/sub:text-sky-700 dark:group-hover/sub:text-sky-300'
                               }`}>
                                 <SubIcon className="w-4 h-4" />
                               </div>
 
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-1.5">
-                                  <span className="text-xs font-bold text-slate-900 group-hover/sub:text-sky-700 transition-colors">
+                                  <span className="text-xs font-bold text-slate-900 dark:text-slate-100 group-hover/sub:text-sky-700 dark:group-hover/sub:text-sky-300 transition-colors">
                                     {sub.label}
                                   </span>
                                   {sub.badge && (
-                                    <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-sky-100 text-sky-700">
+                                    <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-sky-100 dark:bg-sky-900/60 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-700/50">
                                       {sub.badge}
                                     </span>
                                   )}
                                 </div>
-                                <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">
+                                <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">
                                   {sub.desc}
                                 </p>
                               </div>
@@ -328,22 +388,65 @@ export const Navbar: React.FC = () => {
             })}
           </div>
 
-          <div className="text-[11px] text-slate-500 font-medium hidden xl:flex items-center gap-1.5 pl-2">
+          <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium hidden xl:flex items-center gap-2 pl-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             <span>Kecamatan Kepulauan Seribu Selatan Sehat</span>
           </div>
         </nav>
       </div>
 
-      {/* Mobile Drawer Menu (Simpel & Rapi) */}
+      {/* Mobile Drawer Menu (Simpel, Terpadu & Rapi) */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6 shadow-xl max-h-[80vh] overflow-y-auto animate-in slide-in-from-top-2 duration-200">
+        <div className="lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-3 pb-6 shadow-xl max-h-[85vh] overflow-y-auto animate-in slide-in-from-top-2 duration-200">
+          {/* Mobile Top Actions: Search, ILP, Theme, & Social */}
+          <div className="flex items-center justify-between gap-2 mb-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+            {/* Dark Mode Button in Mobile */}
+            <button
+              onClick={toggleTheme}
+              className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-bold transition border ${
+                theme === 'dark'
+                  ? 'bg-amber-400/20 text-amber-300 border-amber-400/50'
+                  : 'bg-slate-100 text-slate-700 border-slate-200'
+              }`}
+            >
+              {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-300" /> : <Moon className="w-4 h-4 text-indigo-600" />}
+              <span>{theme === 'dark' ? 'Mode Siang' : 'Mode Malam'}</span>
+            </button>
+
+            {/* Social Links in Mobile */}
+            <div className="flex items-center gap-2">
+              <a
+                href={profile.facebook || "https://www.facebook.com/puskesmas.kepulauanseribuselatan"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900"
+                title="Facebook Puskesmas Kepulauan Seribu Selatan"
+              >
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+              </a>
+
+              <a
+                href={profile.instagram ? (profile.instagram.startsWith('http') ? profile.instagram : `https://instagram.com/${profile.instagram.replace('@', '')}`) : "https://instagram.com/puskesmaskepulauanseribuselatan"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-xl bg-pink-50 dark:bg-pink-950/60 text-pink-600 dark:text-pink-400 border border-pink-200 dark:border-pink-900"
+                title="Instagram Puskesmas Kepulauan Seribu Selatan"
+              >
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
           <div className="grid grid-cols-2 gap-2 mb-2">
             <button
               onClick={() => { setIsSearchOpen(true); setMobileMenuOpen(false); }}
-              className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-semibold"
+              className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold"
             >
-              <Search className="w-4 h-4 text-sky-600" />
+              <Search className="w-4 h-4 text-sky-600 dark:text-sky-400" />
               <span>Cari Informasi</span>
             </button>
             <button
@@ -358,14 +461,14 @@ export const Navbar: React.FC = () => {
           {isAdminAuthenticated && (
             <button
               onClick={() => handleNavClick('admin')}
-              className="w-full mb-4 flex items-center justify-center gap-2 p-2.5 rounded-xl text-xs font-bold transition border bg-amber-50 text-amber-900 border-amber-300"
+              className="w-full mb-4 flex items-center justify-center gap-2 p-2.5 rounded-xl text-xs font-bold transition border bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200 border-amber-300 dark:border-amber-700"
             >
               <Lock className="w-4 h-4 text-amber-600" />
               <span>Dashboard Admin (Sesi Aktif)</span>
             </button>
           )}
 
-          <div className="space-y-1 divide-y divide-slate-100">
+          <div className="space-y-1 divide-y divide-slate-100 dark:divide-slate-800">
             {menuItems.map((item) => {
               const isActive = item.activeMatchTabs.includes(activeTab);
               const hasSub = item.subItems && item.subItems.length > 0;
@@ -378,18 +481,18 @@ export const Navbar: React.FC = () => {
                       onClick={() => handleNavClick(item.id)}
                       className={`flex-1 flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-semibold transition ${
                         isActive
-                          ? 'bg-sky-50 text-sky-700 font-bold'
-                          : 'text-slate-700 hover:bg-slate-50'
+                          ? 'bg-sky-50 dark:bg-sky-950/50 text-sky-700 dark:text-sky-300 font-bold'
+                          : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
                       }`}
                     >
                       <span>{item.label}</span>
-                      {isActive && <div className="w-2 h-2 rounded-full bg-sky-600" />}
+                      {isActive && <div className="w-2 h-2 rounded-full bg-sky-600 dark:bg-sky-400" />}
                     </button>
 
                     {hasSub && (
                       <button
                         onClick={() => toggleMobileAccordion(item.label)}
-                        className="p-2 text-slate-400 hover:text-slate-700"
+                        className="p-2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
                         aria-label={`Toggle sub-menu ${item.label}`}
                       >
                         <ChevronDown className={`w-4 h-4 transition-transform ${isAccordionOpen ? 'rotate-180' : ''}`} />
@@ -399,7 +502,7 @@ export const Navbar: React.FC = () => {
 
                   {/* Sub-menu inside Mobile Accordion */}
                   {hasSub && isAccordionOpen && (
-                    <div className="pl-4 pr-2 py-2 space-y-1 bg-slate-50 rounded-xl my-1 border border-slate-100">
+                    <div className="pl-4 pr-2 py-2 space-y-1 bg-slate-50 dark:bg-slate-800/60 rounded-xl my-1 border border-slate-100 dark:border-slate-800">
                       {item.subItems!.map((sub) => {
                         const SubIcon = sub.icon;
                         const isSubActive = activeTab === sub.id;
@@ -411,7 +514,7 @@ export const Navbar: React.FC = () => {
                             className={`w-full flex items-center gap-2.5 py-2 px-2.5 rounded-lg text-xs transition text-left ${
                               isSubActive
                                 ? 'bg-sky-600 text-white font-bold'
-                                : 'text-slate-600 hover:bg-white'
+                                : 'text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700'
                             }`}
                           >
                             <SubIcon className="w-3.5 h-3.5 shrink-0" />

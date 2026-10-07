@@ -15,7 +15,9 @@ import {
   Sparkles,
   ExternalLink,
   Layers,
-  Building2
+  Building2,
+  Folder,
+  HardDrive
 } from 'lucide-react';
 
 export const ActivityDocumentationSection: React.FC = () => {
@@ -212,19 +214,35 @@ export const ActivityDocumentationSection: React.FC = () => {
                     <span>{album.photos.length} Foto</span>
                   </div>
 
-                  {/* Date Badge */}
-                  <div className="absolute bottom-3 left-3 text-slate-200 text-[11px] font-medium flex items-center gap-1">
-                    <Calendar className="w-3.5 h-3.5 text-sky-300" />
-                    <span>{album.date}</span>
+                  {/* Date Badge & Drive Indicator */}
+                  <div className="absolute bottom-3 left-3 text-slate-200 text-[11px] font-medium flex items-center gap-2">
+                    <span className="flex items-center gap-1">
+                      <Calendar className="w-3.5 h-3.5 text-sky-300" />
+                      <span>{album.date}</span>
+                    </span>
+                    {album.googleDriveLink && (
+                      <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/80 backdrop-blur-xs text-white text-[10px] font-bold">
+                        <HardDrive className="w-2.5 h-2.5" />
+                        <span>Google Drive</span>
+                      </span>
+                    )}
                   </div>
                 </div>
 
                 {/* Card Body */}
                 <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
                   <div className="space-y-2">
-                    <div className="flex items-center gap-1.5 text-slate-500 text-[11px]">
-                      <MapPin className="w-3.5 h-3.5 text-rose-500 shrink-0" />
-                      <span className="truncate">{album.location}</span>
+                    <div className="flex items-center justify-between text-[11px]">
+                      <div className="flex items-center gap-1.5 text-slate-500">
+                        <MapPin className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+                        <span className="truncate">{album.location}</span>
+                      </div>
+                      {album.googleDriveFolder && (
+                        <span className="text-[10px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md flex items-center gap-1 border border-emerald-200">
+                          <Folder className="w-2.5 h-2.5" />
+                          <span>Link Drive</span>
+                        </span>
+                      )}
                     </div>
 
                     <h3 className="text-base font-bold text-slate-900 group-hover:text-sky-700 transition leading-snug line-clamp-2">
@@ -244,7 +262,7 @@ export const ActivityDocumentationSection: React.FC = () => {
                     </div>
 
                     <span className="text-sky-600 font-bold group-hover:translate-x-0.5 transition flex items-center gap-1">
-                      Buka Album &rarr;
+                      Buka Album Slider &rarr;
                     </span>
                   </div>
                 </div>
@@ -287,6 +305,22 @@ export const ActivityDocumentationSection: React.FC = () => {
                   <MapPin className="w-3.5 h-3.5 text-rose-400 shrink-0" />
                   {activeAlbum.location}
                 </p>
+
+                {activeAlbum.googleDriveLink && (
+                  <div className="pt-1 flex items-center gap-2">
+                    <a
+                      href={activeAlbum.googleDriveLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-400/40 text-[11px] font-bold transition shadow-xs"
+                      title="Buka Folder Foto Asli di Google Drive"
+                    >
+                      <HardDrive className="w-3.5 h-3.5 text-emerald-300" />
+                      <span>{activeAlbum.googleDriveFolder || 'Buka di Google Drive'}</span>
+                      <ExternalLink className="w-3 h-3 text-emerald-300" />
+                    </a>
+                  </div>
+                )}
               </div>
 
               <button

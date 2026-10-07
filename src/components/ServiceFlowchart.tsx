@@ -80,11 +80,11 @@ export const ServiceFlowchart: React.FC = () => {
     {
       step: 7,
       title: 'Selesai / Rujukan',
-      subtitle: 'Pulang Sehat / Ambulans Laut',
+      subtitle: 'Pulang Sehat / Rujukan Maritim',
       icon: Ship,
       color: 'from-rose-600 to-red-600',
       desc: 'Pasien diperbolehkan pulang dengan edukasi PHBS, atau dipersiapkan rujukan maritim bila butuh penanganan spesialis lanjutan.',
-      detail: 'Bila butuh rujukan, koordinasi SISRUTE dan armada Kapal Ambulans Laut disiapkan untuk penyeberangan aman ke RSUD.',
+      detail: 'Bila butuh rujukan, koordinasi SISRUTE dan kapal rujukan maritim disiapkan untuk penyeberangan aman ke RSUD.',
       estTime: 'Sesuai Kebutuhan'
     }
   ];

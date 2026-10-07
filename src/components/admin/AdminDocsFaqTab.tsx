@@ -395,7 +395,7 @@ export const AdminDocsFaqTab: React.FC<Props> = ({ mode, onSuccessToast }) => {
                   <option value="Umum">Informasi Umum</option>
                   <option value="BPJS & Administrasi">BPJS & Administrasi</option>
                   <option value="Pelayanan & Rujukan">Pelayanan & Rujukan Maritim</option>
-                  <option value="Ambulans Laut">Ambulans Laut 24 Jam</option>
+                  <option value="Layanan Rujukan">Layanan Rujukan 24 Jam</option>
                   <option value="Jadwal Poli">Jadwal Poli & Dokter</option>
                 </select>
               </div>

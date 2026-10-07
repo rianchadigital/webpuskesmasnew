@@ -63,7 +63,7 @@ export const FloatingActionHub: React.FC = () => {
             </button>
           </div>
 
-          {/* Sea Ambulance 24H */}
+          {/* Sea Emergency Referral 24H */}
           <a
             href={`tel:${profile.seaAmbulanceHotline}`}
             className="flex items-center gap-3 p-2.5 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-800 transition text-xs font-bold"
@@ -72,7 +72,7 @@ export const FloatingActionHub: React.FC = () => {
               <Ship className="w-4 h-4" />
             </div>
             <div>
-              <p className="leading-tight">Ambulans Laut 24 Jam</p>
+              <p className="leading-tight">Layanan Rujukan 24 Jam</p>
               <p className="text-[10px] text-rose-600 font-normal">Kedaruratan Antar Pulau</p>
             </div>
           </a>

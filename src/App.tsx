@@ -5,10 +5,12 @@
 
 import React from 'react';
 import { DataProvider, useData } from './context/DataContext';
+import { ThemeProvider } from './context/ThemeContext';
 import { Navbar } from './components/Navbar';
 import { HeaderSlider } from './components/HeaderSlider';
 import { QuickServices } from './components/QuickServices';
-import { StatsCounter } from './components/StatsCounter';
+import { UsefulLinksSection } from './components/UsefulLinksSection';
+import { VisitorStatsSection } from './components/VisitorStatsSection';
 import { ProfileSection } from './components/ProfileSection';
 import { WelcomeSection } from './components/WelcomeSection';
 import { IslandCoverage } from './components/IslandCoverage';
@@ -64,25 +66,26 @@ const MainContent: React.FC = () => {
   return (
     <main className="min-h-screen flex flex-col justify-between">
       <div>
-        {/* Dynamic Header Slider is present on the Home tab right below the Menu */}
+        {/* Dynamic Header Slider is present on the Home tab right below the Menu - Singkat, Padat & Premium */}
         {activeTab === 'beranda' && (
-          <>
+          <div className="space-y-0">
+            {/* 1. Gambar Slider Utama Dinamis (4 Foto Spanduk Informasi) */}
             <HeaderSlider />
+
+            {/* 2. Tombol Navigasi Layanan Cepat Premium */}
             <QuickServices />
-            <StatsCounter />
-            <ProfileSection />
-            <IslandCoverage />
-            <ServicesSection />
-            <ILPSection />
-            <ServiceFlowchart />
-            <ScheduleSection />
-            <NewsSection />
-            <AgendaSection />
-            <HealthEduSection />
-            <DownloadSection />
-            <FaqSection />
-            <ContactSection />
-          </>
+
+            {/* 3. Tautan Bermanfaat Resmi & Terpadu */}
+            <UsefulLinksSection />
+
+            {/* 4. Sorotan Warta Terkini & Pelayanan Pilihan (Singkat & Elegan) */}
+            <div className="bg-slate-50 dark:bg-slate-900/60 transition-colors">
+              <NewsSection />
+            </div>
+
+            {/* 5. Grafik Visitor & Statistik Pengunjung Web di Bawah Beranda */}
+            <VisitorStatsSection />
+          </div>
         )}
 
         {activeTab === 'sambutan' && (
@@ -128,8 +131,8 @@ const MainContent: React.FC = () => {
           <CombinedScheduleAgenda />
         )}
 
-        {(activeTab === 'berita' || activeTab === 'edukasi') && (
-          <CombinedNewsEdu />
+        {(activeTab === 'berita' || activeTab === 'pengumuman' || activeTab === 'edukasi') && (
+          <CombinedNewsEdu initialSubTab={activeTab === 'pengumuman' ? 'pengumuman' : (activeTab === 'edukasi' ? 'edukasi' : 'berita')} />
         )}
 
         {(activeTab === 'data' || activeTab === 'data-kesehatan' || activeTab === 'dokumentasi' || activeTab === 'unduhan' || activeTab === 'sdm') && (
@@ -162,16 +165,18 @@ const MainContent: React.FC = () => {
 
 export default function App() {
   return (
-    <DataProvider>
-      <div className="min-h-screen bg-white text-slate-900 font-sans antialiased selection:bg-sky-500 selection:text-white flex flex-col">
-        <Navbar />
-        <div className="flex-1">
-          <MainContent />
+    <ThemeProvider>
+      <DataProvider>
+        <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased selection:bg-sky-500 selection:text-white flex flex-col transition-colors duration-200">
+          <Navbar />
+          <div className="flex-1">
+            <MainContent />
+          </div>
+          <SearchEngineModal />
+          <FloatingActionHub />
+          <ServiceDocumentModal />
         </div>
-        <SearchEngineModal />
-        <FloatingActionHub />
-        <ServiceDocumentModal />
-      </div>
-    </DataProvider>
+      </DataProvider>
+    </ThemeProvider>
   );
 }

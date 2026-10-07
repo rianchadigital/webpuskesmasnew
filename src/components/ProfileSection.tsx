@@ -47,8 +47,8 @@ export const ProfileSection: React.FC = () => {
   };
 
   const facilities = [
-    { name: 'Instalasi Gawat Darurat (IGD) 24 Jam', desc: 'Penanganan kegawatdaruratan medis, trauma, dan resusitasi dengan dokter & perawat siaga non-stop.', icon: 'Ambulance' },
-    { name: 'Kapal Ambulans Laut Evakuasi Medis', desc: 'Armada kapal cepat medis dilengkapi monitor EKG, ventilator transport, tabung oksigen, dan brankar khusus rujukan.', icon: 'Ship' },
+    { name: 'Instalasi Gawat Darurat (IGD) 24 Jam', desc: 'Penanganan kegawatdaruratan medis, trauma, dan resusitasi dengan dokter & perawat siaga non-stop.', icon: 'ShieldCheck' },
+    { name: 'Layanan Rujukan & Evakuasi Medis Terpadu', desc: 'Sistem rujukan terpadu antar pulau dan daratan Jakarta dengan pendampingan tim medis, tabung oksigen, dan brankar khusus rujukan.', icon: 'Ship' },
     { name: 'Poli Rawat Jalan & Poli Spesifik Siklus Hidup', desc: 'Poli umum, Poli KIA, Poli Lansia/PTM, Poli TB DOTS, dan Poli Gigi dengan standar kenyamanan faskes pemerintah.', icon: 'Stethoscope' },
     { name: 'Ruang Bersalin (PONED) 24 Jam', desc: 'Fasilitas persalinan normal dan penanganan awal kegawatdaruratan maternal neonatal berstandar Kemenkes.', icon: 'Baby' },
     { name: 'Laboratorium Diagnostik Terpadu', desc: 'Alat hematologi otomatis, Tes Cepat Molekuler (TCM TB), kimia darah, urinalisis, dan rapid skrining.', icon: 'FlaskConical' },
@@ -64,7 +64,7 @@ export const ProfileSection: React.FC = () => {
     { role: 'Koordinator Klaster 2 (Ibu & Anak)', name: 'Bdn. Sri Wahyuni, S.Tr.Keb', desc: 'Pelayanan KIA, KB, Imunisasi, Gizi & Remaja' },
     { role: 'Koordinator Klaster 3 (Dewasa & Lansia)', name: 'dr. Nurul Fitriani', desc: 'Pengendalian PTM, Prolanis & Geriatri Santun' },
     { role: 'Koordinator Klaster 4 (P2P & Menular)', name: 'Ns. Ahmad Fauzi, S.Kep', desc: 'TB DOTS, DBD, Surveilans & Posko KLB' },
-    { role: 'Koordinator Lintas Klaster & Penunjang', name: 'dr. Rizki Pratama', desc: 'IGD, Ambulans Laut, Farmasi & Laboratorium' },
+    { role: 'Koordinator Lintas Klaster & Penunjang', name: 'dr. Rizki Pratama', desc: 'IGD, Rujukan Medis, Farmasi & Laboratorium' },
     { role: 'Koordinator Jejaring Pustu Pulau', name: 'Ns. Hendra Wijaya, S.Kep', desc: 'Supervisi Pustu Pulau Lancang, Pulau Pari, dan Pulau Untung Jawa' },
   ];
 
@@ -304,7 +304,7 @@ export const ProfileSection: React.FC = () => {
                   Gugusan Pulau Layanan Puskesmas Kepulauan Seribu Selatan
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-300">
-                  Pilih pulau di bawah ini untuk melihat titik koordinat, fasilitas puskesmas pembantu, dan akses ambulans laut.
+                  Pilih pulau di bawah ini untuk melihat titik koordinat, fasilitas puskesmas pembantu, dan akses rujukan medis.
                 </p>
               </div>
 

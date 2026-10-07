@@ -46,11 +46,8 @@ export const Hero: React.FC = () => {
           {/* Main Left Text */}
           <div className="lg:col-span-7 space-y-6">
             <div className="space-y-3">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
-                Selamat Datang di <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-teal-200 to-cyan-300">
-                  Puskesmas Kepulauan Seribu Selatan
-                </span>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                Selamat Datang di <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-teal-200 to-cyan-300">Puskesmas Kepulauan Seribu Selatan</span>
               </h1>
               
               <h2 className="text-base sm:text-lg text-sky-100 font-semibold flex items-center gap-2">
@@ -99,7 +96,7 @@ export const Hero: React.FC = () => {
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0" />
-                <span>Ambulans Laut 24 Jam</span>
+                <span>Layanan Rujukan 24 Jam</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0" />

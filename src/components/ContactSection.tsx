@@ -207,7 +207,7 @@ export const ContactSection: React.FC = () => {
                     >
                       <option value="Konsultasi Layanan">Informasi Pelayanan & Poli</option>
                       <option value="Integrasi Layanan Primer (ILP)">Pertanyaan Seputar ILP</option>
-                      <option value="Ambulans Laut & Rujukan">Rujukan & Ambulans Laut</option>
+                      <option value="Layanan Rujukan Medis">Layanan Rujukan Medis & SISRUTE</option>
                       <option value="Jadwal & Dokter">Jadwal Pelayanan & Dokter</option>
                       <option value="Saran & Masukan Mutu">Saran & Masukan Mutu Pelayanan</option>
                     </select>

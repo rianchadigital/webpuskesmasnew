@@ -385,7 +385,7 @@ export const AdminProfileTab: React.FC<Props> = ({ onSuccessToast }) => {
             </div>
 
             <div>
-              <label className="font-bold text-slate-700 block mb-1">Hotline Ambulans Laut 24 Jam Antar-Pulau</label>
+              <label className="font-bold text-slate-700 block mb-1">Hotline Layanan Rujukan 24 Jam Antar-Pulau</label>
               <input
                 type="text"
                 value={profile.seaAmbulanceHotline}
@@ -421,6 +421,28 @@ export const AdminProfileTab: React.FC<Props> = ({ onSuccessToast }) => {
                 value={profile.email}
                 onChange={(e) => updateProfile({ email: e.target.value })}
                 className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-sky-500"
+              />
+            </div>
+
+            <div>
+              <label className="font-bold text-slate-700 block mb-1">Tautan Akun Facebook Resmi</label>
+              <input
+                type="text"
+                value={profile.facebook || ''}
+                onChange={(e) => updateProfile({ facebook: e.target.value })}
+                placeholder="https://www.facebook.com/puskesmas.kepulauanseribuselatan"
+                className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-sky-500 text-blue-600 font-medium"
+              />
+            </div>
+
+            <div>
+              <label className="font-bold text-slate-700 block mb-1">Tautan Akun Instagram Resmi</label>
+              <input
+                type="text"
+                value={profile.instagram || ''}
+                onChange={(e) => updateProfile({ instagram: e.target.value })}
+                placeholder="https://instagram.com/puskesmaskepulauanseribuselatan"
+                className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-sky-500 text-pink-600 font-medium"
               />
             </div>
 

@@ -1,214 +1,121 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useData } from '../context/DataContext';
 import { 
-  Sparkles, 
-  Ship, 
-  MapPin, 
-  Stethoscope, 
-  CalendarCheck, 
-  PhoneCall, 
-  ArrowRight, 
   ChevronLeft, 
   ChevronRight, 
   Play, 
   Pause, 
+  Maximize2, 
+  X, 
+  ArrowRight, 
+  Sparkles, 
   ShieldCheck, 
-  Heart, 
+  Eye, 
+  Building2, 
+  Ship, 
   Activity, 
-  Users, 
-  Waves,
-  Clock,
-  Compass,
-  FileText,
-  Building2
+  MapPin,
+  ExternalLink
 } from 'lucide-react';
 
-interface SlideItem {
+interface BannerSlide {
   id: string;
-  badge: string;
-  badgeIcon: React.ReactNode;
-  badgeColor: string;
-  titlePrefix: string;
-  titleHighlight: string;
-  titleSuffix?: string;
+  bannerNumber: number;
+  image: string;
+  title: string;
+  highlight: string;
   subtitle: string;
+  category: string;
+  badgeColor: string;
+  categoryIcon: React.ReactNode;
   description: string;
-  quote?: string;
-  image?: string;
-  imageCaption?: string;
-  bgGradient: string;
-  accentGlow: string;
-  primaryBtnText: string;
-  primaryBtnTab: any;
-  primaryBtnTarget?: string;
-  secondaryBtnText: string;
-  secondaryBtnTab: any;
-  highlightStats: { label: string; value: string; icon: React.ReactNode }[];
-  tagPills: string[];
+  actionText: string;
+  actionTab: any;
+  actionSubTab?: string;
+  secondaryActionText?: string;
+  secondaryActionTab?: any;
 }
 
 export const HeaderSlider: React.FC = () => {
-  const { navigateToTab, profile } = useData();
+  const { navigateToTab } = useData();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [progress, setProgress] = useState(0);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [zoomModalOpen, setZoomModalOpen] = useState(false);
   const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const SLIDE_DURATION = 6000; // 6 seconds per slide
+  const SLIDE_DURATION = 6500; // 6.5s per slide
 
-  const slides: SlideItem[] = [
+  const bannerSlides: BannerSlide[] = [
     {
-      id: 'gedung-puskesmas',
-      badge: 'Fasilitas Layanan Utama Kepulauan',
-      badgeIcon: <Building2 className="w-3.5 h-3.5 text-emerald-300" />,
-      badgeColor: 'bg-emerald-500/20 border-emerald-400/40 text-emerald-200',
-      titlePrefix: 'Puskesmas',
-      titleHighlight: 'Kepulauan Seribu Selatan',
-      titleSuffix: '',
+      id: 'spanduk-1',
+      bannerNumber: 1,
+      image: '/banners/banner-1.png',
+      title: 'Puskesmas',
+      highlight: 'Kepulauan Seribu Selatan',
       subtitle: 'Kesehatan Anda Tujuan Kami, Kebahagiaan Anda Kepuasan Kami',
-      description: 'Gedung pelayanan kesehatan representatif di Dermaga Pulau Tidung dengan fasilitas Rawat Inap 24 Jam, Ruang Bersalin, IGD, 9 Poliklinik Rawat Jalan, dan Dermaga Kapal Ambulans Laut.',
-      quote: 'Kesehatan Anda Tujuan Kami, Kebahagiaan Anda Kepuasan Kami',
-      image: '/slider.png',
-      imageCaption: 'Gedung Puskesmas Kepulauan Seribu Selatan - Dermaga Pulau Tidung',
-      bgGradient: 'from-slate-950 via-emerald-950 to-slate-900',
-      accentGlow: 'bg-emerald-500/20',
-      primaryBtnText: 'Lihat Jam Pelayanan',
-      primaryBtnTab: 'jadwal',
-      secondaryBtnText: 'Jejaring Pustu & Faskes',
-      secondaryBtnTab: 'wilayah',
-      highlightStats: [
-        { label: 'Rawat Inap', value: '24 Jam', icon: <Clock className="w-4 h-4 text-emerald-400" /> },
-        { label: 'Poliklinik', value: '9 Poli', icon: <Stethoscope className="w-4 h-4 text-sky-400" /> },
-        { label: 'Kedaruratan', value: 'Siaga 24 Jam', icon: <ShieldCheck className="w-4 h-4 text-amber-400" /> }
-      ],
-      tagPills: ['Puskesmas Kepulauan Seribu Selatan', 'Pustu Pulau Lancang', 'Pustu Pulau Pari', 'Pustu Pulau Untung Jawa', 'Kepgub No. 755/2024']
+      category: 'Fasilitas Layanan Utama & Rawat Inap',
+      badgeColor: 'bg-emerald-500/90 text-white border-emerald-400',
+      categoryIcon: <Building2 className="w-3.5 h-3.5" />,
+      description: 'Pusat pelayanan kesehatan representatif di Kepulauan Seribu Selatan dengan Rawat Inap 24 Jam, IGD Siaga, 9 Poliklinik Spesialis & Layanan Rujukan Medis Terpadu.',
+      actionText: 'Lihat Jadwal Pelayanan',
+      actionTab: 'jadwal',
+      secondaryActionText: 'Jejaring Wilayah Faskes',
+      secondaryActionTab: 'wilayah'
     },
     {
-      id: 'ilp-transformasi',
-      badge: 'Transformasi Layanan Primer Kemenkes RI',
-      badgeIcon: <Sparkles className="w-3.5 h-3.5 text-amber-300" />,
-      badgeColor: 'bg-emerald-500/20 border-emerald-400/40 text-emerald-200',
-      titlePrefix: 'Integrasi Layanan Primer',
-      titleHighlight: 'Berbasis Siklus Hidup',
-      titleSuffix: 'Kepulauan Seribu Selatan',
-      subtitle: 'Pelayanan Kesehatan Holistik & Terpadu 5 Klaster',
-      description: 'Menata layanan kesehatan masyarakat dari Ibu Hamil, Bayi, Balita, Remaja, Usia Produktif hingga Lansia dalam satu ekosistem terintegrasi di seluruh pulau pemukiman.',
-      quote: 'Layanan terstandar, komprehensif, dan menjangkau setiap keluarga pesisir.',
-      bgGradient: 'from-slate-950 via-teal-950 to-slate-900',
-      accentGlow: 'bg-teal-500/20',
-      primaryBtnText: 'Pelajari 5 Klaster ILP',
-      primaryBtnTab: 'ilp',
-      secondaryBtnText: 'Lihat Alur Pelayanan',
-      secondaryBtnTab: 'pelayanan',
-      highlightStats: [
-        { label: 'Klaster Layanan', value: '5 Klaster', icon: <Activity className="w-4 h-4 text-emerald-400" /> },
-        { label: 'Sasaran Usia', value: '0 - 60+ Thn', icon: <Users className="w-4 h-4 text-sky-400" /> },
-        { label: 'Standar Akreditasi', value: 'Paripurna', icon: <ShieldCheck className="w-4 h-4 text-amber-400" /> }
-      ],
-      tagPills: ['Klaster 1: Manajemen', 'Klaster 2: Ibu & Anak', 'Klaster 3: Dewasa & Lansia', 'Klaster 4: P2P', 'Lintas Klaster']
+      id: 'spanduk-2',
+      bannerNumber: 2,
+      image: '/banners/banner-2.png',
+      title: 'Transformasi',
+      highlight: 'Integrasi Layanan Primer (ILP)',
+      subtitle: 'Pelayanan Kesehatan Siklus Hidup Holistik 5 Klaster Kemenkes RI',
+      category: 'Inovasi Program Kemenkes RI',
+      badgeColor: 'bg-sky-500/90 text-white border-sky-400',
+      categoryIcon: <Sparkles className="w-3.5 h-3.5" />,
+      description: 'Menata layanan kesehatan komprehensif bagi Ibu Hamil, Balita, Remaja, Usia Produktif hingga Lansia terintegrasi di seluruh pulau pemukiman.',
+      actionText: 'Pelajari 5 Klaster ILP',
+      actionTab: 'ilp',
+      secondaryActionText: 'Standar Pelayanan',
+      secondaryActionTab: 'dokumen-pelayanan'
     },
     {
-      id: 'ambulans-maritim',
-      badge: 'Kesiapsiagaan Maritim & Kedaruratan',
-      badgeIcon: <Ship className="w-3.5 h-3.5 text-rose-300 animate-pulse" />,
-      badgeColor: 'bg-rose-500/20 border-rose-400/40 text-rose-200',
-      titlePrefix: 'Kapal Ambulans Laut &',
-      titleHighlight: 'IGD Siaga 24 Jam',
-      titleSuffix: 'Respon Cepat Antar Pulau',
-      subtitle: 'Sistem Rujukan Gawat Darurat Laut Terpadu (SISRUTE)',
-      description: 'Layanan evakuasi medis laut gratis bagi warga dan wisatawan antar pulau di Kepulauan Seribu Selatan menuju Puskesmas Induk Pulau Tidung maupun RSUD / Faskes Rujukan Daratan Jakarta.',
-      quote: 'Hotline Siaga 24 Jam Nonstop: 0812-9988-7766.',
-      bgGradient: 'from-slate-950 via-blue-950 to-indigo-950',
-      accentGlow: 'bg-rose-500/20',
-      primaryBtnText: 'Hotline Kedaruratan & Kontak',
-      primaryBtnTab: 'kontak',
-      secondaryBtnText: 'SOP Ambulans & Rujukan',
-      secondaryBtnTab: 'unduhan',
-      highlightStats: [
-        { label: 'Layanan IGD', value: '24 Jam Nonstop', icon: <Clock className="w-4 h-4 text-rose-400" /> },
-        { label: 'Jangkauan Rujukan', value: '5 Pulau & DKI', icon: <Compass className="w-4 h-4 text-blue-400" /> },
-        { label: 'Tarif Pasien BPJS/KTP', value: '100% Gratis', icon: <ShieldCheck className="w-4 h-4 text-emerald-400" /> }
-      ],
-      tagPills: ['Evakuasi Medis Laut', 'Dokter & Perawat Siaga', 'Oksigen & EKG Portabel', 'SISRUTE Terkoneksi']
+      id: 'spanduk-3',
+      bannerNumber: 3,
+      image: '/banners/banner-3.png',
+      title: 'Kesiapsiagaan Maritim &',
+      highlight: 'Layanan Rujukan Darurat 24 Jam',
+      subtitle: 'Sistem Rujukan Medis Bebas Biaya Antar Pulau (SISRUTE)',
+      category: 'Kedaruratan & Rujukan Maritim',
+      badgeColor: 'bg-rose-500/90 text-white border-rose-400',
+      categoryIcon: <Ship className="w-3.5 h-3.5" />,
+      description: 'Sistem rujukan medis terpadu (SISRUTE) antar pulau pemukiman menuju rumah sakit rujukan daratan Jakarta didukung tim medis terlatih siaga 24 jam.',
+      actionText: 'Kontak & Call Center Darurat',
+      actionTab: 'kontak',
+      secondaryActionText: 'Alur Rujukan Pasien',
+      secondaryActionTab: 'pelayanan'
     },
     {
-      id: 'jejaring-pustu',
-      badge: 'Jejaring Pelayanan 5 Pulau Pemukiman',
-      badgeIcon: <MapPin className="w-3.5 h-3.5 text-sky-300" />,
-      badgeColor: 'bg-sky-500/20 border-sky-400/40 text-sky-200',
-      titlePrefix: 'Puskesmas Kecamatan &',
-      titleHighlight: '4 Pustu Pulau Siaga',
-      titleSuffix: 'Melayani Masyarakat Pesisir',
+      id: 'spanduk-4',
+      bannerNumber: 4,
+      image: '/banners/banner-4.png',
+      title: 'Jejaring Pelayanan',
+      highlight: '5 Pulau Pemukiman Siaga',
       subtitle: 'Pulau Tidung, Pulau Pari, Pulau Lancang, Pulau Untung Jawa, & Pulau Payung',
-      description: 'Fasilitas kesehatan hadir lebih dekat dengan warga pulau melalui tenaga medis berkompeten, ketersediaan obat esensial, skrining rutin posyandu, dan kunjungan rumah (home care).',
-      quote: 'Keadilan akses kesehatan tanpa terkendala jarak perairan laut.',
-      bgGradient: 'from-slate-950 via-sky-950 to-slate-900',
-      accentGlow: 'bg-sky-500/20',
-      primaryBtnText: 'Peta Wilayah & Pustu',
-      primaryBtnTab: 'wilayah',
-      secondaryBtnText: 'Jadwal Poliklinik Pulau',
-      secondaryBtnTab: 'jadwal',
-      highlightStats: [
-        { label: 'Pulau Berpenghuni', value: '5 Pulau', icon: <MapPin className="w-4 h-4 text-sky-400" /> },
-        { label: 'Populasi Terlayani', value: '10.500+ Jiwa', icon: <Users className="w-4 h-4 text-teal-400" /> },
-        { label: 'Puskesmas Pembantu', value: '4 Unit Pustu', icon: <ShieldCheck className="w-4 h-4 text-amber-400" /> }
-      ],
-      tagPills: ['Pustu Pulau Pari', 'Pustu Pulau Lancang', 'Pustu P. Untung Jawa', 'Pustu Pulau Payung', 'Puskesmas P. Tidung']
-    },
-    {
-      id: 'pelayanan-medis',
-      badge: 'Fasilitas Pelayanan Lengkap & Modern',
-      badgeIcon: <Stethoscope className="w-3.5 h-3.5 text-teal-300" />,
-      badgeColor: 'bg-teal-500/20 border-teal-400/40 text-teal-200',
-      titlePrefix: 'Pelayanan Medis Rawat Jalan,',
-      titleHighlight: 'Poli Gigi, KIA & Farmasi',
-      titleSuffix: 'Standar Akreditasi Kemenkes',
-      subtitle: 'Poli Umum, KIA-KB, Gigi, Laboratorium, Farmasi, Konseling Gizi & Sanitasi',
-      description: 'Didukung dokter umum, dokter gigi, bidan, perawat, analis lab, dan apoteker profesional dengan sistem Rekam Medis Elektronik (RME) yang terhubung SATUSEHAT Kemenkes.',
-      quote: 'Kesehatan Anda Tujuan Kami, Kebahagiaan Anda Kepuasan Kami',
-      bgGradient: 'from-slate-950 via-cyan-950 to-slate-900',
-      accentGlow: 'bg-cyan-500/20',
-      primaryBtnText: 'Daftar Layanan Medis',
-      primaryBtnTab: 'pelayanan',
-      secondaryBtnText: 'Jadwal Praktik Dokter',
-      secondaryBtnTab: 'jadwal',
-      highlightStats: [
-        { label: 'Unit Pelayanan', value: '14+ Poli & Unit', icon: <Stethoscope className="w-4 h-4 text-teal-400" /> },
-        { label: 'Sistem Data', value: 'RME Digital', icon: <FileText className="w-4 h-4 text-blue-400" /> },
-        { label: 'Indeks Kepuasan', value: '96.8% Sangat Puas', icon: <Heart className="w-4 h-4 text-rose-400" /> }
-      ],
-      tagPills: ['Poli Umum & Lansia', 'Poli KIA & KB', 'Poli Gigi & Mulut', 'Laboratorium & Darah', 'Apotek & Konsultasi Obat']
-    },
-    {
-      id: 'edukasi-agenda',
-      badge: 'Edukasi Kesehatan & Kegiatan Komunitas',
-      badgeIcon: <CalendarCheck className="w-3.5 h-3.5 text-indigo-300" />,
-      badgeColor: 'bg-indigo-500/20 border-indigo-400/40 text-indigo-200',
-      titlePrefix: 'Gerakan Masyarakat Sehat',
-      titleHighlight: 'Pencegahan Penyakit &',
-      titleSuffix: 'Edukasi Warga Pesisir',
-      subtitle: 'Jadwal Posyandu Pulau, Pencegahan Stunting, Skrining DBD & TBC',
-      description: 'Pemberdayaan kader kesehatan pulau, penyuluhan gizi seimbang balita pesisir, skrining penyakit tidak menular (hipertensi & diabetes), dan pemantauan jentik berkala.',
-      quote: 'Mewujudkan Kepulauan Seribu Selatan yang Sehat, Mandiri, dan Sejahtera.',
-      bgGradient: 'from-slate-950 via-indigo-950 to-slate-900',
-      accentGlow: 'bg-indigo-500/20',
-      primaryBtnText: 'Baca Edukasi & PHBS',
-      primaryBtnTab: 'edukasi',
-      secondaryBtnText: 'Kalender Agenda Kegiatan',
-      secondaryBtnTab: 'agenda',
-      highlightStats: [
-        { label: 'Posyandu Terbina', value: '18 Posyandu', icon: <Users className="w-4 h-4 text-indigo-400" /> },
-        { label: 'Kader Kesehatan', value: '85+ Kader Aktif', icon: <Heart className="w-4 h-4 text-rose-400" /> },
-        { label: 'Program Unggulan', value: 'Bebas Stunting', icon: <Sparkles className="w-4 h-4 text-amber-400" /> }
-      ],
-      tagPills: ['Posyandu ILP Balita', 'Skrining Lansia Prolanis', 'Cek Jentik Jumantik', 'Penyuluhan Sanitasi']
+      category: 'Jejaring Faskes Pesisir',
+      badgeColor: 'bg-teal-500/90 text-white border-teal-400',
+      categoryIcon: <MapPin className="w-3.5 h-3.5" />,
+      description: 'Puskesmas hadir lebih dekat dengan warga pesisir melalui Pos Kesehatan Pembantu (Pustu), skrining rutin Posyandu ILP, dan kunjungan rumah berkala.',
+      actionText: 'Peta Wilayah & Pustu',
+      actionTab: 'wilayah',
+      secondaryActionText: 'Warta & Edukasi Sehat',
+      secondaryActionTab: 'berita'
     }
   ];
 
-  // Auto slide management
+  // Auto sliding logic with progress bar
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || zoomModalOpen) return;
 
     const stepMs = 50;
     const progressStep = (stepMs / SLIDE_DURATION) * 100;
@@ -216,7 +123,7 @@ export const HeaderSlider: React.FC = () => {
     progressIntervalRef.current = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
-          setCurrentSlide((curr) => (curr + 1) % slides.length);
+          setCurrentSlide((curr) => (curr + 1) % bannerSlides.length);
           return 0;
         }
         return prev + progressStep;
@@ -226,302 +133,305 @@ export const HeaderSlider: React.FC = () => {
     return () => {
       if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
     };
-  }, [isPaused, slides.length]);
+  }, [isPaused, zoomModalOpen, bannerSlides.length]);
 
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
+  const goToSlide = (idx: number) => {
+    setCurrentSlide(idx);
     setProgress(0);
   };
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
+    setCurrentSlide((prev) => (prev + 1) % bannerSlides.length);
     setProgress(0);
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+    setCurrentSlide((prev) => (prev - 1 + bannerSlides.length) % bannerSlides.length);
     setProgress(0);
   };
 
-  const current = slides[currentSlide];
+  const active = bannerSlides[currentSlide];
 
   return (
-    <div 
-      className="relative bg-slate-950 text-white overflow-hidden select-none border-b border-slate-800"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-    >
-      {/* Background Animated Gradient Backdrop */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${current.bgGradient} transition-all duration-700`} />
-      
-      {/* Decorative Glow Spheres */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
-        <div className={`absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl ${current.accentGlow} transition-all duration-700`} />
-        <div className="absolute top-1/2 -right-24 w-80 h-80 rounded-full blur-3xl bg-sky-500/20 transition-all duration-700" />
-        <div className="absolute -bottom-24 left-1/3 w-80 h-80 rounded-full blur-3xl bg-teal-500/20 transition-all duration-700" />
-        
-        {/* Subtle grid mesh overlay */}
-        <div 
-          className="absolute inset-0 opacity-10" 
-          style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.2) 1px, transparent 1px)', backgroundSize: '32px 32px' }}
-        />
-      </div>
+    <section className="relative w-full bg-slate-950 overflow-hidden">
+      {/* Running Text di Bawah Menu & di Antara Header Spanduk - Kecepatan Normal, Satu Baris Saja */}
+      <div className="w-full bg-gradient-to-r from-teal-950 via-slate-900 to-sky-950 border-b border-teal-500/25 py-2 sm:py-2.5 overflow-hidden shadow-xs relative select-none">
+        {/* Subtle Edge Gradients for Smooth In/Out Fade */}
+        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-teal-950 to-transparent z-10" />
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-sky-950 to-transparent z-10" />
 
-      {/* Main Slide Content */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-14 md:pt-12 md:pb-16">
-        
-        {/* Top Control Bar: Slide Index, Progress, Play/Pause */}
-        <div className="flex items-center justify-between gap-4 mb-6 pb-4 border-b border-white/10">
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-mono font-bold tracking-widest text-sky-300">
-              SLIDE 0{currentSlide + 1} <span className="text-slate-500">/ 0{slides.length}</span>
-            </span>
-
-            <div className="hidden sm:flex items-center gap-1.5">
-              {slides.map((s, idx) => (
-                <button
-                  key={s.id}
-                  onClick={() => goToSlide(idx)}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                    idx === currentSlide 
-                      ? 'w-8 bg-gradient-to-r from-sky-400 to-teal-400' 
-                      : 'w-2 bg-white/20 hover:bg-white/40'
-                  }`}
-                  title={`Slide ${idx + 1}: ${s.titlePrefix}`}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setIsPaused(!isPaused)}
-              className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition text-xs flex items-center gap-1"
-              title={isPaused ? 'Lanjutkan Auto-Slide' : 'Jeda Auto-Slide'}
-            >
-              {isPaused ? <Play className="w-3.5 h-3.5 text-emerald-400" /> : <Pause className="w-3.5 h-3.5 text-amber-400" />}
-              <span className="text-[11px] hidden md:inline">{isPaused ? 'Auto: Dijeda' : 'Auto: Berjalan'}</span>
-            </button>
-
-            <div className="flex items-center gap-1">
-              <button
-                onClick={prevSlide}
-                className="p-1.5 rounded-lg bg-white/10 hover:bg-white/25 text-white transition active:scale-95"
-                aria-label="Slide Sebelumnya"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                onClick={nextSlide}
-                className="p-1.5 rounded-lg bg-white/10 hover:bg-white/25 text-white transition active:scale-95"
-                aria-label="Slide Berikutnya"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
+        <div className="overflow-hidden relative w-full">
+          <div className="inline-flex flex-nowrap shrink-0 whitespace-nowrap items-center animate-marquee-normal text-xs sm:text-sm font-extrabold tracking-widest uppercase text-white drop-shadow-xs">
+            {/* Set 1 */}
+            {[...Array(4)].map((_, i) => (
+              <span key={`set1-${i}`} className="inline-flex shrink-0 items-center gap-2.5 whitespace-nowrap mx-6 sm:mx-10 leading-none">
+                <Sparkles className="w-3.5 h-3.5 text-amber-300 inline shrink-0 animate-pulse" />
+                <span className="whitespace-nowrap shrink-0 text-white font-extrabold tracking-wider">SELAMAT DATANG DI PUSKESMAS KEPULAUAN SERIBU SELATAN</span>
+                <span className="text-teal-400 font-normal shrink-0">✦</span>
+              </span>
+            ))}
+            {/* Set 2 (Duplikasi untuk Seamless Infinite Loop yang Halus & Normal) */}
+            {[...Array(4)].map((_, i) => (
+              <span key={`set2-${i}`} className="inline-flex shrink-0 items-center gap-2.5 whitespace-nowrap mx-6 sm:mx-10 leading-none">
+                <Sparkles className="w-3.5 h-3.5 text-amber-300 inline shrink-0 animate-pulse" />
+                <span className="whitespace-nowrap shrink-0 text-white font-extrabold tracking-wider">SELAMAT DATANG DI PUSKESMAS KEPULAUAN SERIBU SELATAN</span>
+                <span className="text-teal-400 font-normal shrink-0">✦</span>
+              </span>
+            ))}
           </div>
         </div>
+      </div>
 
-        {/* Slide Body Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          
-          {/* Left Column: Heading, Descriptions & Actions */}
-          <div className="lg:col-span-7 space-y-5 animate-in fade-in slide-in-from-left-4 duration-500">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        
+        {/* Main Banner Slider Container (Ukuran Disesuaikan dengan Aplikasi) */}
+        <div 
+          className="relative rounded-3xl overflow-hidden border border-slate-800 bg-slate-900 shadow-2xl group select-none"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          {/* Aspect-Ratio Box Sized For App Spanduk (Responsive: 16:9 on mobile, 21:9 on desktop) */}
+          <div className="relative w-full aspect-[16/9] sm:aspect-[16/8] lg:aspect-[21/9] max-h-[520px] bg-slate-950 overflow-hidden">
             
-            {/* Category / Pillar Badge */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border backdrop-blur-sm shadow-xs ${current.badgeColor}`}>
-                {current.badgeIcon}
-                <span>{current.badge}</span>
-              </span>
+            {/* The 4 Banner Images Stack */}
+            {bannerSlides.map((slide, index) => (
+              <div
+                key={slide.id}
+                className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+                  index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
+                }`}
+              >
+                <img
+                  src={slide.image}
+                  alt={`${slide.title} ${slide.highlight} - Spanduk Informasi Puskesmas Kepulauan Seribu Selatan`}
+                  className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.01]"
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                />
 
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-white/10 text-slate-300 text-[11px] font-mono">
-                <Waves className="w-3 h-3 text-sky-400" />
-                Pesisir & Kepulauan
-              </span>
-            </div>
+                {/* Subtle gradient overlay at bottom & sides for editorial readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-transparent to-slate-950/40 pointer-events-none" />
+              </div>
+            ))}
 
-            {/* Main Headline with High-End Editorial Typography */}
-            <div className="space-y-2">
-              <h1 className="text-2xl sm:text-4xl lg:text-[42px] font-extrabold tracking-tight text-white leading-tight font-display">
-                {current.titlePrefix}{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-teal-200 to-amber-200">
-                  {current.titleHighlight}
-                </span>{' '}
-                {current.titleSuffix}
-              </h1>
-
-              <p className="text-sm sm:text-base font-serif-elegant italic text-sky-200/90 font-medium">
-                "{current.subtitle}"
-              </p>
-            </div>
-
-            {/* Description Text */}
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl">
-              {current.description}
-            </p>
-
-            {/* Interactive Tag Pills */}
-            <div className="flex flex-wrap gap-1.5 pt-1">
-              {current.tagPills.map((tag, i) => (
-                <span 
-                  key={i} 
-                  className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 text-slate-300 hover:text-white text-[11px] font-medium transition cursor-default"
-                >
-                  {tag}
+            {/* Top Toolbar: Slide Badge, Zoom Modal Button, Pause/Play */}
+            <div className="absolute top-3 sm:top-4 left-3 sm:left-6 right-3 sm:right-6 z-20 flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold border backdrop-blur-md shadow-md ${active.badgeColor}`}>
+                  {active.categoryIcon}
+                  <span>{active.category}</span>
                 </span>
-              ))}
-            </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-wrap items-center gap-3 pt-2">
-              <button
-                onClick={() => navigateToTab(current.primaryBtnTab, current.primaryBtnTarget)}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-teal-500 hover:from-sky-400 hover:to-teal-400 text-white text-xs sm:text-sm font-bold shadow-lg shadow-sky-500/25 transition-all transform active:scale-95"
-              >
-                <span>{current.primaryBtnText}</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-
-              <button
-                onClick={() => navigateToTab(current.secondaryBtnTab)}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs sm:text-sm font-semibold backdrop-blur-sm transition"
-              >
-                <span>{current.secondaryBtnText}</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Right Column: Dynamic Highlight Card & Key Metrics */}
-          <div className="lg:col-span-5 animate-in fade-in slide-in-from-right-4 duration-500">
-            <div className="relative rounded-2xl bg-gradient-to-br from-white/15 via-white/10 to-white/5 border border-white/20 p-5 sm:p-6 backdrop-blur-md shadow-2xl space-y-5">
-              
-              {/* Highlight Card Header */}
-              <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl bg-sky-500/30 border border-sky-400/40 flex items-center justify-center text-sky-300">
-                    <ShieldCheck className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h2 className="text-xs sm:text-sm font-bold text-white leading-snug font-display">Puskesmas Kepulauan Seribu Selatan</h2>
-                    <p className="text-[11px] text-sky-200">Kesiapsiagaan Maritim Terpadu</p>
-                  </div>
-                </div>
-
-                <span className="text-[10px] uppercase tracking-wider font-extrabold px-2.5 py-1 rounded-full bg-emerald-500/30 text-emerald-300 border border-emerald-400/40">
-                  Resmi DKI
+                <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-[11px] font-mono border border-white/10 shadow-xs">
+                  <span>Spanduk 0{currentSlide + 1}</span>
+                  <span className="text-slate-400">/ 04</span>
                 </span>
               </div>
 
-              {/* Featured Image if present */}
-              {current.image && (
-                <div className="relative rounded-xl overflow-hidden border border-white/20 group shadow-md bg-slate-900">
-                  <img 
-                    src={current.image} 
-                    alt={current.imageCaption || "Gedung Puskesmas Kepulauan Seribu Selatan"}
-                    className="w-full h-44 sm:h-48 object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
-                  <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between text-[11px] text-white">
-                    <span className="font-semibold truncate flex items-center gap-1.5 drop-shadow-sm">
-                      <Building2 className="w-3.5 h-3.5 text-emerald-400" />
-                      {current.imageCaption || 'Gedung Puskesmas Kepulauan Seribu Selatan'}
-                    </span>
-                    <span className="px-2 py-0.5 rounded-md bg-emerald-600/90 text-[10px] font-bold shrink-0 shadow-xs">
-                      Dermaga Tidung
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              {/* Metric Highlights */}
-              <div className="grid grid-cols-3 gap-2.5">
-                {current.highlightStats.map((stat, i) => (
-                  <div key={i} className="p-2.5 rounded-xl bg-black/30 border border-white/10 text-center space-y-1">
-                    <div className="flex justify-center text-sky-400">
-                      {stat.icon}
-                    </div>
-                    <div className="text-xs sm:text-sm font-extrabold text-white leading-tight font-display">
-                      {stat.value}
-                    </div>
-                    <div className="text-[10px] text-slate-400 truncate">
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Quote / Highlight Note */}
-              {current.quote && (
-                <div className="p-3 rounded-xl bg-sky-950/60 border border-sky-500/30 text-sky-100 text-xs flex items-start gap-2.5 font-serif-elegant italic">
-                  <Heart className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
-                  <p className="leading-snug">"{current.quote}"</p>
-                </div>
-              )}
-
-              {/* Quick Contact inside Card */}
-              <div className="pt-1 flex items-center justify-between gap-3 text-xs">
-                <div className="flex items-center gap-2 text-slate-300">
-                  <PhoneCall className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <div>
-                    <span className="text-[10px] text-slate-400 block">Informasi & Kontak:</span>
-                    <span className="font-bold text-white">{profile.phone}</span>
-                  </div>
-                </div>
-
+              <div className="flex items-center gap-2">
+                {/* Button to view full banner zoom */}
                 <button
-                  onClick={() => navigateToTab('kontak')}
-                  className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] shadow-sm transition active:scale-95"
+                  onClick={() => setZoomModalOpen(true)}
+                  className="px-2.5 py-1.5 rounded-xl bg-black/60 hover:bg-black/80 backdrop-blur-md text-white border border-white/20 text-xs font-semibold flex items-center gap-1.5 shadow-md transition hover:scale-105 active:scale-95 cursor-pointer"
+                  title="Perbesar Spanduk Informasi Penuh"
                 >
-                  Hubungi Kami
+                  <Maximize2 className="w-3.5 h-3.5 text-sky-400" />
+                  <span className="hidden sm:inline text-[11px]">Lihat Gambar Penuh</span>
+                </button>
+
+                {/* Pause/Play Toggle */}
+                <button
+                  onClick={() => setIsPaused(!isPaused)}
+                  className="p-1.5 rounded-xl bg-black/60 hover:bg-black/80 backdrop-blur-md text-slate-300 hover:text-white border border-white/20 transition active:scale-95 cursor-pointer shadow-md"
+                  title={isPaused ? 'Lanjutkan Auto-Slide' : 'Jeda Auto-Slide'}
+                >
+                  {isPaused ? <Play className="w-3.5 h-3.5 text-emerald-400" /> : <Pause className="w-3.5 h-3.5 text-amber-400" />}
                 </button>
               </div>
-
             </div>
+
+            {/* Previous & Next Navigation Arrows (Floating) */}
+            <button
+              onClick={prevSlide}
+              className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 p-2 sm:p-2.5 rounded-2xl bg-black/50 hover:bg-black/80 text-white backdrop-blur-md border border-white/20 transition-all hover:scale-110 active:scale-95 cursor-pointer shadow-xl hidden sm:flex items-center justify-center"
+              aria-label="Spanduk Sebelumnya"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+
+            <button
+              onClick={nextSlide}
+              className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 p-2 sm:p-2.5 rounded-2xl bg-black/50 hover:bg-black/80 text-white backdrop-blur-md border border-white/20 transition-all hover:scale-110 active:scale-95 cursor-pointer shadow-xl hidden sm:flex items-center justify-center"
+              aria-label="Spanduk Berikutnya"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+
+            {/* Bottom Caption & Interactive Action Bar */}
+            <div className="absolute bottom-0 left-0 right-0 z-20 p-4 sm:p-6 lg:p-7 text-white">
+              <div className="max-w-3xl space-y-2 sm:space-y-2.5">
+                
+                {/* Slide Headline */}
+                <h2 className="text-lg sm:text-2xl lg:text-3xl font-extrabold tracking-tight drop-shadow-md leading-tight">
+                  {active.title}{' '}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-teal-200 to-amber-200">
+                    {active.highlight}
+                  </span>
+                </h2>
+
+                {/* Subtitle / Motto */}
+                <p className="text-xs sm:text-sm font-medium text-sky-200/90 font-serif-elegant italic drop-shadow-sm line-clamp-1">
+                  "{active.subtitle}"
+                </p>
+
+                {/* Description - visible on tablet and desktop */}
+                <p className="hidden md:block text-xs sm:text-sm text-slate-200/90 max-w-2xl drop-shadow-sm leading-relaxed">
+                  {active.description}
+                </p>
+
+                {/* Action Buttons */}
+                <div className="flex flex-wrap items-center gap-2.5 pt-1 sm:pt-2">
+                  <button
+                    onClick={() => navigateToTab(active.actionTab, active.actionSubTab)}
+                    className="inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-sky-500 via-teal-500 to-emerald-500 hover:from-sky-400 hover:via-teal-400 hover:to-emerald-400 text-white text-xs sm:text-sm font-extrabold shadow-lg shadow-sky-500/25 transition-all duration-200 hover:-translate-y-0.5 active:scale-95 cursor-pointer"
+                  >
+                    <span>{active.actionText}</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+
+                  {active.secondaryActionText && (
+                    <button
+                      onClick={() => navigateToTab(active.secondaryActionTab)}
+                      className="inline-flex items-center gap-1 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-black/40 hover:bg-black/60 border border-white/25 text-white text-xs sm:text-sm font-bold backdrop-blur-md transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer"
+                    >
+                      <span>{active.secondaryActionText}</span>
+                    </button>
+                  )}
+                </div>
+
+              </div>
+            </div>
+
+            {/* Slider Progress Bar */}
+            <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/10 z-30">
+              <div 
+                className="h-full bg-gradient-to-r from-sky-400 via-teal-400 to-emerald-400 transition-all duration-75"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+
+          </div>
+
+          {/* 4 Interactive Banner Thumbnail Switchers Below */}
+          <div className="bg-slate-900/95 border-t border-slate-800 p-2 sm:p-3 grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+            {bannerSlides.map((slide, idx) => (
+              <button
+                key={slide.id}
+                onClick={() => goToSlide(idx)}
+                className={`group/thumb relative rounded-xl sm:rounded-2xl p-2 sm:p-2.5 text-left transition-all duration-300 border flex items-center gap-2.5 sm:gap-3 cursor-pointer ${
+                  idx === currentSlide
+                    ? 'bg-sky-500/15 border-sky-400/80 shadow-md ring-1 ring-sky-400/30'
+                    : 'bg-slate-800/60 hover:bg-slate-800 border-slate-700/60 hover:border-slate-600'
+                }`}
+              >
+                {/* Mini Image Preview */}
+                <div className="relative w-12 sm:w-16 h-8 sm:h-10 rounded-lg overflow-hidden shrink-0 border border-white/10 bg-slate-950">
+                  <img
+                    src={slide.image}
+                    alt={slide.title}
+                    className="w-full h-full object-cover"
+                  />
+                  {idx === currentSlide && (
+                    <div className="absolute inset-0 bg-sky-500/20 ring-1 ring-inset ring-sky-400" />
+                  )}
+                </div>
+
+                {/* Text Label */}
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-1.5">
+                    <span className={`text-[10px] font-mono font-bold ${idx === currentSlide ? 'text-sky-300' : 'text-slate-400'}`}>
+                      0{idx + 1}
+                    </span>
+                    <span className="text-[10px] font-bold truncate text-slate-300 group-hover/thumb:text-white">
+                      {slide.title}
+                    </span>
+                  </div>
+                  <p className="text-[11px] font-extrabold text-white truncate">
+                    {slide.highlight}
+                  </p>
+                </div>
+              </button>
+            ))}
           </div>
 
         </div>
 
-        {/* Dynamic Slide Thumbnails / Quick Jump Navigation */}
-        <div className="mt-8 pt-4 border-t border-white/10 grid grid-cols-2 sm:grid-cols-5 gap-2">
-          {slides.map((s, idx) => (
-            <button
-              key={s.id}
-              onClick={() => goToSlide(idx)}
-              className={`p-2.5 rounded-xl text-left transition-all border ${
-                idx === currentSlide
-                  ? 'bg-white/20 border-sky-400/80 text-white shadow-md'
-                  : 'bg-white/5 hover:bg-white/10 border-white/5 text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              <div className="flex items-center justify-between text-[10px] mb-1 font-mono">
-                <span className={idx === currentSlide ? 'text-sky-300 font-bold' : 'text-slate-500'}>
-                  0{idx + 1}
-                </span>
-                {idx === currentSlide && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                )}
-              </div>
-              <p className="text-[11px] font-bold truncate text-white leading-tight font-display">
-                {s.titlePrefix}
-              </p>
-              <p className="text-[10px] text-slate-400 truncate">
-                {s.titleHighlight}
-              </p>
-            </button>
-          ))}
-        </div>
-
       </div>
 
-      {/* Slide Progress Line */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/10">
+      {/* Lightbox Modal: Inspect Full High-Res Spanduk without overlays */}
+      {zoomModalOpen && (
         <div 
-          className="h-full bg-gradient-to-r from-sky-400 via-teal-400 to-emerald-400 transition-all duration-75"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
+          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200"
+          onClick={() => setZoomModalOpen(false)}
+        >
+          <div 
+            className="relative max-w-5xl w-full bg-slate-900 rounded-3xl overflow-hidden border border-slate-700 shadow-2xl space-y-3 p-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono font-bold text-sky-400">
+                  SPANDUK 0{currentSlide + 1} DARI 04
+                </span>
+                <span className="text-slate-400 text-xs">|</span>
+                <h3 className="text-xs sm:text-sm font-bold text-white truncate">
+                  {active.title} {active.highlight}
+                </h3>
+              </div>
 
-    </div>
+              <button
+                onClick={() => setZoomModalOpen(false)}
+                className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="relative rounded-2xl overflow-hidden border border-slate-800 bg-black">
+              <img
+                src={active.image}
+                alt={`${active.title} ${active.highlight}`}
+                className="w-full h-auto max-h-[75vh] object-contain mx-auto"
+              />
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-2 text-xs">
+              <p className="text-slate-300 font-medium max-w-xl">
+                {active.description}
+              </p>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={prevSlide}
+                  className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold transition flex items-center gap-1 cursor-pointer"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  <span>Sebelumnya</span>
+                </button>
+                <button
+                  onClick={nextSlide}
+                  className="px-3 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold transition flex items-center gap-1 cursor-pointer"
+                >
+                  <span>Berikutnya</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+    </section>
   );
 };

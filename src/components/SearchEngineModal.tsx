@@ -112,11 +112,11 @@ export const SearchEngineModal: React.FC = () => {
               </div>
               <h4 className="font-bold text-slate-800 text-sm">Pencarian Cepat Internal</h4>
               <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                Ketikkan kata kunci seperti <em>"Klaster Ibu dan Anak", "Ambulans", "USG", "Pustu Lancang", "Jadwal Poli"</em>.
+                Ketikkan kata kunci seperti <em>"Klaster Ibu dan Anak", "Rujukan", "USG", "Pustu Lancang", "Jadwal Poli"</em>.
               </p>
 
               <div className="flex flex-wrap justify-center gap-2 pt-2">
-                {['Klaster 2 ILP', 'Ambulans Laut', 'Pemeriksaan Gigi', 'Pustu Pari', 'Jadwal Dokter', 'SOP Rujukan'].map((kw) => (
+                {['Klaster 2 ILP', 'Layanan Rujukan', 'Pemeriksaan Gigi', 'Pustu Pari', 'Jadwal Dokter', 'SOP Rujukan'].map((kw) => (
                   <button
                     key={kw}
                     onClick={() => setSearchQuery(kw)}

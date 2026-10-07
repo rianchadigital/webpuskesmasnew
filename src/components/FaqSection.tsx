@@ -20,7 +20,7 @@ export const FaqSection: React.FC = () => {
     'faq-4': true
   });
 
-  const categories = ['Semua', 'Umum', 'Pelayanan', 'ILP', 'Rujukan & Ambulans', 'BPJS & Administrasi', 'Pustu Kepulauan'];
+  const categories = ['Semua', 'Umum', 'Pelayanan', 'ILP', 'Rujukan & Layanan Medis', 'BPJS & Administrasi', 'Pustu Kepulauan'];
 
   const toggleFaq = (id: string) => {
     setExpandedIds((prev) => ({
@@ -51,7 +51,7 @@ export const FaqSection: React.FC = () => {
             Pertanyaan yang Sering Diajukan (FAQ)
           </h2>
           <p className="text-sm text-slate-600 font-medium leading-relaxed">
-            Temukan jawaban cepat mengenai jam buka, ambulans laut, kepesertaan BPJS, alur Integrasi Layanan Primer (ILP), dan pelayanan di pulau.
+            Temukan jawaban cepat mengenai jam buka, rujukan medis terpadu, kepesertaan BPJS, alur Integrasi Layanan Primer (ILP), dan pelayanan di pulau.
           </p>
         </div>
 
@@ -63,7 +63,7 @@ export const FaqSection: React.FC = () => {
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Ketik pertanyaan atau kata kunci (contoh: rujukan, ambulans, imunisasi)..."
+              placeholder="Ketik pertanyaan atau kata kunci (contoh: rujukan, IGD, imunisasi, BPJS)..."
               className="w-full pl-11 pr-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition"
             />
           </div>

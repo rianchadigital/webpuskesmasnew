@@ -73,7 +73,7 @@ export const QuickServices: React.FC = () => {
     {
       id: 'kontak',
       title: 'Kontak Darurat',
-      subtitle: 'Ambulans Laut & Call Center',
+      subtitle: 'Call Center & Rujukan Medis',
       icon: PhoneCall,
       color: 'from-red-500 to-rose-600',
       bgColor: 'bg-red-50 text-red-700 border-red-100 hover:border-red-300',
@@ -91,21 +91,21 @@ export const QuickServices: React.FC = () => {
   ];
 
   return (
-    <section className="relative -mt-10 sm:-mt-14 z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="bg-white rounded-3xl p-5 sm:p-7 shadow-xl shadow-slate-200/70 border border-slate-100">
+    <section className="relative -mt-8 sm:-mt-12 z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl p-5 sm:p-7 shadow-2xl shadow-slate-900/10 dark:shadow-black/40 border border-slate-200/90 dark:border-slate-800 transition-colors">
         
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
           <div>
-            <h3 className="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-sky-600" />
-              Layanan Cepat Masyarakat
+            <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-sky-500 animate-pulse" />
+              Layanan Cepat & Navigasi Terpadu
             </h3>
-            <p className="text-xs text-slate-500 font-medium">
+            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
               Akses instan menuju informasi pelayanan, jadwal dokter, lokasi pulau, dan kontak darurat.
             </p>
           </div>
 
-          <div className="text-xs text-slate-400 font-medium hidden md:block">
+          <div className="text-xs text-slate-400 dark:text-slate-500 font-medium hidden md:block">
             Pilih menu untuk membuka detail layanan
           </div>
         </div>
@@ -118,20 +118,20 @@ export const QuickServices: React.FC = () => {
               <button
                 key={item.id}
                 onClick={item.action}
-                className={`group relative text-left p-3.5 sm:p-4 rounded-2xl border transition-all duration-200 hover:-translate-y-1 hover:shadow-md active:translate-y-0 flex flex-col justify-between ${item.bgColor}`}
+                className={`group relative text-left p-3.5 sm:p-4 rounded-2xl border transition-all duration-200 hover:-translate-y-1 hover:shadow-lg active:translate-y-0 flex flex-col justify-between cursor-pointer dark:bg-slate-800/60 dark:border-slate-700/60 dark:hover:border-sky-500 ${item.bgColor}`}
               >
                 <div className="flex items-center justify-between mb-3">
-                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${item.color} text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
+                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${item.color} text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform`}>
                     <Icon className="w-5 h-5" />
                   </div>
                   <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
 
                 <div>
-                  <h4 className="font-bold text-xs sm:text-sm text-slate-900 leading-tight group-hover:text-sky-700 transition-colors">
+                  <h4 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white leading-tight group-hover:text-sky-700 dark:group-hover:text-sky-300 transition-colors">
                     {item.title}
                   </h4>
-                  <p className="text-[11px] text-slate-500 font-medium mt-1 leading-snug truncate">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-1 leading-snug truncate">
                     {item.subtitle}
                   </p>
                 </div>

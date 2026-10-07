@@ -23,7 +23,7 @@ export const AdminMenuTab: React.FC<Props> = ({ onSuccessToast }) => {
 
   // Local state for running announcements and hero banner
   const [announcementText, setAnnouncementText] = useState(
-    'Pelayanan UGD 24 Jam & Ambulans Laut Siaga di Pulau Tidung, Pulau Pari, Pulau Lancang, Pulau Untung Jawa, dan Pulau Payung. Hubungi Hotline Maritim: 0859-6100-0003'
+    'Pelayanan UGD 24 Jam & Layanan Rujukan Siaga di Pulau Tidung, Pulau Pari, Pulau Lancang, Pulau Untung Jawa, dan Pulau Payung. Hubungi Hotline Maritim: 0859-6100-0003'
   );
   const [heroBadge, setHeroBadge] = useState('Puskesmas Ramah Bahari');
   const [heroTitle, setHeroTitle] = useState('Pusat Pelayanan Kesehatan Bahari Kepulauan Seribu Selatan');
@@ -40,8 +40,8 @@ export const AdminMenuTab: React.FC<Props> = ({ onSuccessToast }) => {
     { tab: 'unduhan', title: 'Pusat Unduhan & Dokumen SOP', category: 'Transparansi', description: 'Formulir pelayanan, maklumat & standar mutu' },
     { tab: 'sdm', title: 'Data Ketenagaan & Tenaga Medis', category: 'Transparansi', description: 'Profil 54+ tenaga kesehatan dokter, perawat & bidan' },
     { tab: 'data', title: 'Statistik & Indikator Mutu', category: 'Transparansi', description: 'Capaian indikator SPM & grafik kepuasan masyarakat' },
-    { tab: 'kontak', title: 'Kontak & Lokasi Faskes', category: 'Bantuan', description: 'Alamat dermaga faskes, ambulans laut & WhatsApp' },
-    { tab: 'faq', title: 'Tanya Jawab (FAQ)', category: 'Bantuan', description: 'Pertanyaan umum seputar BPJS, rujukan & ambulans' },
+    { tab: 'kontak', title: 'Kontak & Lokasi Faskes', category: 'Bantuan', description: 'Alamat dermaga faskes, rujukan darurat & WhatsApp' },
+    { tab: 'faq', title: 'Tanya Jawab (FAQ)', category: 'Bantuan', description: 'Pertanyaan umum seputar BPJS, alur layanan & rujukan medis' },
   ];
 
   const handleSaveMenuSettings = () => {

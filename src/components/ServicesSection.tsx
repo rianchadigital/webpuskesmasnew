@@ -21,7 +21,7 @@ import {
   Pill,
   Accessibility,
   MessageSquare,
-  Ambulance,
+  Ship,
   Home,
   Footprints,
   Anchor,
@@ -46,7 +46,7 @@ export const ServicesSection: React.FC = () => {
       case 'Pill': return Pill;
       case 'Accessibility': return Accessibility;
       case 'MessageSquare': return MessageSquare;
-      case 'Ambulance': return Ambulance;
+      case 'Ambulance': return Ship;
       case 'Home': return Home;
       case 'Footprints': return Footprints;
       case 'Anchor': return Anchor;

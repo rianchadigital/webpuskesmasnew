@@ -9,6 +9,8 @@ export const INITIAL_ACTIVITY_ALBUMS: ActivityAlbum[] = [
     island: 'Pulau Tidung',
     location: 'RPTRA Tidung Ceria, Kelurahan Pulau Tidung',
     coverImage: 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=800&q=80',
+    googleDriveLink: 'https://drive.google.com/drive/folders/1ILP_Posyandu_Tidung_2026_Official',
+    googleDriveFolder: 'Drive: Dokumentasi / Posyandu ILP Balita Pulau Tidung 2026',
     description: 'Pelayanan penimbangan rutin, pengukuran antropometri digital, imunisasi lengkap, skrining anemia bagi ibu hamil, dan konsultasi gizi terpadu siklus hidup dengan nakes Puskesmas Kecamatan.',
     organizer: 'Tim Klaster 2 (Ibu & Anak) Puskesmas Kec. Kep. Seribu Selatan',
     participantCount: 84,
@@ -45,6 +47,8 @@ export const INITIAL_ACTIVITY_ALBUMS: ActivityAlbum[] = [
     island: 'Pulau Pari',
     location: 'Gedung Serbaguna RW 01, Pulau Pari',
     coverImage: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=80',
+    googleDriveLink: 'https://drive.google.com/drive/folders/1Lansia_PTM_PulauPari_2026',
+    googleDriveFolder: 'Drive: Dokumentasi / Skrining Lansia & PTM Pulau Pari',
     description: 'Pemeriksaan tensi darah, gula darah sewaktu (GDS), kolesterol, asam urat, serta konseling gaya hidup sehat dan senam jantung sehat untuk warga lansia pesisir.',
     organizer: 'Tim Klaster 3 (Usia Dewasa & Lanjut Usia) Puskesmas Kelurahan Pulau Pari',
     participantCount: 68,
@@ -77,7 +81,9 @@ export const INITIAL_ACTIVITY_ALBUMS: ActivityAlbum[] = [
     island: 'Pulau Payung',
     location: 'Dermaga & Pos Kesehatan Pulau Payung',
     coverImage: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
-    description: 'Kunjungan pelayanan medis mobile dengan kapal ambulans dan speed boat tim medis gabungan ke pulau berpenduduk kecil untuk menjamin kesetaraan akses kesehatan perairan.',
+    googleDriveLink: 'https://drive.google.com/drive/folders/1Pusling_Apung_Payung_Lancang',
+    googleDriveFolder: 'Drive: Dokumentasi / Pusling Apung Pulau Payung & Lancang',
+    description: 'Kunjungan pelayanan medis mobile dengan perahu operasional dan speed boat tim medis gabungan ke pulau berpenduduk kecil untuk menjamin kesetaraan akses kesehatan perairan.',
     organizer: 'Tim Reaksi Cepat & Pelayanan Luar Gedung Puskesmas Kec. Kepulauan Seribu Selatan',
     participantCount: 52,
     highlights: [
@@ -109,6 +115,8 @@ export const INITIAL_ACTIVITY_ALBUMS: ActivityAlbum[] = [
     island: 'Pulau Untung Jawa',
     location: 'SDN 01 & SMPN 285 Pulau Untung Jawa',
     coverImage: 'https://images.unsplash.com/photo-1588072432836-e10032774350?auto=format&fit=crop&w=800&q=80',
+    googleDriveLink: 'https://drive.google.com/drive/folders/1UKS_BIAS_UntungJawa_2026',
+    googleDriveFolder: 'Drive: Dokumentasi / UKS & Imunisasi BIAS Untung Jawa',
     description: 'Pemeriksaan ketajaman penglihatan, kesehatan telinga, kebersihan gigi, status gizi antropometri anak sekolah dasar, serta pemberian imunisasi Campak-Rubella dan HPV.',
     organizer: 'Pembina UKS Puskesmas Kelurahan Pulau Untung Jawa',
     participantCount: 130,
@@ -141,7 +149,9 @@ export const INITIAL_ACTIVITY_ALBUMS: ActivityAlbum[] = [
     island: 'Pulau Tidung',
     location: 'Dermaga Utama & Perairan Pulau Tidung',
     coverImage: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80',
-    description: 'Latihan gabungan simulasi triase korban tenggelam, resusitasi jantung paru (RJP), stabilisasi spinal cervical, dan protokol transfer pasien kritis menggunakan kapal ambulans ke RSUD Kepulauan Seribu.',
+    googleDriveLink: 'https://drive.google.com/drive/folders/1Simulasi_Evakuasi_Maritim_Tidung',
+    googleDriveFolder: 'Drive: Dokumentasi / Simulasi Medis Maritim & Evakuasi Laut',
+    description: 'Latihan gabungan simulasi triase korban tenggelam, resusitasi jantung paru (RJP), stabilisasi spinal cervical, dan protokol transfer pasien kritis menggunakan kapal operasional evakuasi ke RSUD Kepulauan Seribu.',
     organizer: 'Tim IGD, Damkar, Basarnas & Polairud Kepulauan Seribu',
     participantCount: 45,
     highlights: [
@@ -157,7 +167,7 @@ export const INITIAL_ACTIVITY_ALBUMS: ActivityAlbum[] = [
       },
       {
         url: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1200&q=80',
-        caption: 'Proses evakuasi tandu scoop stretcher ke atas dek ambulans laut.'
+        caption: 'Proses evakuasi tandu scoop stretcher ke atas dek kapal rujukan laut.'
       },
       {
         url: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1200&q=80',
@@ -173,6 +183,8 @@ export const INITIAL_ACTIVITY_ALBUMS: ActivityAlbum[] = [
     island: 'Pulau Lancang',
     location: 'Lingkungan RW 01 - RW 03 Pulau Lancang',
     coverImage: 'https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=800&q=80',
+    googleDriveLink: 'https://drive.google.com/drive/folders/1PSN_Jumantik_PulauLancang_2026',
+    googleDriveFolder: 'Drive: Dokumentasi / PSN & Jumantik Mandiri Pulau Lancang',
     description: 'Gerakan serentak pemeriksaan tempat penampungan air tawar, sumur pulau, pembagian bubuk abate, serta penyuluhan pencegahan Demam Berdarah Dengue (DBD) di kawasan permukiman pesisir.',
     organizer: 'Sanitarian & Kader Jumantik Pustu Pulau Lancang',
     participantCount: 110,
