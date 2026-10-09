@@ -33,9 +33,15 @@ import { Footer } from './components/Footer';
 import { SearchEngineModal } from './components/SearchEngineModal';
 import { FloatingActionHub } from './components/FloatingActionHub';
 import { ServiceDocumentModal } from './components/ServiceDocumentModal';
+import { gasService } from './services/gasService';
 
 const MainContent: React.FC = () => {
   const { activeTab, navigateToTab } = useData();
+
+  React.useEffect(() => {
+    // Record page view to Google Spreadsheet if GAS is connected
+    gasService.recordVisitor(activeTab);
+  }, [activeTab]);
 
   React.useEffect(() => {
     // Hidden access for administrator: URL query ?admin=true or hash #admin

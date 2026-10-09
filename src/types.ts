@@ -69,7 +69,7 @@ export interface FacilityMonthlyVisit {
   rujukanRsud: number;
 }
 
-export type ServiceDocKey = 'standar' | 'maklumat' | 'hak-kewajiban';
+export type ServiceDocKey = 'standar' | 'maklumat' | 'hak-kewajiban' | 'struktur-ilp';
 
 export interface StaffMember {
   id: string;

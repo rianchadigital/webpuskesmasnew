@@ -96,9 +96,10 @@ export const Navbar: React.FC = () => {
       label: 'INFORMASI PELAYANAN',
       activeMatchTabs: ['pelayanan', 'ilp', 'dokumen-pelayanan'],
       subItems: [
-        { id: 'dokumen-pelayanan', subTab: 'standar', label: 'Standar Pelayanan', desc: 'Standar operasional, syarat, tarif & alur pelayanan', icon: FileCheck, badge: 'PDF' },
-        { id: 'dokumen-pelayanan', subTab: 'maklumat', label: 'Maklumat Pelayanan', desc: 'Pernyataan kesanggupan pelayanan prima resmi', icon: Scroll, badge: 'PDF' },
-        { id: 'dokumen-pelayanan', subTab: 'hak-kewajiban', label: 'Hak dan Kewajiban Pasien', desc: '12 Hak Pasien & 4 Kewajiban Pasien Kemenkes RI', icon: ShieldAlert, badge: 'PDF' },
+        { id: 'dokumen-pelayanan', subTab: 'standar', label: 'Standar Pelayanan', desc: 'Standar operasional, syarat, tarif & alur pelayanan (View PDF Drive)', icon: FileCheck, badge: 'PDF Drive' },
+        { id: 'dokumen-pelayanan', subTab: 'maklumat', label: 'Maklumat Pelayanan', desc: 'Pernyataan kesanggupan pelayanan prima resmi (View PDF Drive)', icon: Scroll, badge: 'PDF Drive' },
+        { id: 'dokumen-pelayanan', subTab: 'hak-kewajiban', label: 'Hak dan Kewajiban Pasien', desc: '12 Hak Pasien & 4 Kewajiban Pasien Kemenkes (View PDF Drive)', icon: ShieldAlert, badge: 'PDF Drive' },
+        { id: 'dokumen-pelayanan', subTab: 'struktur-ilp', label: 'Struktur Organisasi ILP', desc: 'Struktur organisasi 5 Klaster ILP Kepmenkes 2026 (View PDF Drive)', icon: GitBranch, badge: 'PDF Drive' },
         { id: 'pelayanan', label: 'Layanan Poliklinik & Medis', desc: 'Pemeriksaan umum, KIA/KB, gigi, farmasi & lab', icon: Stethoscope },
         { id: 'ilp', label: 'Integrasi Layanan Primer (ILP)', desc: 'Transformasi 5 klaster siklus hidup Kemenkes RI', icon: Layers, badge: 'ILP' },
         { id: 'pelayanan', label: 'Alur Pelayanan Pasien', desc: 'Standar operasional pendaftaran, rawat & rujukan', icon: GitFork },

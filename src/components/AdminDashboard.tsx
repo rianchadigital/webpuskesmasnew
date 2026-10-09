@@ -210,7 +210,7 @@ export const AdminDashboard: React.FC = () => {
     { id: 'islands', label: 'Wilayah 5 Pustu', icon: Anchor },
     { id: 'documents', label: 'Dokumen SOP', icon: FileText },
     { id: 'faqs', label: 'Tanya Jawab FAQ', icon: HelpCircle },
-    { id: 'database', label: 'Database SQL (Hosting)', icon: Database },
+    { id: 'database', label: 'Database GAS & Deploy Hostinger', icon: Database, highlight: true },
   ];
 
   return (

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { initialOrgLeader, initialOrgClusters } from '../data/initialData';
 import { OrgPerson, OrgCluster } from '../types';
+import { useData } from '../context/DataContext';
 import { 
   Camera, 
   Upload, 
@@ -16,10 +17,16 @@ import {
   Info, 
   CheckCircle2, 
   FileEdit,
-  Printer
+  Printer,
+  ExternalLink,
+  Eye,
+  FileText
 } from 'lucide-react';
 
 const STORAGE_KEY = 'puskesmas_org_chart_data_v2';
+const PDF_DRIVE_ID = '1hNK4UL5swEImzx3mmknDWFIUWb_Kgc0W';
+const PDF_PREVIEW_URL = `https://drive.google.com/file/d/${PDF_DRIVE_ID}/preview`;
+const PDF_SHARE_URL = `https://drive.google.com/file/d/${PDF_DRIVE_ID}/view?usp=sharing`;
 
 export const OrganizationChart: React.FC = () => {
   const [leader, setLeader] = useState<OrgPerson>(() => {
@@ -67,6 +74,9 @@ export const OrganizationChart: React.FC = () => {
     isCoordinator?: boolean;
   } | null>(null);
 
+  const { openServiceDoc } = useData();
+  const [chartViewMode, setChartViewMode] = useState<'pdf' | 'interactive'>('pdf');
+  const [pdfLoading, setPdfLoading] = useState(true);
   const [tempPhotoUrl, setTempPhotoUrl] = useState<string>('');
   const [tempName, setTempName] = useState<string>('');
   const [tempRole, setTempRole] = useState<string>('');
@@ -223,79 +233,179 @@ export const OrganizationChart: React.FC = () => {
             Struktur Organisasi Integrasi Layanan Primer (ILP)
           </h3>
           <p className="text-xs text-slate-600">
-            Klik foto atau kartu pejabat mana saja untuk mengunggah foto nakes baru atau memperbarui data.
+            Dokumen resmi diambil langsung dari Google Drive PDF sesuai keputusan Kepala Puskesmas.
           </p>
         </div>
 
-        {/* Action Buttons & Zoom Bar */}
+        {/* View Mode Switcher: PDF Google Drive vs Bagan Interaktif */}
         <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
-          {/* Search Box */}
-          <div className="relative flex-1 sm:w-56">
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Cari pejabat / bidang..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-hidden focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          {/* Zoom Controls */}
-          <div className="inline-flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
+          <div className="inline-flex p-1 rounded-2xl bg-slate-100 border border-slate-200 text-xs font-bold gap-1">
             <button
-              onClick={() => setZoomLevel(prev => Math.max(60, prev - 10))}
-              className="p-1.5 hover:bg-white rounded-lg text-slate-700 transition"
-              title="Perkecil Bagan"
+              onClick={() => setChartViewMode('pdf')}
+              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl transition ${
+                chartViewMode === 'pdf'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+              }`}
             >
-              <ZoomOut className="w-3.5 h-3.5" />
-            </button>
-            <span className="px-2 font-mono font-bold text-[11px] text-slate-600 min-w-11 text-center">
-              {zoomLevel}%
-            </span>
-            <button
-              onClick={() => setZoomLevel(prev => Math.min(140, prev + 10))}
-              className="p-1.5 hover:bg-white rounded-lg text-slate-700 transition"
-              title="Perbesar Bagan"
-            >
-              <ZoomIn className="w-3.5 h-3.5" />
+              <Eye className="w-4 h-4" />
+              <span>Dokumen PDF (Drive)</span>
             </button>
             <button
-              onClick={() => setZoomLevel(100)}
-              className="p-1.5 hover:bg-white rounded-lg text-slate-700 transition ml-1"
-              title="Reset Skala"
+              onClick={() => setChartViewMode('interactive')}
+              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl transition ${
+                chartViewMode === 'interactive'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+              }`}
             >
-              <RotateCcw className="w-3.5 h-3.5" />
+              <FileText className="w-4 h-4" />
+              <span>Bagan Visual Nakes</span>
             </button>
           </div>
 
-          <button
-            onClick={() => setIsFullscreen(!isFullscreen)}
-            className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 transition text-xs flex items-center gap-1.5 font-bold"
-            title="Layar Penuh"
+          <a
+            href={PDF_SHARE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold border border-slate-200 transition"
+            title="Buka Dokumen PDF di Google Drive"
           >
-            <Maximize2 className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">{isFullscreen ? 'Kecilkan' : 'Layar Penuh'}</span>
-          </button>
-
-          <button
-            onClick={handlePrint}
-            className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 transition text-xs flex items-center gap-1.5 font-bold"
-            title="Cetak / Unduh Bagan"
-          >
-            <Printer className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Cetak</span>
-          </button>
-
-          <button
-            onClick={handleResetToDefault}
-            className="text-[11px] text-slate-500 hover:text-rose-600 underline font-semibold px-1"
-            title="Kembalikan ke susunan awal"
-          >
-            Reset Default
-          </button>
+            <ExternalLink className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Buka Google Drive</span>
+          </a>
         </div>
       </div>
+
+      {/* VIEW MODE 1: DOKUMEN PDF RESMI GOOGLE DRIVE */}
+      {chartViewMode === 'pdf' && (
+        <div className="bg-slate-950 rounded-3xl border border-slate-800 shadow-2xl overflow-hidden flex flex-col">
+          {/* Top Bar for PDF Viewer */}
+          <div className="bg-slate-900 px-5 py-3 border-b border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-slate-300">
+            <div className="flex items-center gap-2.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="font-bold text-white">
+                Dokumen PDF Resmi: Struktur Organisasi Integrasi Layanan Primer (ILP)
+              </span>
+              <span className="text-[10px] px-2 py-0.5 rounded bg-blue-900/60 text-blue-300 border border-blue-700 font-mono">
+                ID: {PDF_DRIVE_ID}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => openServiceDoc('struktur-ilp')}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition"
+              >
+                <Maximize2 className="w-3.5 h-3.5" />
+                <span>Modal Layar Penuh</span>
+              </button>
+
+              <a
+                href={PDF_SHARE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold transition"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Tab Baru</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Embedded Google Drive PDF Iframe */}
+          <div className="relative w-full h-[750px] bg-slate-900">
+            {pdfLoading && (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-slate-900 text-slate-300 gap-3">
+                <div className="w-10 h-10 border-3 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                <p className="text-xs font-semibold text-blue-300">
+                  Memuat dokumen PDF Struktur Organisasi ILP dari Google Drive...
+                </p>
+              </div>
+            )}
+            <iframe
+              src={PDF_PREVIEW_URL}
+              title="Struktur Organisasi ILP Puskesmas Kepulauan Seribu Selatan"
+              className="w-full h-full border-0 block"
+              allow="autoplay"
+              onLoad={() => setPdfLoading(false)}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* VIEW MODE 2: BAGAN VISUAL INTERAKTIF NAKES */}
+      {chartViewMode === 'interactive' && (
+        <>
+          {/* Action Buttons & Zoom Bar */}
+          <div className="bg-slate-100 p-3 rounded-2xl border border-slate-200 flex flex-wrap items-center justify-between gap-2">
+            <div className="relative flex-1 sm:w-64 max-w-sm">
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Cari pejabat / bidang..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-8 pr-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div className="flex items-center gap-2">
+              {/* Zoom Controls */}
+              <div className="inline-flex items-center bg-white p-1 rounded-xl border border-slate-200 text-xs">
+                <button
+                  onClick={() => setZoomLevel(prev => Math.max(60, prev - 10))}
+                  className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-700 transition"
+                  title="Perkecil Bagan"
+                >
+                  <ZoomOut className="w-3.5 h-3.5" />
+                </button>
+                <span className="px-2 font-mono font-bold text-[11px] text-slate-600 min-w-11 text-center">
+                  {zoomLevel}%
+                </span>
+                <button
+                  onClick={() => setZoomLevel(prev => Math.min(140, prev + 10))}
+                  className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-700 transition"
+                  title="Perbesar Bagan"
+                >
+                  <ZoomIn className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={() => setZoomLevel(100)}
+                  className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-700 transition ml-1"
+                  title="Reset Skala"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+              <button
+                onClick={() => setIsFullscreen(!isFullscreen)}
+                className="p-2 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 transition text-xs flex items-center gap-1.5 font-bold"
+                title="Layar Penuh"
+              >
+                <Maximize2 className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">{isFullscreen ? 'Kecilkan' : 'Layar Penuh'}</span>
+              </button>
+
+              <button
+                onClick={handlePrint}
+                className="p-2 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 transition text-xs flex items-center gap-1.5 font-bold"
+                title="Cetak / Unduh Bagan"
+              >
+                <Printer className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Cetak</span>
+              </button>
+
+              <button
+                onClick={handleResetToDefault}
+                className="text-[11px] text-slate-500 hover:text-rose-600 underline font-semibold px-1"
+                title="Kembalikan ke susunan awal"
+              >
+                Reset Default
+              </button>
+            </div>
+          </div>
 
       {/* The Printable Visual Chart Container */}
       <div 
@@ -515,6 +625,8 @@ export const OrganizationChart: React.FC = () => {
           </div>
         </div>
       </div>
+      </>
+      )}
 
       {/* PHOTO & DETAIL EDITING MODAL ("dapat dimasukan foto") */}
       {activeEditingPerson && (

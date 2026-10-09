@@ -282,7 +282,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setProfileSubTab('sambutan');
     } else if (tab === 'dokumen-pelayanan') {
       setActiveTab('pelayanan');
-      if (targetId && ['standar', 'maklumat', 'hak-kewajiban'].includes(targetId)) {
+      if (targetId && ['standar', 'maklumat', 'hak-kewajiban', 'struktur-ilp'].includes(targetId)) {
         setActiveServiceDoc(targetId as ServiceDocKey);
       } else {
         setActiveServiceDoc('standar');

@@ -1022,33 +1022,44 @@ export const initialDocuments: DocumentItem[] = [
     name: 'Dokumen Standar Pelayanan Publik Puskesmas Kecamatan Kepulauan Seribu Selatan',
     category: 'Informasi pelayanan',
     date: '2026-08-15',
-    fileSize: '180 KB',
-    fileType: 'PDF / Vektor',
+    fileSize: '480 KB',
+    fileType: 'PDF / Drive',
     downloadsCount: 1450,
     description: 'Keputusan resmi standar persyaratan, mekanisme, tarif gratis BPJS/DKI, waktu respon IGD 24 jam, dan sarana fasilitas.',
-    fileUrl: '/assets/dokumen/standar-pelayanan.svg'
+    fileUrl: 'https://drive.google.com/file/d/1Gxi3_fT5c2a-hjM5S9BAzRdbybdMtq7Y/view?usp=sharing'
   },
   {
     id: 'doc-maklumat-pelayanan',
     name: 'Dokumen Maklumat Pelayanan Resmi Puskesmas Kepulauan Seribu Selatan',
     category: 'SOP publik',
     date: '2026-08-15',
-    fileSize: '120 KB',
-    fileType: 'PDF / Vektor',
+    fileSize: '320 KB',
+    fileType: 'PDF / Drive',
     downloadsCount: 1820,
     description: 'Pernyataan kesanggupan resmi seluruh jajaran Puskesmas dalam menyelenggarakan pelayanan prima dan siap menerima sanksi apabila melanggar.',
-    fileUrl: '/assets/dokumen/maklumat-pelayanan.svg'
+    fileUrl: 'https://drive.google.com/file/d/1DFcUjFAhLsJuFs4pvv5WMtxnd651NXvS/view?usp=drive_link'
   },
   {
     id: 'doc-hak-kewajiban',
     name: 'Dokumen 12 Hak Pasien dan 4 Kewajiban Pasien Resmi',
     category: 'Informasi pelayanan',
     date: '2026-08-15',
-    fileSize: '210 KB',
-    fileType: 'PDF / Vektor',
+    fileSize: '390 KB',
+    fileType: 'PDF / Drive',
     downloadsCount: 2310,
     description: 'Pedoman hak-hak pasien dalam memperoleh pelayanan medis yang manusiawi, adil, bermutu, serta 4 kewajiban pasien saat berobat.',
-    fileUrl: '/assets/dokumen/hak-dan-kewajiban-pasien.svg'
+    fileUrl: 'https://drive.google.com/file/d/1FwoMOjldKvUK6pXmDxSP0r-QfVvJcqXy/view?usp=sharing'
+  },
+  {
+    id: 'doc-struktur-ilp',
+    name: 'Dokumen Struktur Organisasi Integrasi Layanan Primer (ILP) 2026',
+    category: 'Informasi pelayanan',
+    date: '2026-08-15',
+    fileSize: '520 KB',
+    fileType: 'PDF / Drive',
+    downloadsCount: 1980,
+    description: 'Bagan dan tata kelola struktur organisasi Integrasi Layanan Primer (ILP) 5 Klaster Siklus Hidup Puskesmas Kepulauan Seribu Selatan sesuai Kepmenkes No. 2014/2023.',
+    fileUrl: 'https://drive.google.com/file/d/1hNK4UL5swEImzx3mmknDWFIUWb_Kgc0W/view?usp=sharing'
   },
   {
     id: 'doc-1',

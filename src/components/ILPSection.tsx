@@ -19,11 +19,13 @@ import {
   Layers,
   ChevronDown,
   ChevronUp,
-  HeartHandshake
+  HeartHandshake,
+  ExternalLink,
+  Eye
 } from 'lucide-react';
 
 export const ILPSection: React.FC = () => {
-  const { ilpClusters, selectedClusterId, setSelectedClusterId, navigateToTab } = useData();
+  const { ilpClusters, selectedClusterId, setSelectedClusterId, navigateToTab, openServiceDoc } = useData();
   const [activeModalCluster, setActiveModalCluster] = useState<ILPCluster | null>(null);
 
   // Auto open modal or focus if selectedClusterId changed
@@ -68,6 +70,48 @@ export const ILPSection: React.FC = () => {
           <p className="text-sm text-slate-600 font-medium leading-relaxed">
             Puskesmas Kepulauan Seribu Selatan menerapkan penataan pelayanan berbasis siklus hidup manusia untuk menjamin pemantauan kesehatan keluarga yang proaktif, menyeluruh, dan berkesinambungan.
           </p>
+        </div>
+
+        {/* Official Google Drive PDF Callout Banner for Struktur Organisasi ILP */}
+        <div className="mb-10 max-w-4xl mx-auto p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-teal-900 via-sky-950 to-indigo-950 text-white border border-teal-500/40 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5 text-center sm:text-left">
+            <div className="w-12 h-12 rounded-xl bg-teal-500/20 border border-teal-400/40 flex items-center justify-center text-teal-300 shrink-0">
+              <Layers className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 justify-center sm:justify-start">
+                <span className="px-2 py-0.5 rounded-full bg-teal-500/30 text-teal-300 border border-teal-400/30 text-[10px] font-extrabold uppercase">
+                  Dokumen Resmi Kemenkes
+                </span>
+                <span className="text-[10px] font-mono text-slate-400">PDF Drive</span>
+              </div>
+              <h3 className="text-sm sm:text-base font-bold text-white mt-0.5">
+                Struktur Organisasi Integrasi Layanan Primer (ILP) 2026
+              </h3>
+              <p className="text-xs text-slate-300 line-clamp-1">
+                Tersedia dokumen view PDF resmi penetapan 5 klaster ILP dan koordinator nakes faskes kepulauan.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
+            <button
+              onClick={() => openServiceDoc('struktur-ilp')}
+              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition shadow-md cursor-pointer"
+            >
+              <Eye className="w-3.5 h-3.5" />
+              <span>Lihat View PDF</span>
+            </button>
+            <a
+              href="https://drive.google.com/file/d/1hNK4UL5swEImzx3mmknDWFIUWb_Kgc0W/view?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 transition"
+              title="Buka Dokumen PDF di Tab Baru Google Drive"
+            >
+              <ExternalLink className="w-4 h-4" />
+            </a>
+          </div>
         </div>
 
         {/* 5 Clusters Interactive Dashboard Grid */}
