@@ -679,35 +679,36 @@ git push -u origin main`;
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-              {/* Method A */}
-              <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-3">
+              {/* Method 1: Menu Git Hostinger (Paling Mudah) */}
+              <div className="p-5 rounded-2xl bg-indigo-50/70 border border-indigo-200/90 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="px-2.5 py-0.5 rounded-full bg-indigo-600 text-white text-[10px] font-bold uppercase">Metode GitHub Actions (CI/CD Otomatis)</span>
-                  <span className="text-xs font-bold text-indigo-900">Otomatis Setiap Push</span>
+                  <span className="px-2.5 py-0.5 rounded-full bg-indigo-600 text-white text-[10px] font-bold uppercase">Metode 1: Menu GIT Hostinger (Paling Mudah)</span>
+                  <span className="text-xs font-bold text-indigo-900">Langsung Tampil</span>
                 </div>
-                <h4 className="font-black text-sm text-slate-900">Cara Memasukkan Secret ke GitHub:</h4>
+                <h4 className="font-black text-sm text-slate-900">Tinggal Koneksikan di Menu Git Hostinger:</h4>
                 <ol className="list-decimal list-inside text-xs text-slate-700 space-y-1.5 leading-relaxed">
-                  <li>Buka repositori Anda di <strong>GitHub.com</strong>.</li>
-                  <li>Klik menu <strong>Settings</strong> (kanan atas) &gt; di menu kiri pilih <strong>Secrets and variables &gt; Actions</strong>.</li>
-                  <li>Klik tombol hijau <strong>New repository secret</strong>.</li>
-                  <li>Masukkan 3 secrets di atas: <code className="font-mono font-bold">FTP_SERVER</code>, <code className="font-mono font-bold">FTP_USERNAME</code>, dan <code className="font-mono font-bold">FTP_PASSWORD</code>.</li>
-                  <li>Selesai! Sekarang setiap Anda <code>git push</code>, website Hostinger otomatis terupdate tanpa perlu buka Hostinger lagi!</li>
+                  <li>Buka <strong>hPanel Hostinger &gt; Tingkat Lanjut (Advanced) &gt; Git</strong>.</li>
+                  <li>Di kolom <strong>Repository</strong>: Masukkan link GitHub Anda (contoh: <code className="font-mono font-bold text-indigo-800">https://github.com/akun/puskesmas.git</code>).</li>
+                  <li>Di kolom <strong>Branch</strong>: Pilih/Ketik <code className="font-mono font-bold text-emerald-800 bg-emerald-100 px-1 py-0.5 rounded">production</code> <em>(PENTING: Pilih branch production agar website langsung tampil!)</em>.</li>
+                  <li>Di kolom <strong>Install Directory</strong>: Isi <code className="font-mono font-bold">public_html</code>.</li>
+                  <li>Klik tombol <strong>Create (Buat)</strong> ➔ Website Puskesmas <strong>LANGSUNG TAMPIL LIVE</strong>!</li>
+                  <li><em>Agar otomatis update setiap push:</em> Salin link <strong>Webhook URL</strong> dari tabel Hostinger, lalu tempelkan di GitHub: <strong>Settings &gt; Webhooks</strong>.</li>
                 </ol>
               </div>
 
-              {/* Method B */}
-              <div className="p-5 rounded-2xl bg-sky-50/60 border border-sky-100 space-y-3">
+              {/* Method 2: GitHub Actions FTP */}
+              <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="px-2.5 py-0.5 rounded-full bg-sky-600 text-white text-[10px] font-bold uppercase">Metode Menu Git Hostinger (Alternatif)</span>
-                  <span className="text-xs font-bold text-sky-900">Fitur hPanel</span>
+                  <span className="px-2.5 py-0.5 rounded-full bg-slate-700 text-white text-[10px] font-bold uppercase">Metode 2: GitHub Actions Auto FTP</span>
+                  <span className="text-xs font-bold text-slate-700">Alternatif CI/CD</span>
                 </div>
-                <h4 className="font-black text-sm text-slate-900">Gunakan Menu Git Bawaan Hostinger:</h4>
+                <h4 className="font-black text-sm text-slate-900">Deploy Otomatis via Akun FTP:</h4>
                 <ol className="list-decimal list-inside text-xs text-slate-700 space-y-1.5 leading-relaxed">
-                  <li>Buka <strong>hPanel Hostinger &gt; Advanced &gt; Git</strong>.</li>
-                  <li>Masukkan URL Repository GitHub Anda (contoh: <code className="font-mono">https://github.com/akun/puskesmas</code>).</li>
-                  <li>Pilih Branch: <code className="font-mono">main</code> dan Directory: <code className="font-mono">public_html</code> lalu klik Create.</li>
-                  <li>Salin <strong>Webhook URL</strong> yang diberikan Hostinger, lalu tempelkan di GitHub Repo: <strong>Settings &gt; Webhooks</strong>.</li>
-                  <li>Hostinger akan otomatis menarik update setiap kali push di GitHub!</li>
+                  <li>Buka repositori Anda di <strong>GitHub.com</strong>.</li>
+                  <li>Klik menu <strong>Settings</strong> &gt; di bilah kiri pilih <strong>Secrets and variables &gt; Actions</strong>.</li>
+                  <li>Klik tombol hijau <strong>New repository secret</strong>.</li>
+                  <li>Masukkan 3 secrets FTP di atas: <code className="font-mono font-bold">FTP_SERVER</code>, <code className="font-mono font-bold">FTP_USERNAME</code>, dan <code className="font-mono font-bold">FTP_PASSWORD</code>.</li>
+                  <li>Setiap Anda ketik <code>git push</code> ke branch main, website Hostinger otomatis terupdate tanpa perlu buka Hostinger lagi!</li>
                 </ol>
               </div>
             </div>
