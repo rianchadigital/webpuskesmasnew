@@ -1,6 +1,6 @@
 /**
  * Service Penghubung Google Apps Script (GAS) & Google Spreadsheet
- * Puskesmas Kecamatan Kepulauan Seribu Selatan
+ * Puskesmas Kepulauan Seribu Selatan
  */
 
 const STORAGE_KEY_GAS_URL = 'puskesmas_gas_url';
@@ -208,6 +208,120 @@ export const gasService = {
       return {
         success: false,
         message: err.message || 'Gagal menghubungi server GAS.'
+      };
+    }
+  },
+
+  /**
+   * Mengambil data SDM dari Google Spreadsheet
+   */
+  async getSDMData(): Promise<any[]> {
+    const url = this.getUrl();
+    if (!url) return [];
+
+    try {
+      const fetchUrl = url.includes('?') ? `${url}&action=get_sdm` : `${url}?action=get_sdm`;
+      const response = await fetch(fetchUrl);
+      if (!response.ok) return [];
+      const result: GASResponse = await response.json();
+      return result.status === 'success' && Array.isArray(result.data) ? result.data : [];
+    } catch {
+      return [];
+    }
+  },
+
+  /**
+   * Menyimpan / Sinkronisasi data formasi SDM ke Google Spreadsheet
+   */
+  async saveSDMData(data: any[]): Promise<{ success: boolean; message: string }> {
+    const url = this.getUrl();
+    if (!url) {
+      return {
+        success: false,
+        message: 'URL Google Apps Script belum disetel di Dashboard Admin.'
+      };
+    }
+
+    try {
+      const payload = {
+        action: 'save_sdm',
+        data
+      };
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+
+      const result: GASResponse = await response.json();
+      return {
+        success: result.status === 'success',
+        message: result.message || 'Data SDM berhasil disimpan ke Google Spreadsheet.'
+      };
+    } catch (err: any) {
+      return {
+        success: false,
+        message: err.message || 'Gagal menyinkronkan data SDM ke Google Spreadsheet.'
+      };
+    }
+  },
+
+  async saveSDMKData(data: any[]): Promise<{ success: boolean; message: string }> {
+    return this.saveSDMData(data);
+  },
+
+  /**
+   * Mengambil data kesehatan (morbiditas 10 penyakit & kunjungan) dari Google Spreadsheet
+   */
+  async getHealthData(): Promise<{ morbiditas?: any[]; kunjungan?: any[] } | null> {
+    const url = this.getUrl();
+    if (!url) return null;
+
+    try {
+      const fetchUrl = url.includes('?') ? `${url}&action=get_kesehatan` : `${url}?action=get_kesehatan`;
+      const response = await fetch(fetchUrl);
+      if (!response.ok) return null;
+      const result: GASResponse = await response.json();
+      return result.status === 'success' ? result.data : null;
+    } catch {
+      return null;
+    }
+  },
+
+  /**
+   * Menyimpan / Sinkronisasi data kesehatan ke Google Spreadsheet
+   */
+  async saveHealthData(data: { morbiditas?: any[]; kunjungan?: any[] }): Promise<{ success: boolean; message: string }> {
+    const url = this.getUrl();
+    if (!url) {
+      return {
+        success: false,
+        message: 'URL Google Apps Script belum disetel di Dashboard Admin.'
+      };
+    }
+
+    try {
+      const payload = {
+        action: 'save_kesehatan',
+        ...data
+      };
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+
+      const result: GASResponse = await response.json();
+      return {
+        success: result.status === 'success',
+        message: result.message || 'Data Kesehatan berhasil disimpan ke Google Spreadsheet.'
+      };
+    } catch (err: any) {
+      return {
+        success: false,
+        message: err.message || 'Gagal menyinkronkan data kesehatan ke Google Spreadsheet.'
       };
     }
   }

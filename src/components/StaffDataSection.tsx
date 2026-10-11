@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useData } from '../context/DataContext';
 import { initialSDMKData } from '../data/initialData';
 import { SDMKItem } from '../types';
 import { 
@@ -30,6 +31,9 @@ import {
 } from 'lucide-react';
 
 export const StaffDataSection: React.FC = () => {
+  const { sdmkData } = useData();
+  const currentSDMKData = (sdmkData && sdmkData.length > 0) ? sdmkData : initialSDMKData;
+
   const [activeView, setActiveView] = useState<'grafik' | 'jabatan' | 'tempat_tugas'>('grafik');
   const [selectedCategory, setSelectedCategory] = useState<string>('Semua');
   const [selectedLocation, setSelectedLocation] = useState<string>('Semua');
@@ -60,45 +64,57 @@ export const StaffDataSection: React.FC = () => {
 
   // Totals calculations
   const totalEksisting = useMemo(() => {
-    return initialSDMKData.reduce((acc, curr) => acc + curr.jumlahEksisting, 0);
-  }, []);
+    return currentSDMKData.reduce((acc, curr) => acc + curr.jumlahEksisting, 0);
+  }, [currentSDMKData]);
 
   const totalABK = useMemo(() => {
-    return initialSDMKData.reduce((acc, curr) => acc + curr.standarABK, 0);
-  }, []);
+    return currentSDMKData.reduce((acc, curr) => acc + curr.standarABK, 0);
+  }, [currentSDMKData]);
 
   const totalPNS = useMemo(() => {
-    return initialSDMKData.reduce((acc, curr) => acc + curr.statusPNS, 0);
-  }, []);
+    return currentSDMKData.reduce((acc, curr) => acc + (curr.statusPNS || 0), 0);
+  }, [currentSDMKData]);
 
   const totalPPPK = useMemo(() => {
-    return initialSDMKData.reduce((acc, curr) => acc + curr.statusPPPK, 0);
-  }, []);
+    return currentSDMKData.reduce((acc, curr) => acc + (curr.statusPPPK || 0), 0);
+  }, [currentSDMKData]);
+
+  const totalPPPKPW = useMemo(() => {
+    return currentSDMKData.reduce((acc, curr) => acc + (curr.statusPPPKPW || 0), 0);
+  }, [currentSDMKData]);
+
+  const totalNonPNS = useMemo(() => {
+    return currentSDMKData.reduce((acc, curr) => acc + (curr.statusNonPNS || 0), 0);
+  }, [currentSDMKData]);
+
+  const totalPJLP = useMemo(() => {
+    return currentSDMKData.reduce((acc, curr) => acc + (curr.statusPJLP || 0), 0);
+  }, [currentSDMKData]);
 
   const totalNonASN = useMemo(() => {
-    return initialSDMKData.reduce((acc, curr) => acc + curr.statusNonASN, 0);
-  }, []);
+    return totalNonPNS + totalPJLP;
+  }, [totalNonPNS, totalPJLP]);
 
   // Facility counts
   const totalInduk = useMemo(() => {
-    return initialSDMKData.reduce((acc, curr) => acc + curr.lokasiPuskesmasInduk, 0);
-  }, []);
+    return currentSDMKData.reduce((acc, curr) => acc + curr.lokasiPuskesmasInduk, 0);
+  }, [currentSDMKData]);
 
   const totalLancang = useMemo(() => {
-    return initialSDMKData.reduce((acc, curr) => acc + curr.lokasiPustuLancang, 0);
-  }, []);
+    return currentSDMKData.reduce((acc, curr) => acc + curr.lokasiPustuLancang, 0);
+  }, [currentSDMKData]);
 
   const totalPari = useMemo(() => {
-    return initialSDMKData.reduce((acc, curr) => acc + curr.lokasiPustuPari, 0);
-  }, []);
+    return currentSDMKData.reduce((acc, curr) => acc + curr.lokasiPustuPari, 0);
+  }, [currentSDMKData]);
 
   const totalUntungJawa = useMemo(() => {
-    return initialSDMKData.reduce((acc, curr) => acc + curr.lokasiPustuUntungJawa, 0);
-  }, []);
+    return currentSDMKData.reduce((acc, curr) => acc + curr.lokasiPustuUntungJawa, 0);
+  }, [currentSDMKData]);
 
   // Filtered dataset for table
   const filteredData = useMemo(() => {
-    return initialSDMKData
+    return currentSDMKData
       .filter((item: SDMKItem) => {
         const matchesCategory = selectedCategory === 'Semua' || item.kategori === selectedCategory;
         const matchesSearch = 
@@ -119,18 +135,18 @@ export const StaffDataSection: React.FC = () => {
         const valB = b[sortField];
         return sortAsc ? valA - valB : valB - valA;
       });
-  }, [selectedCategory, searchQuery, selectedLocation, sortField, sortAsc]);
+  }, [currentSDMKData, selectedCategory, searchQuery, selectedLocation, sortField, sortAsc]);
 
   // Chart data per jabatan
   const chartDataJabatan = useMemo(() => {
-    return initialSDMKData.map(item => ({
+    return currentSDMKData.map(item => ({
       name: item.jabatan.replace(/ \(.*\)/, ''),
       fullName: item.jabatan,
       Eksisting: item.jumlahEksisting,
       StandarABK: item.standarABK,
       kategori: item.kategori
     }));
-  }, []);
+  }, [currentSDMKData]);
 
   // Chart data per faskes
   const chartDataFaskes = [
@@ -140,17 +156,19 @@ export const StaffDataSection: React.FC = () => {
     { name: 'Pustu Pulau Lancang', value: totalLancang, fill: '#f59e0b' }
   ];
 
-  // Pie chart data status
+  // Pie chart data 5 status kepegawaian
   const chartDataStatus = [
-    { name: 'PNS / ASN', value: totalPNS, color: '#0284c7' },
+    { name: 'PNS', value: totalPNS, color: '#0284c7' },
     { name: 'PPPK', value: totalPPPK, color: '#10b981' },
-    { name: 'Kontrak Non-ASN / PJLP', value: totalNonASN, color: '#f59e0b' }
+    { name: 'PPPK PW', value: totalPPPKPW, color: '#0d9488' },
+    { name: 'NON PNS', value: totalNonPNS, color: '#f59e0b' },
+    { name: 'PJLP', value: totalPJLP, color: '#8b5cf6' }
   ];
 
   const handleDownloadCSV = () => {
-    const headers = 'No,Jabatan,Kategori,Kualifikasi,Standar ABK,Jumlah Riil,PNS,PPPK,Non-ASN,Puskesmas Induk,Pustu Lancang,Pustu Pari,Pustu Untung Jawa,Keterangan\n';
-    const rows = initialSDMKData.map((item, idx) => 
-      `${idx + 1},"${item.jabatan}","${item.kategori}","${item.kualifikasi}",${item.standarABK},${item.jumlahEksisting},${item.statusPNS},${item.statusPPPK},${item.statusNonASN},${item.lokasiPuskesmasInduk},${item.lokasiPustuLancang},${item.lokasiPustuPari},${item.lokasiPustuUntungJawa},"${item.keterangan}"`
+    const headers = 'No,Jabatan,Kategori,Kualifikasi,Standar ABK,Jumlah Riil,PNS,PPPK,PPPK PW,NON PNS,PJLP,Puskesmas Induk,Pustu Lancang,Pustu Pari,Pustu Untung Jawa,Keterangan\n';
+    const rows = currentSDMKData.map((item, idx) => 
+      `${idx + 1},"${item.jabatan}","${item.kategori}","${item.kualifikasi}",${item.standarABK},${item.jumlahEksisting},${item.statusPNS || 0},${item.statusPPPK || 0},${item.statusPPPKPW || 0},${item.statusNonPNS || 0},${item.statusPJLP || 0},${item.lokasiPuskesmasInduk},${item.lokasiPustuLancang},${item.lokasiPustuPari},${item.lokasiPustuUntungJawa},"${item.keterangan}"`
     ).join('\n');
 
     const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8;' });
@@ -401,18 +419,26 @@ export const StaffDataSection: React.FC = () => {
                   </ResponsiveContainer>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100 text-center">
-                  <div className="p-2 rounded-xl bg-blue-50">
-                    <span className="block text-[11px] font-bold text-blue-800">PNS</span>
-                    <span className="text-lg font-black text-slate-900">{totalPNS}</span>
+                <div className="grid grid-cols-5 gap-1.5 pt-2 border-t border-slate-100 text-center">
+                  <div className="p-1.5 rounded-xl bg-blue-50 border border-blue-100">
+                    <span className="block text-[10px] font-bold text-blue-800">PNS</span>
+                    <span className="text-base sm:text-lg font-black text-slate-900">{totalPNS}</span>
                   </div>
-                  <div className="p-2 rounded-xl bg-emerald-50">
-                    <span className="block text-[11px] font-bold text-emerald-800">PPPK</span>
-                    <span className="text-lg font-black text-slate-900">{totalPPPK}</span>
+                  <div className="p-1.5 rounded-xl bg-emerald-50 border border-emerald-100">
+                    <span className="block text-[10px] font-bold text-emerald-800">PPPK</span>
+                    <span className="text-base sm:text-lg font-black text-slate-900">{totalPPPK}</span>
                   </div>
-                  <div className="p-2 rounded-xl bg-amber-50">
-                    <span className="block text-[11px] font-bold text-amber-800">Non-ASN</span>
-                    <span className="text-lg font-black text-slate-900">{totalNonASN}</span>
+                  <div className="p-1.5 rounded-xl bg-teal-50 border border-teal-100">
+                    <span className="block text-[10px] font-bold text-teal-800">PW</span>
+                    <span className="text-base sm:text-lg font-black text-slate-900">{totalPPPKPW}</span>
+                  </div>
+                  <div className="p-1.5 rounded-xl bg-amber-50 border border-amber-100">
+                    <span className="block text-[10px] font-bold text-amber-800">NON PNS</span>
+                    <span className="text-base sm:text-lg font-black text-slate-900">{totalNonPNS}</span>
+                  </div>
+                  <div className="p-1.5 rounded-xl bg-purple-50 border border-purple-100">
+                    <span className="block text-[10px] font-bold text-purple-800">PJLP</span>
+                    <span className="text-base sm:text-lg font-black text-slate-900">{totalPJLP}</span>
                   </div>
                 </div>
               </div>
@@ -532,7 +558,7 @@ export const StaffDataSection: React.FC = () => {
                           <ArrowUpDown className="w-3 h-3" />
                         </div>
                       </th>
-                      <th className="py-3.5 px-4 text-center">Status (PNS/PPPK/Non-ASN)</th>
+                      <th className="py-3.5 px-4 text-center">Status (PNS / PPPK / PW / Non / PJLP)</th>
                       <th className="py-3.5 px-4">Status Pemenuhan</th>
                     </tr>
                   </thead>
@@ -559,10 +585,12 @@ export const StaffDataSection: React.FC = () => {
                         <td className="py-3.5 px-4 text-center font-black text-blue-700 font-mono text-base bg-blue-50/30">
                           {item.jumlahEksisting}
                         </td>
-                        <td className="py-3.5 px-4 text-center font-mono text-xs">
-                          <span className="text-blue-700 font-bold">{item.statusPNS} PNS</span> • {' '}
-                          <span className="text-emerald-700 font-bold">{item.statusPPPK} PPPK</span> • {' '}
-                          <span className="text-amber-700 font-bold">{item.statusNonASN} Non-ASN</span>
+                        <td className="py-3.5 px-4 text-center font-mono text-xs whitespace-nowrap">
+                          <span className="text-blue-700 font-bold">{item.statusPNS || 0} PNS</span> • {' '}
+                          <span className="text-emerald-700 font-bold">{item.statusPPPK || 0} PPPK</span> • {' '}
+                          <span className="text-teal-700 font-bold">{item.statusPPPKPW || 0} PW</span> • {' '}
+                          <span className="text-amber-700 font-bold">{item.statusNonPNS || 0} Non</span> • {' '}
+                          <span className="text-purple-700 font-bold">{item.statusPJLP || 0} PJLP</span>
                         </td>
                         <td className="py-3.5 px-4">
                           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
@@ -580,8 +608,8 @@ export const StaffDataSection: React.FC = () => {
                       </td>
                       <td className="py-3.5 px-4 text-center font-mono font-black">{totalABK}</td>
                       <td className="py-3.5 px-4 text-center font-mono font-black text-blue-700 text-base">{totalEksisting}</td>
-                      <td className="py-3.5 px-4 text-center font-mono">
-                        {totalPNS} PNS • {totalPPPK} PPPK • {totalNonASN} Non-ASN
+                      <td className="py-3.5 px-4 text-center font-mono text-xs whitespace-nowrap">
+                        {totalPNS} PNS • {totalPPPK} PPPK • {totalPPPKPW} PW • {totalNonPNS} Non • {totalPJLP} PJLP
                       </td>
                       <td className="py-3.5 px-4 text-emerald-700 font-bold">
                         Pemenuhan 100% Sesuai Kebutuhan
@@ -775,7 +803,7 @@ export const StaffDataSection: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 text-slate-700">
-                    {initialSDMKData.map((item) => (
+                    {currentSDMKData.map((item) => (
                       <tr key={item.id} className="hover:bg-slate-50 transition">
                         <td className="py-2.5 px-4 font-semibold text-slate-900">
                           {item.jabatan}

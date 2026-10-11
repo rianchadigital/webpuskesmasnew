@@ -12,7 +12,13 @@ import {
   AgendaEvent,
   HealthArticle,
   DocumentItem,
-  FaqItem
+  FaqItem,
+  SDMKItem,
+  MorbidityItem,
+  FacilityMonthlyVisit,
+  UsefulLink,
+  AnnouncementItem,
+  ActivityAlbum
 } from '../types';
 import {
   initialProfile,
@@ -25,8 +31,17 @@ import {
   initialAgenda,
   initialHealthArticles,
   initialDocuments,
-  initialFaqs
+  initialFaqs,
+  initialSDMKData,
+  initialUsefulLinks
 } from '../data/initialData';
+import {
+  MORBIDITY_DATA_BY_YEAR,
+  MONTHLY_VISITS_BY_YEAR,
+  INITIAL_ACTIVITY_ALBUMS
+} from '../data/healthData';
+import { INITIAL_ANNOUNCEMENTS } from '../data/announcementData';
+import { gasService } from '../services/gasService';
 
 interface DataContextType {
   activeTab: TabType;
@@ -70,6 +85,48 @@ interface DataContextType {
   faqs: FaqItem[];
   setFaqs: React.Dispatch<React.SetStateAction<FaqItem[]>>;
 
+  // Data Tautan Bermanfaat
+  usefulLinks: UsefulLink[];
+  setUsefulLinks: React.Dispatch<React.SetStateAction<UsefulLink[]>>;
+  addUsefulLink: (link: UsefulLink) => void;
+  updateUsefulLink: (id: string, partial: Partial<UsefulLink>) => void;
+  deleteUsefulLink: (id: string) => void;
+  updateUsefulLinks: (links: UsefulLink[]) => void;
+
+  // Data Pengumuman & Rekrutmen
+  announcements: AnnouncementItem[];
+  setAnnouncements: React.Dispatch<React.SetStateAction<AnnouncementItem[]>>;
+  addAnnouncement: (item: AnnouncementItem) => void;
+  updateAnnouncement: (id: string, partial: Partial<AnnouncementItem>) => void;
+  deleteAnnouncement: (id: string) => void;
+  updateAnnouncements: (items: AnnouncementItem[]) => void;
+
+  // Data Dokumentasi & Galeri Kegiatan
+  activityAlbums: ActivityAlbum[];
+  setActivityAlbums: React.Dispatch<React.SetStateAction<ActivityAlbum[]>>;
+  addActivityAlbum: (item: ActivityAlbum) => void;
+  updateActivityAlbum: (id: string, partial: Partial<ActivityAlbum>) => void;
+  deleteActivityAlbum: (id: string) => void;
+  updateActivityAlbums: (items: ActivityAlbum[]) => void;
+
+  // Data SDM (Tenaga Kesehatan)
+  sdmkData: SDMKItem[];
+  setSdmkData: React.Dispatch<React.SetStateAction<SDMKItem[]>>;
+  updateSDMKData: (items: SDMKItem[]) => void;
+  addSDMKItem: (item: SDMKItem) => void;
+  updateSDMKItem: (id: string, partial: Partial<SDMKItem>) => void;
+  deleteSDMKItem: (id: string) => void;
+  syncSDMKToGAS: () => Promise<{ success: boolean; message: string }>;
+
+  // Data Kesehatan (10 Penyakit & Kunjungan)
+  morbidityDataByYear: Record<number, MorbidityItem[]>;
+  setMorbidityDataByYear: React.Dispatch<React.SetStateAction<Record<number, MorbidityItem[]>>>;
+  monthlyVisitsByYear: Record<number, FacilityMonthlyVisit[]>;
+  setMonthlyVisitsByYear: React.Dispatch<React.SetStateAction<Record<number, FacilityMonthlyVisit[]>>>;
+  updateMorbidityYear: (year: number, items: MorbidityItem[]) => void;
+  updateMonthlyVisitsYear: (year: number, visits: FacilityMonthlyVisit[]) => void;
+  syncHealthDataToGAS: () => Promise<{ success: boolean; message: string }>;
+
   // Admin Authentication State
   isAdminAuthenticated: boolean;
   setIsAdminAuthenticated: (auth: boolean) => void;
@@ -96,7 +153,7 @@ interface DataContextType {
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
-const LOCAL_STORAGE_KEY = 'puskesmas_seribu_selatan_data_v2';
+const LOCAL_STORAGE_KEY = 'puskesmas_seribu_selatan_data_v3';
 
 export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [activeTab, setActiveTab] = useState<TabType>('beranda');
@@ -118,7 +175,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Initialize data with local storage fallback
   const loadSavedData = () => {
     try {
-      const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+      const saved = localStorage.getItem(LOCAL_STORAGE_KEY) || localStorage.getItem('puskesmas_seribu_selatan_data_v2');
       if (saved) {
         return JSON.parse(saved);
       }
@@ -141,8 +198,35 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [articles, setArticles] = useState<HealthArticle[]>(savedData?.articles || initialHealthArticles);
   const [documents, setDocuments] = useState<DocumentItem[]>(savedData?.documents || initialDocuments);
   const [faqs, setFaqs] = useState<FaqItem[]>(savedData?.faqs || initialFaqs);
+  const [usefulLinks, setUsefulLinks] = useState<UsefulLink[]>(savedData?.usefulLinks || initialUsefulLinks);
+  const [announcements, setAnnouncements] = useState<AnnouncementItem[]>(savedData?.announcements || INITIAL_ANNOUNCEMENTS);
+  const [activityAlbums, setActivityAlbums] = useState<ActivityAlbum[]>(savedData?.activityAlbums || INITIAL_ACTIVITY_ALBUMS);
 
-  // Admin Authentication State (saved in sessionStorage so it persists across tab clicks)
+  // Data SDM (dengan normalisasi 5 rincian status kepegawaian: PNS, PPPK, PPPK PW, NON PNS, PJLP)
+  const [sdmkData, setSdmkData] = useState<SDMKItem[]>(() => {
+    const raw = savedData?.sdmkData && Array.isArray(savedData.sdmkData) && savedData.sdmkData.length > 0 
+      ? savedData.sdmkData 
+      : initialSDMKData;
+    return raw.map((item: any) => ({
+      ...item,
+      statusPNS: Number(item.statusPNS) || 0,
+      statusPPPK: Number(item.statusPPPK) || 0,
+      statusPPPKPW: Number(item.statusPPPKPW) || 0,
+      statusNonPNS: item.statusNonPNS !== undefined ? Number(item.statusNonPNS) : (Number(item.statusNonASN) || 0),
+      statusPJLP: Number(item.statusPJLP) || 0,
+      statusNonASN: (Number(item.statusNonPNS) || Number(item.statusNonASN) || 0) + (Number(item.statusPJLP) || 0)
+    }));
+  });
+
+  // Data Kesehatan
+  const [morbidityDataByYear, setMorbidityDataByYear] = useState<Record<number, MorbidityItem[]>>(
+    savedData?.morbidityDataByYear || MORBIDITY_DATA_BY_YEAR
+  );
+  const [monthlyVisitsByYear, setMonthlyVisitsByYear] = useState<Record<number, FacilityMonthlyVisit[]>>(
+    savedData?.monthlyVisitsByYear || MONTHLY_VISITS_BY_YEAR
+  );
+
+  // Admin Authentication State
   const [isAdminAuthenticated, setIsAdminAuthenticatedState] = useState<boolean>(() => {
     try {
       return sessionStorage.getItem('puskesmas_admin_logged_in') === 'true';
@@ -162,6 +246,51 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (e) {
       console.warn('Session storage error:', e);
     }
+  };
+
+  // SDM Updaters
+  const updateSDMKData = (items: SDMKItem[]) => {
+    setSdmkData(items);
+  };
+
+  const addSDMKItem = (item: SDMKItem) => {
+    setSdmkData(prev => [item, ...prev]);
+  };
+
+  const updateSDMKItem = (id: string, partial: Partial<SDMKItem>) => {
+    setSdmkData(prev => prev.map(item => item.id === id ? { ...item, ...partial } : item));
+  };
+
+  const deleteSDMKItem = (id: string) => {
+    setSdmkData(prev => prev.filter(item => item.id !== id));
+  };
+
+  const syncSDMKToGAS = async () => {
+    return await gasService.saveSDMKData(sdmkData);
+  };
+
+  // Health Data Updaters
+  const updateMorbidityYear = (year: number, items: MorbidityItem[]) => {
+    setMorbidityDataByYear(prev => ({
+      ...prev,
+      [year]: items
+    }));
+  };
+
+  const updateMonthlyVisitsYear = (year: number, visits: FacilityMonthlyVisit[]) => {
+    setMonthlyVisitsByYear(prev => ({
+      ...prev,
+      [year]: visits
+    }));
+  };
+
+  const syncHealthDataToGAS = async () => {
+    const activeMorbidity = morbidityDataByYear[2026] || [];
+    const activeVisits = monthlyVisitsByYear[2026] || [];
+    return await gasService.saveHealthData({
+      morbiditas: activeMorbidity,
+      kunjungan: activeVisits
+    });
   };
 
   // Updater actions for Admin Dashboard
@@ -201,6 +330,56 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setFaqs(items);
   };
 
+  const addUsefulLink = (link: UsefulLink) => {
+    setUsefulLinks(prev => [link, ...prev]);
+  };
+
+  const updateUsefulLink = (id: string, partial: Partial<UsefulLink>) => {
+    setUsefulLinks(prev => prev.map(l => l.id === id ? { ...l, ...partial } : l));
+  };
+
+  const deleteUsefulLink = (id: string) => {
+    setUsefulLinks(prev => prev.filter(l => l.id !== id));
+  };
+
+  const updateUsefulLinks = (links: UsefulLink[]) => {
+    setUsefulLinks(links);
+  };
+
+  // Announcements Handlers
+  const addAnnouncement = (item: AnnouncementItem) => {
+    setAnnouncements(prev => [item, ...prev]);
+  };
+
+  const updateAnnouncement = (id: string, partial: Partial<AnnouncementItem>) => {
+    setAnnouncements(prev => prev.map(a => a.id === id ? { ...a, ...partial } : a));
+  };
+
+  const deleteAnnouncement = (id: string) => {
+    setAnnouncements(prev => prev.filter(a => a.id !== id));
+  };
+
+  const updateAnnouncements = (items: AnnouncementItem[]) => {
+    setAnnouncements(items);
+  };
+
+  // Activity Documentation (Albums) Handlers
+  const addActivityAlbum = (item: ActivityAlbum) => {
+    setActivityAlbums(prev => [item, ...prev]);
+  };
+
+  const updateActivityAlbum = (id: string, partial: Partial<ActivityAlbum>) => {
+    setActivityAlbums(prev => prev.map(a => a.id === id ? { ...a, ...partial } : a));
+  };
+
+  const deleteActivityAlbum = (id: string) => {
+    setActivityAlbums(prev => prev.filter(a => a.id !== id));
+  };
+
+  const updateActivityAlbums = (items: ActivityAlbum[]) => {
+    setActivityAlbums(items);
+  };
+
   const updateStatistics = (stats: StatisticItem[]) => {
     setStatistics(stats);
   };
@@ -227,13 +406,37 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         agenda,
         articles,
         documents,
-        faqs
+        faqs,
+        usefulLinks,
+        announcements,
+        activityAlbums,
+        sdmkData,
+        morbidityDataByYear,
+        monthlyVisitsByYear
       };
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(payload));
     } catch (e) {
       console.error('Error saving data to localStorage', e);
     }
-  }, [profile, statistics, islands, ilpClusters, healthServices, schedules, news, agenda, articles, documents, faqs]);
+  }, [
+    profile, 
+    statistics, 
+    islands, 
+    ilpClusters, 
+    healthServices, 
+    schedules, 
+    news, 
+    agenda, 
+    articles, 
+    documents, 
+    faqs,
+    usefulLinks,
+    announcements,
+    activityAlbums,
+    sdmkData,
+    morbidityDataByYear,
+    monthlyVisitsByYear
+  ]);
 
   const resetToDefaults = () => {
     if (window.confirm('Kembalikan semua data ke pengaturan awal puskesmas?')) {
@@ -248,7 +451,14 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setArticles(initialHealthArticles);
       setDocuments(initialDocuments);
       setFaqs(initialFaqs);
+      setUsefulLinks(initialUsefulLinks);
+      setAnnouncements(INITIAL_ANNOUNCEMENTS);
+      setActivityAlbums(INITIAL_ACTIVITY_ALBUMS);
+      setSdmkData(initialSDMKData);
+      setMorbidityDataByYear(MORBIDITY_DATA_BY_YEAR);
+      setMonthlyVisitsByYear(MONTHLY_VISITS_BY_YEAR);
       localStorage.removeItem(LOCAL_STORAGE_KEY);
+      localStorage.removeItem('puskesmas_org_pergub14_data_v1');
     }
   };
 
@@ -265,6 +475,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       articles,
       documents,
       faqs,
+      usefulLinks,
+      announcements,
+      activityAlbums,
+      sdmkData,
+      morbidityDataByYear,
+      monthlyVisitsByYear,
       exportedAt: new Date().toISOString()
     };
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(payload, null, 2));
@@ -282,7 +498,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setProfileSubTab('sambutan');
     } else if (tab === 'dokumen-pelayanan') {
       setActiveTab('pelayanan');
-      if (targetId && ['standar', 'maklumat', 'hak-kewajiban', 'struktur-ilp'].includes(targetId)) {
+      if (targetId && ['standar', 'maklumat', 'hak-kewajiban', 'struktur-ilp', 'struktur-pergub14'].includes(targetId)) {
         setActiveServiceDoc(targetId as ServiceDocKey);
       } else {
         setActiveServiceDoc('standar');
@@ -344,6 +560,38 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setDocuments,
         faqs,
         setFaqs,
+        usefulLinks,
+        setUsefulLinks,
+        addUsefulLink,
+        updateUsefulLink,
+        deleteUsefulLink,
+        updateUsefulLinks,
+        announcements,
+        setAnnouncements,
+        addAnnouncement,
+        updateAnnouncement,
+        deleteAnnouncement,
+        updateAnnouncements,
+        activityAlbums,
+        setActivityAlbums,
+        addActivityAlbum,
+        updateActivityAlbum,
+        deleteActivityAlbum,
+        updateActivityAlbums,
+        sdmkData,
+        setSdmkData,
+        updateSDMKData,
+        addSDMKItem,
+        updateSDMKItem,
+        deleteSDMKItem,
+        syncSDMKToGAS,
+        morbidityDataByYear,
+        setMorbidityDataByYear,
+        monthlyVisitsByYear,
+        setMonthlyVisitsByYear,
+        updateMorbidityYear,
+        updateMonthlyVisitsYear,
+        syncHealthDataToGAS,
         isAdminAuthenticated,
         setIsAdminAuthenticated,
         updateProfile,

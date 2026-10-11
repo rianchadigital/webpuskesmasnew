@@ -28,8 +28,8 @@ function escapeSql(val: any): string {
 
 function generateSql(): string {
   let sql = `-- ==============================================================================
--- DATABASE SQL RESMI PUSKESMAS KECAMATAN KEPULAUAN SERIBU SELATAN
--- Target Hosting: cPanel Niagahoster (MySQL 5.7+ / MySQL 8.0+ / MariaDB)
+-- DATABASE SQL RESMI PUSKESMAS KEPULAUAN SERIBU SELATAN
+-- Target Hosting: Hostinger / cPanel Niagahoster (MySQL 5.7+ / MySQL 8.0+ / MariaDB)
 -- Dibuat Otomatis & Teruji untuk Lingkungan Produksi & phpMyAdmin
 -- ==============================================================================
 
@@ -517,7 +517,7 @@ INSERT INTO \`pengaduan_masyarakat\` (\`nomor_tiket\`, \`nama_pelapor\`, \`konta
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- ==============================================================================
--- AKHIR DARI FILE SQL PUSKESMAS KECAMATAN KEPULAUAN SERIBU SELATAN
+-- AKHIR DARI FILE SQL PUSKESMAS KEPULAUAN SERIBU SELATAN
 -- ==============================================================================
 `;
 

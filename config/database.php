@@ -1,8 +1,8 @@
 <?php
 /**
  * Konfigurasi Koneksi Database MySQL / MariaDB
- * Khusus Web Hosting cPanel Niagahoster
- * Puskesmas Kecamatan Kepulauan Seribu Selatan
+ * Khusus Web Hosting Hostinger / cPanel Niagahoster
+ * Puskesmas Kepulauan Seribu Selatan
  */
 
 // Pengaturan kredensial database dari cPanel Niagahoster

@@ -1,7 +1,7 @@
 # PANDUAN LENGKAP DEPLOY PUSKESMAS KEPULAUAN SERIBU SELATAN
 ## Database Google Apps Script (Spreadsheet) + GitHub & Hostinger Deployment
 
-Panduan ini disusun untuk membantu Anda menaikkan (*UP*) website Puskesmas Kecamatan Kepulauan Seribu Selatan ke hosting publik Hostinger menggunakan GitHub dan Google Apps Script (GAS) dengan Google Spreadsheet sebagai basis data.
+Panduan ini disusun untuk membantu Anda menaikkan (*UP*) website Puskesmas Kepulauan Seribu Selatan ke hosting publik Hostinger menggunakan GitHub dan Google Apps Script (GAS) dengan Google Spreadsheet sebagai basis data.
 
 ---
 

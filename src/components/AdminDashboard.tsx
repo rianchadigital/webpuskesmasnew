@@ -27,7 +27,12 @@ import {
   Eye,
   Sparkles,
   KeyRound,
-  Menu
+  Menu,
+  Activity,
+  Users,
+  Globe,
+  Megaphone,
+  Camera
 } from 'lucide-react';
 
 import { AdminProfileTab } from './admin/AdminProfileTab';
@@ -38,13 +43,23 @@ import { AdminSchedulesTab } from './admin/AdminSchedulesTab';
 import { AdminNewsAgendaTab } from './admin/AdminNewsAgendaTab';
 import { AdminIslandsTab } from './admin/AdminIslandsTab';
 import { AdminDocsFaqTab } from './admin/AdminDocsFaqTab';
+import { AdminHealthDataTab } from './admin/AdminHealthDataTab';
+import { AdminStaffDataTab } from './admin/AdminStaffDataTab';
+import { AdminUsefulLinksTab } from './admin/AdminUsefulLinksTab';
+import { AdminAnnouncementsTab } from './admin/AdminAnnouncementsTab';
+import { AdminDocumentationTab } from './admin/AdminDocumentationTab';
 import { AdminDatabaseTab } from './AdminDatabaseTab';
 
 type AdminTabKey = 
   | 'profile' 
   | 'menu' 
+  | 'links'
+  | 'announcements'
+  | 'documentation'
   | 'services' 
   | 'ilp' 
+  | 'kesehatan'
+  | 'sdm' 
   | 'schedules' 
   | 'news' 
   | 'agenda' 
@@ -76,24 +91,16 @@ export const AdminDashboard: React.FC = () => {
 
   const handleAdminLogin = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    const trimmed = passwordInput.trim().toLowerCase();
+    const trimmed = passwordInput.trim();
     
-    // Accept standard demo passwords, or if empty and submitted via direct button
-    const validPasswords = ['admin123', 'admin', 'puskesmas', '123456', 'adminpuskesmas', 'kepulauanseribu'];
-    
-    if (validPasswords.includes(trimmed) || trimmed === '') {
+    // Kata sandi resmi pengelola portal website: Pkm@123456
+    if (trimmed === 'Pkm@123456') {
       setIsAdminAuthenticated(true);
       setAuthError(false);
       triggerToast('Selamat datang! Login Administrator berhasil diverifikasi.');
     } else {
       setAuthError(true);
     }
-  };
-
-  const handleInstantLogin = () => {
-    setIsAdminAuthenticated(true);
-    setAuthError(false);
-    triggerToast('Berhasil masuk menggunakan Akses Cepat Pengelola!');
   };
 
   const handleLogout = () => {
@@ -119,60 +126,23 @@ export const AdminDashboard: React.FC = () => {
             </p>
           </div>
 
-          {/* Quick 1-Click Access Button (Zero Friction for Demo / User) */}
-          <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-700 space-y-2 text-left">
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-amber-400 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Akses Cepat Pengelola</span>
-              </span>
-              <span className="text-[10px] text-slate-400 bg-slate-800 px-2 py-0.5 rounded">1-Klik Masuk</span>
-            </div>
-            <p className="text-[11px] text-slate-300">
-              Langsung masuk ke dashboard tanpa perlu mengetik kata sandi secara manual:
-            </p>
-            <button
-              type="button"
-              onClick={handleInstantLogin}
-              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-md transition active:scale-98 flex items-center justify-center gap-2"
-            >
-              <KeyRound className="w-4 h-4 text-yellow-300" />
-              <span>Masuk Langsung Sebagai Admin</span>
-            </button>
-          </div>
-
-          <div className="relative flex items-center justify-center">
-            <div className="border-t border-slate-700 w-full"></div>
-            <span className="bg-slate-800 px-3 text-[11px] text-slate-500 font-medium absolute">atau via sandi</span>
-          </div>
-
-          <form onSubmit={handleAdminLogin} className="space-y-4 text-left">
+          <form onSubmit={handleAdminLogin} className="space-y-4 text-left pt-2">
             <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="text-xs font-bold text-slate-300">Kata Sandi Administrator</label>
-                <button
-                  type="button"
-                  onClick={() => setPasswordInput('admin123')}
-                  className="text-[11px] text-sky-400 hover:text-sky-300 underline font-medium"
-                >
-                  Isi Sandi: admin123
-                </button>
-              </div>
+              <label className="text-xs font-bold text-slate-300 block mb-1.5">
+                Kata Sandi Administrator
+              </label>
               <input
                 type="password"
                 value={passwordInput}
                 onChange={(e) => { setPasswordInput(e.target.value); setAuthError(false); }}
-                placeholder="Ketik kata sandi (default: admin123)..."
+                placeholder="Masukkan kata sandi administrator..."
                 className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-sky-500"
               />
-              <p className="text-[11px] text-slate-400 mt-1">
-                Kata sandi bawaan sistem: <code className="bg-slate-900 px-1.5 py-0.5 rounded text-sky-300">admin123</code>
-              </p>
             </div>
 
             {authError && (
               <div className="p-2.5 rounded-xl bg-rose-500/20 border border-rose-500/50 text-xs text-rose-300 font-medium">
-                Kata sandi tidak sesuai. Gunakan sandi <strong>admin123</strong> atau klik tombol <strong>"Masuk Langsung Sebagai Admin"</strong> di atas.
+                Kata sandi tidak sesuai. Silakan periksa kembali kata sandi administrator Anda.
               </div>
             )}
 
@@ -202,6 +172,11 @@ export const AdminDashboard: React.FC = () => {
   const navTabs: { id: AdminTabKey; label: string; icon: any; count?: number; highlight?: boolean }[] = [
     { id: 'profile', label: 'Profil & Sambutan', icon: Building2 },
     { id: 'menu', label: 'Menu & Tampilan', icon: Sliders, highlight: true },
+    { id: 'links', label: 'Tautan Bermanfaat', icon: Globe, highlight: true },
+    { id: 'announcements', label: 'Pengumuman & Rekrutmen', icon: Megaphone, highlight: true },
+    { id: 'documentation', label: 'Dokumentasi Kegiatan', icon: Camera, highlight: true },
+    { id: 'kesehatan', label: 'Data Kesehatan', icon: Activity, highlight: true },
+    { id: 'sdm', label: 'Data SDM (Nakes)', icon: Users, highlight: true },
     { id: 'services', label: 'Layanan & Poli', icon: Stethoscope },
     { id: 'ilp', label: 'Klaster ILP', icon: Layers },
     { id: 'schedules', label: 'Jadwal Dokter', icon: Calendar },
@@ -241,7 +216,7 @@ export const AdminDashboard: React.FC = () => {
                 </span>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
-                Puskesmas Kecamatan Kepulauan Seribu Selatan • Pemprov DKI Jakarta
+                Puskesmas Kepulauan Seribu Selatan • Pemprov DKI Jakarta
               </p>
             </div>
           </div>
@@ -318,6 +293,26 @@ export const AdminDashboard: React.FC = () => {
 
           {adminTab === 'menu' && (
             <AdminMenuTab onSuccessToast={triggerToast} />
+          )}
+
+          {adminTab === 'links' && (
+            <AdminUsefulLinksTab onSuccessToast={triggerToast} />
+          )}
+
+          {adminTab === 'announcements' && (
+            <AdminAnnouncementsTab onSuccessToast={triggerToast} />
+          )}
+
+          {adminTab === 'documentation' && (
+            <AdminDocumentationTab onSuccessToast={triggerToast} />
+          )}
+
+          {adminTab === 'kesehatan' && (
+            <AdminHealthDataTab onSuccessToast={triggerToast} />
+          )}
+
+          {adminTab === 'sdm' && (
+            <AdminStaffDataTab onSuccessToast={triggerToast} />
           )}
 
           {adminTab === 'services' && (

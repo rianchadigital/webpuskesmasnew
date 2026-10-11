@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useData } from '../context/DataContext';
 import { 
   MORBIDITY_DATA_BY_YEAR, 
   MONTHLY_VISITS_BY_YEAR 
@@ -38,6 +39,7 @@ import {
 } from 'recharts';
 
 export const HealthDataSection: React.FC = () => {
+  const { morbidityDataByYear, monthlyVisitsByYear } = useData();
   const [selectedYear, setSelectedYear] = useState<number>(2026);
   const [selectedMonth, setSelectedMonth] = useState<string>('Semua'); // 'Semua' or monthIndex '1'..'12'
   const [selectedFacility, setSelectedFacility] = useState<string>('Semua');
@@ -73,8 +75,8 @@ export const HealthDataSection: React.FC = () => {
 
   // 10 Penyakit Terbanyak for current year
   const rawMorbidityList: MorbidityItem[] = useMemo(() => {
-    return MORBIDITY_DATA_BY_YEAR[selectedYear] || MORBIDITY_DATA_BY_YEAR[2026];
-  }, [selectedYear]);
+    return (morbidityDataByYear && morbidityDataByYear[selectedYear]) || MORBIDITY_DATA_BY_YEAR[selectedYear] || MORBIDITY_DATA_BY_YEAR[2026];
+  }, [morbidityDataByYear, selectedYear]);
 
   // Adjust morbidity count if single month is selected (approx. monthly proportion)
   const morbidityData = useMemo(() => {
@@ -100,8 +102,8 @@ export const HealthDataSection: React.FC = () => {
 
   // Monthly Visits for current year
   const monthlyVisitsList: FacilityMonthlyVisit[] = useMemo(() => {
-    return MONTHLY_VISITS_BY_YEAR[selectedYear] || MONTHLY_VISITS_BY_YEAR[2026];
-  }, [selectedYear]);
+    return (monthlyVisitsByYear && monthlyVisitsByYear[selectedYear]) || MONTHLY_VISITS_BY_YEAR[selectedYear] || MONTHLY_VISITS_BY_YEAR[2026];
+  }, [monthlyVisitsByYear, selectedYear]);
 
   // Filtered visits for summary and chart
   const displayedVisits = useMemo(() => {

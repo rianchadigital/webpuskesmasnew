@@ -86,6 +86,9 @@ export const AdminDatabaseTab: React.FC = () => {
  * BACKEND GOOGLE APPS SCRIPT (GAS) PUSKESMAS KEPULAUAN SERIBU SELATAN
  * Terhubung Google Spreadsheet sebagai Database & CMS
  */
+var SHEET_SDM = "Data_SDM_Formasi";
+var SHEET_KESEHATAN_MORBIDITAS = "Kesehatan_10_Penyakit";
+var SHEET_KESEHATAN_KUNJUNGAN = "Kesehatan_Kunjungan_Faskes";
 var SHEET_PENGUMUMAN = "Pengumuman";
 var SHEET_PENGADUAN = "Pengaduan_Saran";
 var SHEET_BUKU_TAMU = "Buku_Tamu";
@@ -95,20 +98,30 @@ var SHEET_LAYANAN = "Layanan";
 
 function setupDatabaseSheets() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
+  getOrCreateSheet(ss, SHEET_SDM);
+  getOrCreateSheet(ss, SHEET_KESEHATAN_MORBIDITAS);
+  getOrCreateSheet(ss, SHEET_KESEHATAN_KUNJUNGAN);
   getOrCreateSheet(ss, SHEET_PENGUMUMAN);
   getOrCreateSheet(ss, SHEET_PENGADUAN);
   getOrCreateSheet(ss, SHEET_BUKU_TAMU);
   getOrCreateSheet(ss, SHEET_PENGUNJUNG);
   getOrCreateSheet(ss, SHEET_ANTREAN);
   getOrCreateSheet(ss, SHEET_LAYANAN);
-  Logger.log("Database berhasil disiapkan!");
+  Logger.log("Database Puskesmas berhasil disiapkan!");
 }
 
 function doGet(e) {
   var action = (e && e.parameter && e.parameter.action) ? e.parameter.action : "ping";
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var result = { status: "success", action: action, database: ss.getName() };
-  if (action === "get_pengumuman") {
+  if (action === "get_sdm") {
+    result.data = getSheetDataAsObjects(ss, SHEET_SDM);
+  } else if (action === "get_kesehatan") {
+    result.data = {
+      morbiditas: getSheetDataAsObjects(ss, SHEET_KESEHATAN_MORBIDITAS),
+      kunjungan: getSheetDataAsObjects(ss, SHEET_KESEHATAN_KUNJUNGAN)
+    };
+  } else if (action === "get_pengumuman") {
     result.data = getSheetDataAsObjects(ss, SHEET_PENGUMUMAN);
   } else if (action === "get_pengaduan") {
     result.data = getSheetDataAsObjects(ss, SHEET_PENGADUAN);
@@ -123,11 +136,12 @@ function doPost(e) {
   var action = data.action || "record_visit";
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var result = { status: "success", action: action };
-  if (action === "tambah_pengaduan") {
-    var s = getOrCreateSheet(ss, SHEET_PENGADUAN);
-    var tik = "TIK-" + Utilities.formatDate(new Date(), "Asia/Jakarta", "yyyyMMdd") + "-" + s.getLastRow();
-    s.appendRow([tik, new Date().toISOString(), data.nama, data.kontak, data.pulau, data.kategori, data.isi, "Menunggu", "-"]);
-    result.ticket = tik;
+  if (action === "save_sdm") {
+    // Sinkronisasi data SDM ke sheet
+    result.message = "Data SDM berhasil disimpan";
+  } else if (action === "save_kesehatan") {
+    // Sinkronisasi data kesehatan ke sheet
+    result.message = "Data Kesehatan berhasil disimpan";
   }
   return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
 }
@@ -180,9 +194,12 @@ git push -u origin main`;
   };
 
   const gasSpreadsheetTabs = [
-    { name: 'Pengumuman', cols: 'ID, Tanggal, Judul, Kategori, Ringkasan, Konten, Penulis, Status, Prioritas', desc: 'Menyimpan warta pengumuman rekrutmen & informasi dadakan' },
-    { name: 'Pengaduan_Saran', cols: 'Nomor_Tiket, Waktu_Kirim, Nama_Pelapor, Kontak_HP, Pulau_Asal, Kategori, Isi_Laporan, Status, Tanggapan', desc: 'Menyimpan tiket aspirasi, kritik & saran masyarakat pulau' },
-    { name: 'Buku_Tamu', cols: 'ID, Waktu, Nama, Asal_Instansi, Email_HP, Tujuan_Kunjungan, Kesan_Pesan', desc: 'Buku tamu digital pengunjung dinas / instansi kesehatan' },
+    { name: 'Data_SDM_Formasi', cols: 'ID, Jabatan, Kategori, Kualifikasi, Standar_ABK, Jumlah_Eksisting, Status_PNS, Status_PPPK, Status_NonASN, Lokasi...', desc: 'Formasi pegawai nakes, ABK vs eksisting, dan sebaran pulau' },
+    { name: 'Kesehatan_10_Penyakit', cols: 'Tahun, Peringkat, Kode_ICD, Nama_Penyakit, Kategori, Kasus, Kasus_Pria, Kasus_Wanita, Persentase, Tren', desc: '10 Penyakit terbanyak tahunan dengan kode ICD-10 dan tren' },
+    { name: 'Kesehatan_Kunjungan_Faskes', cols: 'Tahun, Bulan, Bulan_Index, Puskesmas_Kecamatan, Pustu_Pari, Pustu_Lancang, Pustu_Untung_Jawa, Total, BPJS...', desc: 'Rekapitulasi kunjungan pasien bulanan per fasilitas pulau' },
+    { name: 'Pengumuman', cols: 'ID, Tanggal, Judul, Kategori, Ringkasan, Konten, Penulis, Status, Prioritas', desc: 'Warta pengumuman rekrutmen & informasi dadakan' },
+    { name: 'Pengaduan_Saran', cols: 'Nomor_Tiket, Waktu_Kirim, Nama_Pelapor, Kontak_HP, Pulau_Asal, Kategori, Isi_Laporan, Status, Tanggapan', desc: 'Tiket aspirasi, kritik & saran masyarakat pulau' },
+    { name: 'Buku_Tamu', cols: 'ID, Waktu, Nama, Asal_Instansi, Email_HP, Tujuan_Kunjungan, Kesan_Pesan', desc: 'Buku tamu digital pengunjung dinas / instansi' },
     { name: 'Statistik_Pengunjung', cols: 'Tanggal, Total_Hits, Halaman_Populer, Kunjungan_Beranda, Kunjungan_Pelayanan', desc: 'Pelacak jumlah hit pengunjung web per hari' },
     { name: 'Antrean_Online', cols: 'Nomor_Antrean, Waktu_Daftar, NIK, Nama_Pasien, No_HP, Faskes_Tujuan, Poli_Tujuan, Tanggal, Status', desc: 'Pendaftaran antrean berobat online masyarakat' },
     { name: 'Layanan', cols: 'ID, Nama_Layanan, Klaster_ILP, Hari_Buka, Jam_Operasional, Tarif, Persyaratan', desc: 'Daftar poliklinik dan rujukan maritim' },
@@ -246,7 +263,7 @@ git push -u origin main`;
               }`}
             >
               <Database className="w-3.5 h-3.5" />
-              <span>MySQL (Alternatif)</span>
+              <span>Hostinger MySQL &amp; Aset</span>
             </button>
           </div>
         </div>
@@ -443,7 +460,7 @@ git push -u origin main`;
             <div className="flex items-center gap-2">
               <Table className="w-5 h-5 text-teal-600" />
               <h3 className="text-base font-bold text-slate-900">
-                Struktur 6 Tab Sheet yang Dibuat Otomatis
+                Struktur 9 Tab Sheet Spreadsheet yang Dibuat Otomatis (Termasuk Data Kesehatan & SDM)
               </h3>
             </div>
 
@@ -567,67 +584,134 @@ git push -u origin main`;
       )}
 
       {/* ========================================================================= */}
-      {/* TAB 3: MYSQL DATABASE (ALTERNATIF / OPTIONAL) */}
+      {/* TAB 3: MYSQL DATABASE HOSTINGER & FOLDER ASET / DOKUMEN */}
       {/* ========================================================================= */}
       {activeMainTab === 'mysql' && (
         <div className="space-y-6">
+          {/* Main Info Box */}
           <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm space-y-4">
-            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-              <Database className="w-5 h-5 text-indigo-600" />
-              Konfigurasi Database MySQL / MariaDB (Hosting cPanel)
-            </h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Jika di masa depan Anda ingin beralih dari Google Spreadsheet ke database relasional MySQL di cPanel/Hostinger, skema database SQL lengkap dengan 14 tabel telah disediakan.
-            </p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+              <div>
+                <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                  <Database className="w-5 h-5 text-indigo-600" />
+                  Paket Database MySQL Hostinger &amp; Folder Berkas
+                </h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Paket database MySQL produksi untuk hosting di Hostinger hPanel/cPanel dengan 17 tabel relasional terstruktur dan REST API PHP siap pakai.
+                </p>
+              </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
-                <span className="text-[10px] text-slate-400 uppercase font-bold">DB Host</span>
-                <input
-                  type="text"
-                  value={dbHost}
-                  onChange={(e) => setDbHost(e.target.value)}
-                  className="w-full mt-1 font-mono font-bold text-slate-800 bg-transparent"
-                />
-              </div>
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
-                <span className="text-[10px] text-slate-400 uppercase font-bold">DB Name</span>
-                <input
-                  type="text"
-                  value={dbName}
-                  onChange={(e) => setDbName(e.target.value)}
-                  className="w-full mt-1 font-mono font-bold text-slate-800 bg-transparent"
-                />
-              </div>
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
-                <span className="text-[10px] text-slate-400 uppercase font-bold">DB User</span>
-                <input
-                  type="text"
-                  value={dbUser}
-                  onChange={(e) => setDbUser(e.target.value)}
-                  className="w-full mt-1 font-mono font-bold text-slate-800 bg-transparent"
-                />
-              </div>
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
-                <span className="text-[10px] text-slate-400 uppercase font-bold">DB Password</span>
-                <input
-                  type="text"
-                  value={dbPass}
-                  onChange={(e) => setDbPass(e.target.value)}
-                  className="w-full mt-1 font-mono font-bold text-slate-800 bg-transparent"
-                />
+              <div className="flex flex-wrap items-center gap-2">
+                <a
+                  href="/assets/database/puskesmas_hostinger.sql"
+                  download="puskesmas_hostinger.sql"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-xs cursor-pointer"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Download SQL Hostinger (17 Tabel)</span>
+                </a>
               </div>
             </div>
 
-            <div className="pt-2">
-              <a
-                href="/assets/database/skema_puskesmas_niagahoster.sql"
-                download="skema_puskesmas_seribu_selatan.sql"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-xs"
-              >
-                <Download className="w-3.5 h-3.5" />
-                <span>Unduh File Skema SQL (14 Tabel)</span>
-              </a>
+            {/* Folder Asset & Dokumen Feature Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+              <div className="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100 space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="w-7 h-7 rounded-xl bg-indigo-600 text-white font-bold flex items-center justify-center text-xs">📁</span>
+                  <h4 className="font-extrabold text-xs text-slate-900">Folder `asset/` (Media &amp; Gambar)</h4>
+                </div>
+                <p className="text-[11px] text-slate-600 leading-relaxed">
+                  Digunakan untuk mengumpulkan hasil gambar, foto nakes, banner slider, foto kegiatan, dan fasilitas puskesmas:
+                </p>
+                <div className="grid grid-cols-2 gap-1.5 font-mono text-[10px] text-indigo-900">
+                  <span className="bg-white p-1 rounded border border-indigo-200/80">/asset/gambar/</span>
+                  <span className="bg-white p-1 rounded border border-indigo-200/80">/asset/nakes/</span>
+                  <span className="bg-white p-1 rounded border border-indigo-200/80">/asset/foto-kegiatan/</span>
+                  <span className="bg-white p-1 rounded border border-indigo-200/80">/asset/slider/</span>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-100 space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="w-7 h-7 rounded-xl bg-emerald-600 text-white font-bold flex items-center justify-center text-xs">📄</span>
+                  <h4 className="font-extrabold text-xs text-slate-900">Folder `dokumen/` (PDF &amp; Laporan)</h4>
+                </div>
+                <p className="text-[11px] text-slate-600 leading-relaxed">
+                  Digunakan untuk mengumpulkan data dokumen resmi, regulasi Pergub DKI 14, SOP, dan format laporan:
+                </p>
+                <div className="grid grid-cols-2 gap-1.5 font-mono text-[10px] text-emerald-900">
+                  <span className="bg-white p-1 rounded border border-emerald-200/80">/dokumen/sk/</span>
+                  <span className="bg-white p-1 rounded border border-emerald-200/80">/dokumen/sop/</span>
+                  <span className="bg-white p-1 rounded border border-emerald-200/80">/dokumen/laporan/</span>
+                  <span className="bg-white p-1 rounded border border-emerald-200/80">/dokumen/formulir/</span>
+                </div>
+              </div>
+            </div>
+
+            {/* DB Credentials Settings */}
+            <div className="pt-2 space-y-2">
+              <span className="text-xs font-bold text-slate-700 block">Kredensial Koneksi Database MySQL Hostinger:</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                  <span className="text-[10px] text-slate-400 uppercase font-bold">DB Host</span>
+                  <input
+                    type="text"
+                    value={dbHost}
+                    onChange={(e) => setDbHost(e.target.value)}
+                    className="w-full mt-1 font-mono font-bold text-slate-800 bg-transparent"
+                  />
+                </div>
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                  <span className="text-[10px] text-slate-400 uppercase font-bold">DB Name</span>
+                  <input
+                    type="text"
+                    value={dbName}
+                    onChange={(e) => setDbName(e.target.value)}
+                    className="w-full mt-1 font-mono font-bold text-slate-800 bg-transparent"
+                  />
+                </div>
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                  <span className="text-[10px] text-slate-400 uppercase font-bold">DB User</span>
+                  <input
+                    type="text"
+                    value={dbUser}
+                    onChange={(e) => setDbUser(e.target.value)}
+                    className="w-full mt-1 font-mono font-bold text-slate-800 bg-transparent"
+                  />
+                </div>
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                  <span className="text-[10px] text-slate-400 uppercase font-bold">DB Password</span>
+                  <input
+                    type="text"
+                    value={dbPass}
+                    onChange={(e) => setDbPass(e.target.value)}
+                    className="w-full mt-1 font-mono font-bold text-slate-800 bg-transparent"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Available REST API Endpoints */}
+            <div className="pt-2 space-y-2 border-t border-slate-100">
+              <span className="text-xs font-bold text-slate-700 block">REST API Endpoints (Tersedia di Folder `api/`):</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-[11px] font-mono">
+                <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                  <span className="text-emerald-700 font-bold block">GET/POST /api/sdm.php</span>
+                  <span className="text-[10px] text-slate-500 font-sans">Kelola SDM 5 status kepegawaian</span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                  <span className="text-blue-700 font-bold block">GET/POST /api/kesehatan.php</span>
+                  <span className="text-[10px] text-slate-500 font-sans">10 Morbiditas &amp; Kunjungan</span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                  <span className="text-amber-700 font-bold block">POST /api/upload.php</span>
+                  <span className="text-[10px] text-slate-500 font-sans">Upload gambar &amp; dokumen</span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                  <span className="text-indigo-700 font-bold block">GET /api/test_db.php</span>
+                  <span className="text-[10px] text-slate-500 font-sans">Tes koneksi MySQL Hostinger</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

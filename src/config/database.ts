@@ -1,6 +1,6 @@
 /**
- * Konfigurasi Database SQL Niagahoster (MySQL / MariaDB)
- * Puskesmas Kecamatan Kepulauan Seribu Selatan
+ * Konfigurasi Database SQL Hostinger / Niagahoster (MySQL / MariaDB)
+ * Puskesmas Kepulauan Seribu Selatan
  */
 
 export interface DatabaseConfig {
@@ -12,13 +12,15 @@ export interface DatabaseConfig {
   charset: string;
 }
 
-export const defaultNiagahosterConfig: DatabaseConfig = {
+export const defaultHostingerConfig: DatabaseConfig = {
   host: process.env.DB_HOST || 'localhost',
   port: parseInt(process.env.DB_PORT || '3306', 10),
   database: process.env.DB_NAME || 'u1234567_puskesmas',
   user: process.env.DB_USER || 'u1234567_puskesmas_user',
   charset: 'utf8mb4'
 };
+
+export const defaultNiagahosterConfig: DatabaseConfig = defaultHostingerConfig;
 
 export const databaseTablesInfo = [
   {
@@ -30,6 +32,21 @@ export const databaseTablesInfo = [
     name: 'profil_puskesmas',
     description: 'Profil kelembagaan, visi misi, tata nilai, sambutan pimpinan, jam kerja (Kepgub 755/2024), dan kontak resmi.',
     columns: ['id', 'nama_puskesmas', 'sub_judul', 'motto', 'kepala_nama', 'sambutan_kepala', 'visi', 'misi_json', 'telepon', 'whatsapp']
+  },
+  {
+    name: 'sdm_formasi_kesehatan',
+    description: 'Formasi SDM Kesehatan, Standar ABK, Eksisting, dan 5 Status Kepegawaian (PNS, PPPK, PPPK PW, NON PNS, PJLP).',
+    columns: ['id', 'jabatan', 'kategori', 'kualifikasi', 'standar_abk', 'jumlah_eksisting', 'status_pns', 'status_pppk', 'status_pppk_pw', 'status_non_pns', 'status_pjlp', 'lokasi_induk', 'lokasi_lancang', 'lokasi_pari', 'lokasi_untung_jawa']
+  },
+  {
+    name: 'kesehatan_10_penyakit',
+    description: 'Data morbiditas 10 Besar Penyakit Terbanyak per tahun dan per bulan.',
+    columns: ['id', 'tahun', 'nama_penyakit', 'kode_icd10', 'kategori', 'jumlah_kasus', 'persentase', 'tren']
+  },
+  {
+    name: 'kesehatan_kunjungan_faskes',
+    description: 'Data tren kunjungan pasien bulanan di Puskesmas Induk dan 3 Pustu Pulau.',
+    columns: ['id', 'tahun', 'bulan', 'puskesmas_induk', 'pustu_lancang', 'pustu_pari', 'pustu_untung_jawa', 'total_kunjungan']
   },
   {
     name: 'fasilitas_pulau',

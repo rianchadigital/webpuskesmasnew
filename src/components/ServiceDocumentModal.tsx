@@ -19,7 +19,8 @@ import {
   Check,
   Network,
   RotateCw,
-  Eye
+  Eye,
+  Building2
 } from 'lucide-react';
 
 interface DocumentMeta {
@@ -92,6 +93,20 @@ const DOCUMENTS: Record<ServiceDocKey, DocumentMeta> = {
     fileName: 'Struktur-Organisasi-ILP-Puskesmas-Kepulauan-Seribu-Selatan.pdf',
     description: 'Bagan dan tata kelola struktur organisasi Integrasi Layanan Primer (ILP) 5 Klaster Siklus Hidup Puskesmas Kepulauan Seribu Selatan Tahun 2026.',
     icon: Network,
+    ratio: 'landscape'
+  },
+  'struktur-pergub14': {
+    key: 'struktur-pergub14',
+    title: 'Bagan Struktur Organisasi (Pergub DKI No. 14)',
+    badge: 'Pergub DKI No. 14',
+    category: 'Organisasi & Tata Kerja Faskes',
+    driveId: '1IMRc04HIo3QhOGZXbRHUlQ-P1dRGusZN',
+    drivePreviewUrl: 'https://drive.google.com/file/d/1IMRc04HIo3QhOGZXbRHUlQ-P1dRGusZN/preview',
+    driveShareUrl: 'https://drive.google.com/file/d/1IMRc04HIo3QhOGZXbRHUlQ-P1dRGusZN/view?usp=sharing',
+    fileUrl: '/assets/dokumen/standar-pelayanan.svg',
+    fileName: 'Bagan-Struktur-Organisasi-Pergub-DKI-14-Puskesmas.pdf',
+    description: 'Bagan Struktur Organisasi dan Tata Kerja Pusat Kesehatan Masyarakat berdasarkan Peraturan Gubernur Provinsi DKI Jakarta Nomor 14.',
+    icon: Building2,
     ratio: 'landscape'
   }
 };
@@ -363,6 +378,43 @@ export const ServiceDocumentModal: React.FC = () => {
                   <p className="text-xs text-slate-400 mt-1">{currentDoc.description}</p>
                 </div>
 
+                {activeServiceDoc === 'struktur-pergub14' && (
+                  <div className="space-y-5">
+                    <div className="p-4 rounded-xl bg-blue-950/40 border border-blue-800/60 text-slate-200 space-y-3">
+                      <h4 className="font-bold text-sm text-blue-300">Susunan Organisasi Berdasarkan Pergub DKI Jakarta Nomor 14:</h4>
+                      <div className="space-y-2 text-xs text-slate-300 leading-relaxed">
+                        <div className="p-2.5 rounded-lg bg-blue-900/30 border border-blue-800/40">
+                          <strong className="text-amber-300">1. Kepala Pusat Kesehatan Masyarakat (Puskesmas Kecamatan):</strong>
+                          <p className="mt-0.5">Memimpin pelaksanaan tugas dan fungsi Puskesmas dalam menyelenggarakan pelayanan kesehatan tingkat pertama di wilayah kerja kepulauan.</p>
+                        </div>
+                        <div className="p-2.5 rounded-lg bg-blue-900/30 border border-blue-800/40">
+                          <strong className="text-sky-300">2. Subbagian Tata Usaha (Subbag TU):</strong>
+                          <p className="mt-0.5">Pengelolaan urusan kepegawaian, keuangan, aset/BMD, umum, rumah tangga, perencanaan, evaluasi, pelaporan, dan sistem informasi kesehatan.</p>
+                        </div>
+                        <div className="p-2.5 rounded-lg bg-blue-900/30 border border-blue-800/40">
+                          <strong className="text-emerald-300">3. Satuan Pelaksana Upaya Kesehatan Masyarakat (Satpel UKM):</strong>
+                          <p className="mt-0.5">Pelayanan promosi kesehatan, kesehatan lingkungan, KIA-KB komunitas, gizi masyarakat, pencegahan & pengendalian penyakit (P2P), dan keperawatan kesehatan masyarakat.</p>
+                        </div>
+                        <div className="p-2.5 rounded-lg bg-blue-900/30 border border-blue-800/40">
+                          <strong className="text-indigo-300">4. Satuan Pelaksana Upaya Kesehatan Perorangan, Kefarmasian & Laboratorium (Satpel UKP):</strong>
+                          <p className="mt-0.5">Pelayanan rawat jalan (Poli Umum, Gigi, KIA), IGD & rawat tindakan 24 jam, kefarmasian, laboratorium medis, dan rujukan transportasi laut.</p>
+                        </div>
+                        <div className="p-2.5 rounded-lg bg-blue-900/30 border border-blue-800/40">
+                          <strong className="text-teal-300">5. Satuan Pelaksana Puskesmas Kelurahan / Puskesmas Pembantu (Pustu):</strong>
+                          <p className="mt-0.5">Pustu Pulau Pari, Pustu Pulau Lancang, Pustu Pulau Untung Jawa, dan Pos Kesehatan Pulau Payung.</p>
+                        </div>
+                        <div className="p-2.5 rounded-lg bg-blue-900/30 border border-blue-800/40">
+                          <strong className="text-violet-300">6. Kelompok Jabatan Fungsional:</strong>
+                          <p className="mt-0.5">Dokter, Dokter Gigi, Perawat, Bidan, Tenaga Sanitasi Lingkungan, Nutrisionis, Apoteker, ATLM, dan Perekam Medis.</p>
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      Dokumen resmi lengkap dapat dilihat melalui penampil PDF Google Drive atau diunduh langsung dari berkas asli Pemprov DKI Jakarta.
+                    </p>
+                  </div>
+                )}
+
                 {activeServiceDoc === 'struktur-ilp' && (
                   <div className="space-y-5">
                     <div className="p-4 rounded-xl bg-teal-950/40 border border-teal-800/60 text-slate-200 space-y-2">
@@ -448,7 +500,7 @@ export const ServiceDocumentModal: React.FC = () => {
                 {activeServiceDoc === 'standar' && (
                   <div className="space-y-4 text-sm text-slate-300">
                     <p className="text-slate-400 text-xs">
-                      Ringkasan Komponen Standar Pelayanan Publik Puskesmas Kecamatan Kepulauan Seribu Selatan:
+                      Ringkasan Komponen Standar Pelayanan Publik Puskesmas Kepulauan Seribu Selatan:
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div className="p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/60">
@@ -514,7 +566,7 @@ export const ServiceDocumentModal: React.FC = () => {
           <div className="flex items-center gap-2 text-center sm:text-left">
             <Building className="w-4 h-4 text-teal-400 shrink-0" />
             <span>
-              Puskesmas Kecamatan Kepulauan Seribu Selatan — Dinas Kesehatan Provinsi DKI Jakarta
+              Puskesmas Kepulauan Seribu Selatan — Dinas Kesehatan Provinsi DKI Jakarta
             </span>
           </div>
 

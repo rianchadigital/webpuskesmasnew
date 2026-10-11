@@ -1,6 +1,6 @@
 # ==============================================================================
 # KONFIGURASI APACHE .HTACCESS UNTUK HOSTINGER & CPANEL
-# Puskesmas Kecamatan Kepulauan Seribu Selatan (React SPA Single Page App)
+# Puskesmas Kepulauan Seribu Selatan (React SPA Single Page App)
 # ==============================================================================
 
 <IfModule mod_rewrite.c>

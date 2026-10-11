@@ -1,5 +1,5 @@
-# Panduan Lengkap Import Database MySQL ke Hosting Niagahoster
-**Puskesmas Kecamatan Kepulauan Seribu Selatan**
+# Panduan Lengkap Import Database MySQL ke Hosting Hostinger / Niagahoster
+**Puskesmas Kepulauan Seribu Selatan**
 
 Berkas database SQL resmi telah dibuat dan siap diimport ke server web hosting Niagahoster:
 - **Nama Berkas:** `puskesmas_niagahoster.sql`

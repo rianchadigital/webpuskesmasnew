@@ -42,6 +42,38 @@ export interface ActivityAlbum {
   googleDriveFolder?: string;
 }
 
+export interface AnnouncementPosition {
+  name: string;
+  quota: string;
+  qualification: string;
+}
+
+export interface AnnouncementItem {
+  id: string;
+  title: string;
+  category: 'Rekrutmen' | 'Info Dadakan' | 'Pengumuman Resmi' | 'Jadwal Khusus';
+  urgency: 'Tinggi' | 'Sedang' | 'Biasa';
+  date: string;
+  validUntil?: string;
+  officialNumber: string;
+  author: string;
+  summary: string;
+  content: string;
+  positions?: AnnouncementPosition[];
+  requirements?: string[];
+  documents?: string[];
+  contactPerson?: {
+    name: string;
+    phone: string;
+    email: string;
+  };
+  fileAttachment?: {
+    name: string;
+    size: string;
+  };
+  isUrgentBanner?: boolean;
+}
+
 export interface MorbidityItem {
   rank: number;
   code: string;
@@ -69,7 +101,7 @@ export interface FacilityMonthlyVisit {
   rujukanRsud: number;
 }
 
-export type ServiceDocKey = 'standar' | 'maklumat' | 'hak-kewajiban' | 'struktur-ilp';
+export type ServiceDocKey = 'standar' | 'maklumat' | 'hak-kewajiban' | 'struktur-ilp' | 'struktur-pergub14';
 
 export interface StaffMember {
   id: string;
@@ -297,10 +329,29 @@ export interface SDMKItem {
   jumlahEksisting: number;
   statusPNS: number;
   statusPPPK: number;
-  statusNonASN: number;
+  statusPPPKPW: number; // PPPK Paruh Waktu
+  statusNonPNS: number; // NON PNS
+  statusPJLP: number;   // PJLP
+  statusNonASN?: number; // Akumulasi Non-ASN (opsional/legacy)
   lokasiPuskesmasInduk: number;
   lokasiPustuLancang: number;
   lokasiPustuPari: number;
   lokasiPustuUntungJawa: number;
   keterangan: string;
+}
+
+export interface UsefulLink {
+  id: string;
+  name: string;
+  shortName: string;
+  subtitle: string;
+  description: string;
+  url: string;
+  badge: string;
+  badgeColor?: string;
+  category: string;
+  iconName?: 'file' | 'user' | 'database' | 'shield' | 'globe' | 'building' | 'link';
+  gradient?: string;
+  borderColor?: string;
+  hoverGlow?: string;
 }

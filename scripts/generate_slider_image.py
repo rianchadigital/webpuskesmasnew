@@ -137,7 +137,7 @@ def create_slider_png(output_path, width=1280, height=720):
     # Center green dot
     fill_rect(hx - 3, hy - 3, hx + 3, hy + 3, 22, 163, 74)
 
-    # Text blocks on Left Tower: "PUSKESMAS KECAMATAN KEPULAUAN SERIBU SELATAN"
+    # Text blocks on Left Tower: "PUSKESMAS KEPULAUAN SERIBU SELATAN"
     # We render bold green simulated typographic lines matching the real signage!
     text_lines = [
         (220, 150), # PUSKESMAS

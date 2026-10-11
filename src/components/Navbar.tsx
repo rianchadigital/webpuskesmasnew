@@ -78,7 +78,7 @@ export const Navbar: React.FC = () => {
       subItems: [
         { id: 'profil', subTab: 'sambutan', label: 'Sambutan Kepala Puskesmas', desc: 'Pesan resmi pimpinan, foto resmi & komitmen mutu faskes', icon: UserCheck, badge: 'Foto Resmi' },
         { id: 'profil', subTab: 'visimisi', label: 'Visi, Misi & Tata Nilai PRIMA', desc: '6 Misi pelayanan & budaya kerja PRIMA kepulauan sehat', icon: Award },
-        { id: 'profil', subTab: 'struktur', label: 'Bagan Struktur Organisasi', desc: 'Struktur kelembagaan & koordinasi klaster ILP 2026', icon: GitBranch },
+        { id: 'profil', subTab: 'struktur', label: 'Bagan Struktur (Pergub DKI 14)', desc: 'Bagan struktur organisasi & tata kerja Pergub DKI No. 14', icon: GitBranch, badge: 'Pergub 14' },
         { id: 'profil', subTab: 'profil', label: 'Profil & Fasilitas Faskes', desc: 'Gambaran umum faskes terintegrasi darat & maritim', icon: Building2 },
       ]
     },
@@ -99,7 +99,8 @@ export const Navbar: React.FC = () => {
         { id: 'dokumen-pelayanan', subTab: 'standar', label: 'Standar Pelayanan', desc: 'Standar operasional, syarat, tarif & alur pelayanan (View PDF Drive)', icon: FileCheck, badge: 'PDF Drive' },
         { id: 'dokumen-pelayanan', subTab: 'maklumat', label: 'Maklumat Pelayanan', desc: 'Pernyataan kesanggupan pelayanan prima resmi (View PDF Drive)', icon: Scroll, badge: 'PDF Drive' },
         { id: 'dokumen-pelayanan', subTab: 'hak-kewajiban', label: 'Hak dan Kewajiban Pasien', desc: '12 Hak Pasien & 4 Kewajiban Pasien Kemenkes (View PDF Drive)', icon: ShieldAlert, badge: 'PDF Drive' },
-        { id: 'dokumen-pelayanan', subTab: 'struktur-ilp', label: 'Struktur Organisasi ILP', desc: 'Struktur organisasi 5 Klaster ILP Kepmenkes 2026 (View PDF Drive)', icon: GitBranch, badge: 'PDF Drive' },
+        { id: 'dokumen-pelayanan', subTab: 'struktur-pergub14', label: 'Bagan Struktur Pergub DKI 14', desc: 'Bagan organisasi Pergub DKI 14 resmi (View PDF Drive)', icon: Building2, badge: 'PDF Drive' },
+        { id: 'dokumen-pelayanan', subTab: 'struktur-ilp', label: 'Struktur Organisasi ILP', desc: 'Struktur organisasi 5 Klaster ILP Kepmenkes (View PDF Drive)', icon: GitBranch, badge: 'PDF Drive' },
         { id: 'pelayanan', label: 'Layanan Poliklinik & Medis', desc: 'Pemeriksaan umum, KIA/KB, gigi, farmasi & lab', icon: Stethoscope },
         { id: 'ilp', label: 'Integrasi Layanan Primer (ILP)', desc: 'Transformasi 5 klaster siklus hidup Kemenkes RI', icon: Layers, badge: 'ILP' },
         { id: 'pelayanan', label: 'Alur Pelayanan Pasien', desc: 'Standar operasional pendaftaran, rawat & rujukan', icon: GitFork },

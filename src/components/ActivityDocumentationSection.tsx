@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { INITIAL_ACTIVITY_ALBUMS } from '../data/healthData';
+import { useData } from '../context/DataContext';
 import { ActivityAlbum } from '../types';
 import { 
   Camera, 
@@ -17,11 +17,12 @@ import {
   Layers,
   Building2,
   Folder,
-  HardDrive
+  HardDrive,
+  Settings
 } from 'lucide-react';
 
 export const ActivityDocumentationSection: React.FC = () => {
-  const [albums] = useState<ActivityAlbum[]>(INITIAL_ACTIVITY_ALBUMS);
+  const { activityAlbums, isAdminAuthenticated, navigateToTab } = useData();
   const [selectedCategory, setSelectedCategory] = useState<string>('Semua');
   const [selectedIsland, setSelectedIsland] = useState<string>('Semua Pulau');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -49,7 +50,7 @@ export const ActivityDocumentationSection: React.FC = () => {
     'Pulau Payung'
   ];
 
-  const filteredAlbums = albums.filter((album) => {
+  const filteredAlbums = activityAlbums.filter((album) => {
     const matchCategory = selectedCategory === 'Semua' || album.category === selectedCategory;
     const matchIsland = selectedIsland === 'Semua Pulau' || album.island === selectedIsland;
     const matchSearch = searchQuery.trim() === '' || 
@@ -87,9 +88,21 @@ export const ActivityDocumentationSection: React.FC = () => {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-2">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-sky-100 text-sky-800 text-xs font-bold uppercase tracking-wider">
-            <Camera className="w-3.5 h-3.5 text-sky-600" />
-            Galeri & Dokumentasi Kegiatan
+          <div className="flex items-center justify-center gap-2 flex-wrap">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-sky-100 text-sky-800 text-xs font-bold uppercase tracking-wider">
+              <Camera className="w-3.5 h-3.5 text-sky-600" />
+              Galeri & Dokumentasi Kegiatan
+            </div>
+            {isAdminAuthenticated && (
+              <button
+                type="button"
+                onClick={() => navigateToTab('admin')}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-900 hover:bg-amber-200 border border-amber-300 text-xs font-bold transition"
+              >
+                <Settings className="w-3 h-3 text-amber-700" />
+                <span>Kelola Galeri (Admin)</span>
+              </button>
+            )}
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">
             Dokumentasi Pelayanan Kesehatan Kepulauan

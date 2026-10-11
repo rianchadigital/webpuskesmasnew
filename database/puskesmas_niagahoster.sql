@@ -1,6 +1,6 @@
 -- ==============================================================================
--- DATABASE SQL RESMI PUSKESMAS KECAMATAN KEPULAUAN SERIBU SELATAN
--- Target Hosting: cPanel Niagahoster (MySQL 5.7+ / MySQL 8.0+ / MariaDB)
+-- DATABASE SQL RESMI PUSKESMAS KEPULAUAN SERIBU SELATAN
+-- Target Hosting: Hostinger / cPanel Niagahoster (MySQL 5.7+ / MySQL 8.0+ / MariaDB)
 -- Dibuat Otomatis & Teruji untuk Lingkungan Produksi & phpMyAdmin
 -- ==============================================================================
 
@@ -72,7 +72,7 @@ INSERT INTO `profil_puskesmas` (
   NULL,
   'Kesehatan Anda Tujuan Kami, Kebahagiaan Anda Kepuasan Kami',
   'dr. Ignatius Dendy Purnama',
-  'Kepala Puskesmas Kecamatan Kepulauan Seribu Selatan',
+  'Kepala Puskesmas Kepulauan Seribu Selatan',
   '198503222010012031',
   '/assets/kepala-puskesmas.svg',
   'Assalamu''alaikum Wr. Wb.
@@ -1033,7 +1033,7 @@ CREATE TABLE `dokumen_publik` (
 
 INSERT INTO `dokumen_publik` (`id`, `nama`, `kategori`, `tanggal`, `ukuran_berkas`, `tipe_berkas`, `url_berkas`, `deskripsi`, `jumlah_unduhan`) VALUES (
   'doc-standar-pelayanan',
-  'Dokumen Standar Pelayanan Publik Puskesmas Kecamatan Kepulauan Seribu Selatan',
+  'Dokumen Standar Pelayanan Publik Puskesmas Kepulauan Seribu Selatan',
   'Informasi pelayanan',
   '2026-08-15',
   '180 KB',
@@ -1282,5 +1282,5 @@ INSERT INTO `pengaduan_masyarakat` (`nomor_tiket`, `nama_pelapor`, `kontak_hp`, 
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- ==============================================================================
--- AKHIR DARI FILE SQL PUSKESMAS KECAMATAN KEPULAUAN SERIBU SELATAN
+-- AKHIR DARI FILE SQL PUSKESMAS KEPULAUAN SERIBU SELATAN
 -- ==============================================================================

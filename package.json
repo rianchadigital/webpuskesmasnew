@@ -7,6 +7,7 @@
     "dev": "vite --port=3000 --host=0.0.0.0",
     "build": "vite build",
     "preview": "vite preview",
+    "package:hostinger": "vite build && mkdir -p dist/api dist/dokumen dist/asset && cp -r api/* dist/api/ && cp -r dokumen/* dist/dokumen/ 2>/dev/null && cp -r asset/* dist/asset/ 2>/dev/null",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit"
   },

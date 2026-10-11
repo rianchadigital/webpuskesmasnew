@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { initialOrgLeader, initialOrgClusters } from '../data/initialData';
-import { OrgPerson, OrgCluster } from '../types';
+import { initialOrgLeader } from '../data/initialData';
+import { OrgPerson } from '../types';
 import { useData } from '../context/DataContext';
 import { 
   Camera, 
@@ -20,18 +20,242 @@ import {
   Printer,
   ExternalLink,
   Eye,
-  FileText
+  FileText,
+  Shield,
+  Layers,
+  Sparkles,
+  MapPin,
+  Stethoscope,
+  Heart,
+  Activity,
+  Users
 } from 'lucide-react';
 
-const STORAGE_KEY = 'puskesmas_org_chart_data_v2';
-const PDF_DRIVE_ID = '1hNK4UL5swEImzx3mmknDWFIUWb_Kgc0W';
-const PDF_PREVIEW_URL = `https://drive.google.com/file/d/${PDF_DRIVE_ID}/preview`;
-const PDF_SHARE_URL = `https://drive.google.com/file/d/${PDF_DRIVE_ID}/view?usp=sharing`;
+const STORAGE_KEY_PERGUB14 = 'puskesmas_org_pergub14_data_v1';
+const PERGUB14_DRIVE_ID = '1IMRc04HIo3QhOGZXbRHUlQ-P1dRGusZN';
+const PERGUB14_PREVIEW_URL = `https://drive.google.com/file/d/${PERGUB14_DRIVE_ID}/preview`;
+const PERGUB14_SHARE_URL = `https://drive.google.com/file/d/${PERGUB14_DRIVE_ID}/view?usp=sharing`;
+
+const ILP_DRIVE_ID = '1hNK4UL5swEImzx3mmknDWFIUWb_Kgc0W';
+const ILP_PREVIEW_URL = `https://drive.google.com/file/d/${ILP_DRIVE_ID}/preview`;
+const ILP_SHARE_URL = `https://drive.google.com/file/d/${ILP_DRIVE_ID}/view?usp=sharing`;
+
+export interface PergubUnit {
+  id: string;
+  title: string;
+  code: string;
+  coordinator: OrgPerson;
+  items: OrgPerson[];
+  colorTheme: string;
+  description: string;
+}
+
+const initialPergubUnits: PergubUnit[] = [
+  {
+    id: 'subbag-tu',
+    title: 'Subbagian Tata Usaha (Subbag TU)',
+    code: 'TATA USAHA',
+    colorTheme: 'from-blue-700 to-indigo-900 border-blue-400',
+    description: 'Pengelolaan kepegawaian, keuangan BLUD, umum, perlengkapan, aset/BMD, SP3/SIMPUS dan pelaporan',
+    coordinator: {
+      id: 'tu-head',
+      role: 'Kepala Subbagian Tata Usaha',
+      name: 'Saeful Muslimin, SKM',
+      nip: '19790814 200604 1 008',
+      photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'
+    },
+    items: [
+      {
+        id: 'tu-1',
+        role: 'Urusan Kepegawaian & Diklat',
+        name: 'Pipit Apriyani, A.Md.Kep',
+        nip: '19880412 201101 2 015',
+        photo: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?auto=format&fit=crop&w=400&q=80'
+      },
+      {
+        id: 'tu-2',
+        role: 'Urusan Keuangan & Akuntansi BLUD',
+        name: 'Jamaludin, Amkg',
+        nip: '19840618 200801 1 012',
+        photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80'
+      },
+      {
+        id: 'tu-3',
+        role: 'Urusan Umum, Rumah Tangga & Aset/BMD',
+        name: 'Jajul Karomi, A.Md.Kep',
+        nip: '19830925 200902 1 004',
+        photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80'
+      },
+      {
+        id: 'tu-4',
+        role: 'Urusan Perencanaan, Pelaporan & SP3/SIMPUS',
+        name: 'Defry Dwi Bastanta, Amd. Rad',
+        nip: '19920105 201503 1 002',
+        photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80'
+      }
+    ]
+  },
+  {
+    id: 'satpel-ukm',
+    title: 'Satpel Upaya Kesehatan Masyarakat (Satpel UKM)',
+    code: 'UKM KEPULAUAN',
+    colorTheme: 'from-emerald-700 to-teal-900 border-emerald-400',
+    description: 'Pelayanan promotif dan preventif, kesehatan lingkungan pulau, gizi, KIA-KB komunitas dan P2P',
+    coordinator: {
+      id: 'ukm-head',
+      role: 'Kepala Satuan Pelaksana UKM',
+      name: 'Masriyah, SKM',
+      nip: '19810214 200501 2 007',
+      photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80'
+    },
+    items: [
+      {
+        id: 'ukm-1',
+        role: 'Promosi Kesehatan & UKS',
+        name: 'Assya Zazhilla, S.K.M',
+        nip: '19940612 201903 2 011',
+        photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80'
+      },
+      {
+        id: 'ukm-2',
+        role: 'Kesehatan Lingkungan & Sanitasi Bahari',
+        name: 'M. Iqbal, S.Tr.Kes',
+        nip: '19910319 201402 1 003',
+        photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80'
+      },
+      {
+        id: 'ukm-3',
+        role: 'Pencegahan & Pengendalian Penyakit (P2P)',
+        name: 'Sunarti, A.Md.Keb',
+        nip: '19870504 201001 2 018',
+        photo: 'https://images.unsplash.com/photo-1594824813593-1b91bc706eb8?auto=format&fit=crop&w=400&q=80'
+      },
+      {
+        id: 'ukm-4',
+        role: 'Gizi Masyarakat & Pencegahan Stunting',
+        name: 'Sri Mega, S.Tr.Keb',
+        nip: '19900820 201212 2 005',
+        photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80'
+      },
+      {
+        id: 'ukm-5',
+        role: 'Keperawatan Kesehatan Masyarakat (Perkesmas)',
+        name: 'Ns. Ahmad Fauzi, S.Kep',
+        nip: '19890915 201403 1 004',
+        photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80'
+      }
+    ]
+  },
+  {
+    id: 'satpel-ukp',
+    title: 'Satpel Upaya Kesehatan Perorangan (Satpel UKP)',
+    code: 'UKP, FARMASI & LAB',
+    colorTheme: 'from-rose-700 to-red-950 border-rose-400',
+    description: 'Rawat jalan kuratif, IGD 24 Jam, KIA klinis, farmasi, laboratorium dan transportasi rujukan ambulans kapal',
+    coordinator: {
+      id: 'ukp-head',
+      role: 'Kepala Satuan Pelaksana UKP',
+      name: 'dr. Tri Wahyu Ningrum',
+      nip: '19860417 201101 2 021',
+      photo: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=400&q=80'
+    },
+    items: [
+      {
+        id: 'ukp-1',
+        role: 'Pelayanan Pemeriksaan Umum & Lansia',
+        name: 'dr. Ambro Henri Sihite',
+        nip: '19900115 201701 1 002',
+        photo: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=400&q=80'
+      },
+      {
+        id: 'ukp-2',
+        role: 'Pelayanan Kesehatan Gigi & Mulut',
+        name: 'drg. Putri Ajri Mawadara',
+        nip: '19930722 201802 2 006',
+        photo: 'https://images.unsplash.com/photo-1594824813593-1b91bc706eb8?auto=format&fit=crop&w=400&q=80'
+      },
+      {
+        id: 'ukp-3',
+        role: 'Instalasi Gawat Darurat (IGD) & Tindakan 24 Jam',
+        name: 'Ns. Hendra Wijaya, S.Kep',
+        nip: '19871109 201001 1 014',
+        photo: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=400&q=80'
+      },
+      {
+        id: 'ukp-4',
+        role: 'Pelayanan Kefarmasian & Gudang Obat',
+        name: 'apt. Nurul Hidayah, S.Farm',
+        nip: '19920511 201503 2 008',
+        photo: 'https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?auto=format&fit=crop&w=400&q=80'
+      },
+      {
+        id: 'ukp-5',
+        role: 'Pelayanan Laboratorium Sederhana',
+        name: 'Siti Rahmah, A.Md.AK',
+        nip: '19931018 201602 2 009',
+        photo: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=400&q=80'
+      },
+      {
+        id: 'ukp-6',
+        role: 'Transportasi Rujukan Ambulans Laut',
+        name: 'Budi Santoso (Kapten Kapal Medis)',
+        nip: '19820415 200902 1 006',
+        photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80'
+      }
+    ]
+  },
+  {
+    id: 'satpel-pustu',
+    title: 'Satpel Puskesmas Pembantu (Pustu Wilayah Pulau)',
+    code: 'FASKES KEPULAUAN',
+    colorTheme: 'from-cyan-700 to-blue-950 border-cyan-400',
+    description: 'Jejaring pelayanan kesehatan primer di pulau pemukiman gugusan Kepulauan Seribu Selatan',
+    coordinator: {
+      id: 'pustu-coord',
+      role: 'Koordinator Pelayanan Faskes Pulau',
+      name: 'dr. Ignatius Dendy Purnama',
+      nip: '198503222010012031',
+      photo: '/assets/kepala-puskesmas.svg'
+    },
+    items: [
+      {
+        id: 'pustu-1',
+        role: 'Puskesmas Pembantu (Pustu) Pulau Pari',
+        name: 'Penanggung Jawab Pustu P. Pari',
+        nip: 'Siaga Layanan Medis',
+        photo: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=400&q=80'
+      },
+      {
+        id: 'pustu-2',
+        role: 'Puskesmas Pembantu (Pustu) Pulau Lancang',
+        name: 'Penanggung Jawab Pustu P. Lancang',
+        nip: 'Siaga Layanan Medis',
+        photo: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=400&q=80'
+      },
+      {
+        id: 'pustu-3',
+        role: 'Puskesmas Pembantu (Pustu) Pulau Untung Jawa',
+        name: 'Penanggung Jawab Pustu P. Untung Jawa',
+        nip: 'Siaga Layanan Medis',
+        photo: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=400&q=80'
+      },
+      {
+        id: 'pustu-4',
+        role: 'Pos Kesehatan (Poskes) Pulau Payung',
+        name: 'Petugas Nakes Siaga P. Payung',
+        nip: 'Pelayanan Pusling & Poskes',
+        photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80'
+      }
+    ]
+  }
+];
 
 export const OrganizationChart: React.FC = () => {
+  const { openServiceDoc } = useData();
+
   const [leader, setLeader] = useState<OrgPerson>(() => {
     const customHeadPhoto = localStorage.getItem('puskesmas_head_photo');
-    const saved = localStorage.getItem(STORAGE_KEY);
+    const saved = localStorage.getItem(STORAGE_KEY_PERGUB14);
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -47,36 +271,38 @@ export const OrganizationChart: React.FC = () => {
     }
     return {
       ...initialOrgLeader,
-      photo: customHeadPhoto || initialOrgLeader.photo || '/kepala-puskesmas.svg'
+      photo: customHeadPhoto || initialOrgLeader.photo || '/assets/kepala-puskesmas.svg'
     };
   });
 
-  const [clusters, setClusters] = useState<OrgCluster[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
+  const [pergubUnits, setPergubUnits] = useState<PergubUnit[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY_PERGUB14);
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        if (parsed.clusters) return parsed.clusters;
+        if (parsed.pergubUnits) return parsed.pergubUnits;
       } catch {
         // fallback
       }
     }
-    return initialOrgClusters;
+    return initialPergubUnits;
   });
 
+  // Controls & View States
+  const [activeTabMode, setActiveTabMode] = useState<'pergub14-visual' | 'pergub14-pdf' | 'ilp-pdf'>('pergub14-visual');
   const [zoomLevel, setZoomLevel] = useState<number>(100);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [pdfLoading, setPdfLoading] = useState<boolean>(true);
+
+  // Edit Person Modal State
   const [activeEditingPerson, setActiveEditingPerson] = useState<{
     person: OrgPerson;
-    clusterId?: string;
+    unitId?: string;
     isLeader?: boolean;
     isCoordinator?: boolean;
   } | null>(null);
 
-  const { openServiceDoc } = useData();
-  const [chartViewMode, setChartViewMode] = useState<'pdf' | 'interactive'>('pdf');
-  const [pdfLoading, setPdfLoading] = useState(true);
   const [tempPhotoUrl, setTempPhotoUrl] = useState<string>('');
   const [tempName, setTempName] = useState<string>('');
   const [tempRole, setTempRole] = useState<string>('');
@@ -86,25 +312,29 @@ export const OrganizationChart: React.FC = () => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Save changes to localStorage
-  const saveToStorage = (newLeader: OrgPerson, newClusters: OrgCluster[]) => {
+  const triggerToast = (msg: string) => {
+    setSuccessToast(msg);
+    setTimeout(() => setSuccessToast(null), 3000);
+  };
+
+  const saveToStorage = (newLeader: OrgPerson, newUnits: PergubUnit[]) => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      localStorage.setItem(STORAGE_KEY_PERGUB14, JSON.stringify({
         leader: newLeader,
-        clusters: newClusters
+        pergubUnits: newUnits
       }));
     } catch {
-      // ignore storage error
+      // ignore
     }
   };
 
   const handleEditClick = (
     person: OrgPerson, 
-    clusterId?: string, 
+    unitId?: string, 
     isLeader = false, 
     isCoordinator = false
   ) => {
-    setActiveEditingPerson({ person, clusterId, isLeader, isCoordinator });
+    setActiveEditingPerson({ person, unitId, isLeader, isCoordinator });
     setTempPhotoUrl(person.photo || '');
     setTempName(person.name);
     setTempRole(person.role);
@@ -115,7 +345,6 @@ export const OrganizationChart: React.FC = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Check size limit (max 3MB)
     if (file.size > 3 * 1024 * 1024) {
       alert('Ukuran foto maksimal 3MB');
       return;
@@ -132,7 +361,7 @@ export const OrganizationChart: React.FC = () => {
   const handleSavePerson = () => {
     if (!activeEditingPerson) return;
 
-    const { person, clusterId, isLeader, isCoordinator } = activeEditingPerson;
+    const { unitId, isLeader, isCoordinator } = activeEditingPerson;
 
     if (isLeader) {
       const updatedLeader: OrgPerson = {
@@ -143,57 +372,53 @@ export const OrganizationChart: React.FC = () => {
         photo: tempPhotoUrl
       };
       setLeader(updatedLeader);
-      saveToStorage(updatedLeader, clusters);
-    } else if (clusterId) {
-      const updatedClusters = clusters.map(cluster => {
-        if (cluster.id !== clusterId) return cluster;
+      saveToStorage(updatedLeader, pergubUnits);
+      triggerToast('Data Kepala Puskesmas berhasil diperbarui!');
+    } else if (unitId) {
+      const updatedUnits = pergubUnits.map(unit => {
+        if (unit.id !== unitId) return unit;
 
         if (isCoordinator) {
           return {
-            ...cluster,
+            ...unit,
             coordinator: {
-              ...cluster.coordinator,
+              ...unit.coordinator,
               name: tempName,
               role: tempRole,
               nip: tempNip,
               photo: tempPhotoUrl
             }
           };
-        }
-
-        return {
-          ...cluster,
-          members: cluster.members.map(m => {
-            if (m.id === person.id) {
+        } else {
+          return {
+            ...unit,
+            items: unit.items.map(p => {
+              if (p.id !== activeEditingPerson.person.id) return p;
               return {
-                ...m,
+                ...p,
                 name: tempName,
                 role: tempRole,
                 nip: tempNip,
                 photo: tempPhotoUrl
               };
-            }
-            return m;
-          })
-        };
+            })
+          };
+        }
       });
-
-      setClusters(updatedClusters);
-      saveToStorage(leader, updatedClusters);
+      setPergubUnits(updatedUnits);
+      saveToStorage(leader, updatedUnits);
+      triggerToast('Data pejabat / staf berhasil diperbarui!');
     }
 
-    setSuccessToast(`Foto dan data "${tempName}" berhasil diperbarui!`);
     setActiveEditingPerson(null);
-    setTimeout(() => setSuccessToast(null), 4000);
   };
 
   const handleResetToDefault = () => {
-    if (window.confirm('Kembalikan bagan struktur ke data awal resmi?')) {
-      localStorage.removeItem(STORAGE_KEY);
+    if (window.confirm('Kembalikan bagan struktur organisasi ke susunan resmi Pergub DKI No. 14?')) {
+      localStorage.removeItem(STORAGE_KEY_PERGUB14);
       setLeader(initialOrgLeader);
-      setClusters(initialOrgClusters);
-      setSuccessToast('Struktur organisasi berhasil dikembalikan ke standar awal.');
-      setTimeout(() => setSuccessToast(null), 3000);
+      setPergubUnits(initialPergubUnits);
+      triggerToast('Bagan berhasil dikembalikan ke standar awal Pergub DKI No. 14.');
     }
   };
 
@@ -202,130 +427,148 @@ export const OrganizationChart: React.FC = () => {
   };
 
   const isMatched = (name: string, role: string) => {
-    if (!searchQuery) return true;
-    const query = searchQuery.toLowerCase();
-    return name.toLowerCase().includes(query) || role.toLowerCase().includes(query);
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.toLowerCase();
+    return name.toLowerCase().includes(q) || role.toLowerCase().includes(q);
   };
 
   return (
-    <div className={`space-y-6 ${isFullscreen ? 'fixed inset-0 z-50 bg-slate-900 p-6 overflow-auto' : ''}`}>
-      {/* Toast Notification */}
+    <div className="space-y-6">
+      {/* Toast Alert */}
       {successToast && (
-        <div className="fixed bottom-6 right-6 z-50 bg-emerald-600 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2.5 text-xs sm:text-sm font-semibold animate-in slide-in-from-bottom duration-300">
-          <CheckCircle2 className="w-5 h-5 text-emerald-200 shrink-0" />
+        <div className="fixed bottom-6 right-6 z-50 p-4 rounded-2xl bg-slate-900 text-white shadow-2xl border border-slate-700 flex items-center gap-3 text-xs font-semibold animate-in slide-in-from-bottom-4">
+          <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
           <span>{successToast}</span>
         </div>
       )}
 
-      {/* Header Info & Action Controls */}
-      <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/90 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      {/* Header Info & Main Mode Switcher */}
+      <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/90 shadow-xs flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
         <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-blue-50 text-blue-800 text-[11px] font-bold uppercase tracking-wider border border-blue-200/60">
-              <Building2 className="w-3.5 h-3.5 text-blue-600" />
-              Bagan Resmi ILP 2026
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-blue-100 text-blue-900 text-[11px] font-bold uppercase tracking-wider border border-blue-300">
+              <Building2 className="w-3.5 h-3.5 text-blue-700" />
+              Pergub DKI Jakarta No. 14
             </span>
             <span className="text-xs text-slate-500 font-medium">
-              Kepmenkes No. 2014/2023 & Pola Tata Kelola Kepulauan
+              Organisasi &amp; Tata Kerja Pusat Kesehatan Masyarakat
             </span>
           </div>
           <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight font-display">
-            Struktur Organisasi Integrasi Layanan Primer (ILP)
+            Bagan Struktur Organisasi Pergub DKI No. 14
           </h3>
-          <p className="text-xs text-slate-600">
-            Dokumen resmi diambil langsung dari Google Drive PDF sesuai keputusan Kepala Puskesmas.
+          <p className="text-xs text-slate-600 max-w-2xl leading-relaxed">
+            Struktur kelembagaan resmi Puskesmas Kepulauan Seribu Selatan sesuai Peraturan Gubernur DKI Jakarta Nomor 14 dan dokumen berkas Google Drive resmi.
           </p>
         </div>
 
-        {/* View Mode Switcher: PDF Google Drive vs Bagan Interaktif */}
-        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
-          <div className="inline-flex p-1 rounded-2xl bg-slate-100 border border-slate-200 text-xs font-bold gap-1">
+        {/* View Mode Switcher */}
+        <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
+          <div className="inline-flex p-1 rounded-2xl bg-slate-100 border border-slate-200 text-xs font-bold gap-1 w-full sm:w-auto justify-center">
             <button
-              onClick={() => setChartViewMode('pdf')}
+              onClick={() => setActiveTabMode('pergub14-visual')}
               className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl transition ${
-                chartViewMode === 'pdf'
-                  ? 'bg-blue-600 text-white shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
-              }`}
-            >
-              <Eye className="w-4 h-4" />
-              <span>Dokumen PDF (Drive)</span>
-            </button>
-            <button
-              onClick={() => setChartViewMode('interactive')}
-              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl transition ${
-                chartViewMode === 'interactive'
+                activeTabMode === 'pergub14-visual'
                   ? 'bg-blue-600 text-white shadow-xs'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
               }`}
             >
               <FileText className="w-4 h-4" />
-              <span>Bagan Visual Nakes</span>
+              <span>Bagan Visual Pergub 14</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTabMode('pergub14-pdf');
+                setPdfLoading(true);
+              }}
+              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl transition ${
+                activeTabMode === 'pergub14-pdf'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+              }`}
+            >
+              <Eye className="w-4 h-4" />
+              <span>PDF Pergub 14 (Drive)</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTabMode('ilp-pdf');
+                setPdfLoading(true);
+              }}
+              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl transition ${
+                activeTabMode === 'ilp-pdf'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+              }`}
+            >
+              <Layers className="w-4 h-4" />
+              <span>Dokumen ILP (Drive)</span>
             </button>
           </div>
 
           <a
-            href={PDF_SHARE_URL}
+            href={PERGUB14_SHARE_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold border border-slate-200 transition"
-            title="Buka Dokumen PDF di Google Drive"
+            title="Buka Dokumen PDF Pergub DKI 14 di Google Drive"
           >
             <ExternalLink className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Buka Google Drive</span>
+            <span className="hidden sm:inline">Drive Pergub 14</span>
           </a>
         </div>
       </div>
 
-      {/* VIEW MODE 1: DOKUMEN PDF RESMI GOOGLE DRIVE */}
-      {chartViewMode === 'pdf' && (
+      {/* ================= TAB 1: PDF PERGUB DKI 14 (GOOGLE DRIVE) ================= */}
+      {activeTabMode === 'pergub14-pdf' && (
         <div className="bg-slate-950 rounded-3xl border border-slate-800 shadow-2xl overflow-hidden flex flex-col">
-          {/* Top Bar for PDF Viewer */}
           <div className="bg-slate-900 px-5 py-3 border-b border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-slate-300">
             <div className="flex items-center gap-2.5">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
               <span className="font-bold text-white">
-                Dokumen PDF Resmi: Struktur Organisasi Integrasi Layanan Primer (ILP)
+                Dokumen Resmi: Struktur Organisasi Pergub DKI Jakarta Nomor 14
               </span>
               <span className="text-[10px] px-2 py-0.5 rounded bg-blue-900/60 text-blue-300 border border-blue-700 font-mono">
-                ID: {PDF_DRIVE_ID}
+                ID: {PERGUB14_DRIVE_ID}
               </span>
             </div>
 
             <div className="flex items-center gap-2">
               <button
-                onClick={() => openServiceDoc('struktur-ilp')}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition"
+                onClick={() => openServiceDoc('struktur-pergub14')}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition text-xs"
               >
                 <Maximize2 className="w-3.5 h-3.5" />
                 <span>Modal Layar Penuh</span>
               </button>
 
               <a
-                href={PDF_SHARE_URL}
+                href={PERGUB14_SHARE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold transition"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold transition text-xs"
               >
                 <ExternalLink className="w-3.5 h-3.5" />
-                <span>Tab Baru</span>
+                <span>Buka di Google Drive</span>
               </a>
             </div>
           </div>
 
-          {/* Embedded Google Drive PDF Iframe */}
-          <div className="relative w-full h-[750px] bg-slate-900">
+          <div className="relative w-full h-[780px] bg-slate-900">
             {pdfLoading && (
               <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-slate-900 text-slate-300 gap-3">
                 <div className="w-10 h-10 border-3 border-blue-500 border-t-transparent rounded-full animate-spin" />
                 <p className="text-xs font-semibold text-blue-300">
-                  Memuat dokumen PDF Struktur Organisasi ILP dari Google Drive...
+                  Memuat berkas PDF Struktur Pergub DKI 14 dari Google Drive...
                 </p>
+                <p className="text-[11px] text-slate-500">ID Drive: {PERGUB14_DRIVE_ID}</p>
               </div>
             )}
             <iframe
-              src={PDF_PREVIEW_URL}
-              title="Struktur Organisasi ILP Puskesmas Kepulauan Seribu Selatan"
+              src={PERGUB14_PREVIEW_URL}
+              title="Dokumen Bagan Struktur Pergub DKI 14"
               className="w-full h-full border-0 block"
               allow="autoplay"
               onLoad={() => setPdfLoading(false)}
@@ -334,16 +577,71 @@ export const OrganizationChart: React.FC = () => {
         </div>
       )}
 
-      {/* VIEW MODE 2: BAGAN VISUAL INTERAKTIF NAKES */}
-      {chartViewMode === 'interactive' && (
+      {/* ================= TAB 2: PDF ILP 2026 (GOOGLE DRIVE) ================= */}
+      {activeTabMode === 'ilp-pdf' && (
+        <div className="bg-slate-950 rounded-3xl border border-slate-800 shadow-2xl overflow-hidden flex flex-col">
+          <div className="bg-slate-900 px-5 py-3 border-b border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-slate-300">
+            <div className="flex items-center gap-2.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="font-bold text-white">
+                Dokumen Resmi: Struktur Organisasi Integrasi Layanan Primer (ILP)
+              </span>
+              <span className="text-[10px] px-2 py-0.5 rounded bg-teal-900/60 text-teal-300 border border-teal-700 font-mono">
+                ID: {ILP_DRIVE_ID}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => openServiceDoc('struktur-ilp')}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold transition text-xs"
+              >
+                <Maximize2 className="w-3.5 h-3.5" />
+                <span>Modal Layar Penuh</span>
+              </button>
+
+              <a
+                href={ILP_SHARE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold transition text-xs"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Buka di Google Drive</span>
+              </a>
+            </div>
+          </div>
+
+          <div className="relative w-full h-[780px] bg-slate-900">
+            {pdfLoading && (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-slate-900 text-slate-300 gap-3">
+                <div className="w-10 h-10 border-3 border-teal-500 border-t-transparent rounded-full animate-spin" />
+                <p className="text-xs font-semibold text-teal-300">
+                  Memuat berkas PDF Struktur ILP dari Google Drive...
+                </p>
+              </div>
+            )}
+            <iframe
+              src={ILP_PREVIEW_URL}
+              title="Dokumen Bagan Struktur Organisasi ILP"
+              className="w-full h-full border-0 block"
+              allow="autoplay"
+              onLoad={() => setPdfLoading(false)}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* ================= TAB 3: BAGAN STRUKTUR VISUAL PERGUB DKI 14 ================= */}
+      {activeTabMode === 'pergub14-visual' && (
         <>
-          {/* Action Buttons & Zoom Bar */}
+          {/* Action Bar (Zoom, Search, Fullscreen, Print) */}
           <div className="bg-slate-100 p-3 rounded-2xl border border-slate-200 flex flex-wrap items-center justify-between gap-2">
-            <div className="relative flex-1 sm:w-64 max-w-sm">
+            <div className="relative flex-1 sm:w-72 max-w-sm">
               <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Cari pejabat / bidang..."
+                placeholder="Cari pejabat, satpel, atau staf..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-8 pr-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs focus:outline-hidden focus:ring-2 focus:ring-blue-500"
@@ -373,7 +671,7 @@ export const OrganizationChart: React.FC = () => {
                 <button
                   onClick={() => setZoomLevel(100)}
                   className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-700 transition ml-1"
-                  title="Reset Skala"
+                  title="Reset Skala 100%"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                 </button>
@@ -391,7 +689,7 @@ export const OrganizationChart: React.FC = () => {
               <button
                 onClick={handlePrint}
                 className="p-2 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 transition text-xs flex items-center gap-1.5 font-bold"
-                title="Cetak / Unduh Bagan"
+                title="Cetak Bagan"
               >
                 <Printer className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Cetak</span>
@@ -400,366 +698,386 @@ export const OrganizationChart: React.FC = () => {
               <button
                 onClick={handleResetToDefault}
                 className="text-[11px] text-slate-500 hover:text-rose-600 underline font-semibold px-1"
-                title="Kembalikan ke susunan awal"
+                title="Kembalikan data ke standar awal"
               >
                 Reset Default
               </button>
             </div>
           </div>
 
-      {/* The Printable Visual Chart Container */}
-      <div 
-        ref={chartContainerRef}
-        className="bg-gradient-to-b from-slate-900 via-slate-950 to-blue-950 text-white rounded-3xl p-6 sm:p-10 border border-slate-800 shadow-2xl overflow-x-auto print:bg-white print:text-slate-900 print:p-0 print:border-none print:shadow-none"
-      >
-        <div 
-          style={{ transform: `scale(${zoomLevel / 100})`, transformOrigin: 'top center' }} 
-          className="transition-transform duration-200 min-w-[1100px] flex flex-col items-center"
-        >
-          {/* Chart Header Branding (Matching Attachment Banner) */}
-          <div className="text-center mb-8 flex flex-col items-center">
-            {/* DKI Jakarta Crest / Jaya Raya Emblem */}
-            <div className="w-16 h-16 mb-2 flex items-center justify-center p-1 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-md">
-              <svg viewBox="0 0 100 120" className="w-full h-full drop-shadow-sm" fill="none">
-                <path d="M 50,5 L 85,25 L 85,85 C 85,105 50,115 50,115 C 50,115 15,105 15,85 L 15,25 Z" fill="#b91c1c" stroke="#f59e0b" strokeWidth="3" />
-                <path d="M 50,15 L 75,30 L 75,75 C 75,90 50,100 50,100 C 50,100 25,90 25,75 L 25,30 Z" fill="#1e3a8a" />
-                <circle cx="50" cy="55" r="18" fill="#f59e0b" />
-                <path d="M 50,42 L 53,50 L 61,50 L 55,55 L 57,63 L 50,58 L 43,63 L 45,55 L 39,50 L 47,50 Z" fill="#ffffff" />
-                <text x="50" y="85" textAnchor="middle" fill="#ffffff" fontSize="9" fontWeight="900" letterSpacing="0.5">JAYA RAYA</text>
-              </svg>
-            </div>
+          {/* Canvas Bagan Hirarki Pergub 14 */}
+          <div 
+            ref={chartContainerRef}
+            className={`bg-gradient-to-b from-slate-900 via-slate-950 to-blue-950 text-white rounded-3xl p-6 sm:p-10 border border-slate-800 shadow-2xl overflow-x-auto print:bg-white print:text-slate-900 print:p-0 print:border-none print:shadow-none ${
+              isFullscreen ? 'fixed inset-0 z-50 rounded-none overflow-y-auto' : ''
+            }`}
+          >
+            {isFullscreen && (
+              <div className="sticky top-4 right-4 flex justify-end z-40 mb-4">
+                <button
+                  onClick={() => setIsFullscreen(false)}
+                  className="px-4 py-2 rounded-xl bg-rose-600 text-white font-bold text-xs shadow-lg flex items-center gap-2 hover:bg-rose-500"
+                >
+                  <X className="w-4 h-4" />
+                  <span>Tutup Layar Penuh</span>
+                </button>
+              </div>
+            )}
 
-            <h4 className="text-lg sm:text-2xl font-black text-amber-400 tracking-wider uppercase font-display drop-shadow-sm">
-              STRUKTUR ORGANISASI
-            </h4>
-            <h5 className="text-base sm:text-xl font-extrabold text-white tracking-wide uppercase font-display mt-0.5">
-              INTEGRASI LAYANAN PRIMER (ILP)
-            </h5>
-            <h6 className="text-sm sm:text-lg font-bold text-sky-300 tracking-normal mt-0.5">
-              PUSKESMAS KEPULAUAN SERIBU SELATAN
-            </h6>
-            <span className="inline-block mt-1 px-3 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/40 text-xs font-black tracking-widest">
-              TAHUN 2026
-            </span>
-          </div>
-
-          {/* LEVEL 1: KEPALA PUSKESMAS (Pucuk Pimpinan) */}
-          <div className="flex flex-col items-center relative mb-12">
             <div 
-              onClick={() => handleEditClick(leader, undefined, true, false)}
-              className={`group relative cursor-pointer p-4 rounded-3xl bg-gradient-to-b from-slate-800 to-slate-900 border-2 ${
-                isMatched(leader.name, leader.role) ? 'border-amber-400 shadow-xl shadow-amber-500/20' : 'border-slate-700 opacity-60'
-              } hover:border-amber-300 hover:scale-[1.03] transition-all duration-200 flex flex-col items-center text-center w-72 backdrop-blur-md`}
+              style={{ transform: `scale(${zoomLevel / 100})`, transformOrigin: 'top center' }} 
+              className="transition-transform duration-200 min-w-[1240px] flex flex-col items-center"
             >
-              {/* Leader Photo Avatar with Amber Ring */}
-              <div className="relative w-24 h-24 mb-3 rounded-2xl overflow-hidden border-2 border-amber-400 bg-slate-800 shadow-lg group-hover:ring-4 group-hover:ring-amber-400/30 transition-all">
-                {leader.photo ? (
-                  <img 
-                    src={leader.photo} 
-                    alt={leader.name}
-                    className="w-full h-full object-cover object-top"
-                    referrerPolicy="no-referrer"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-slate-700 text-slate-300">
-                    <User className="w-10 h-10" />
-                  </div>
-                )}
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white">
-                  <Camera className="w-6 h-6 text-amber-300 drop-shadow" />
+              {/* Header Emblem Jaya Raya DKI Jakarta */}
+              <div className="text-center mb-8 flex flex-col items-center">
+                <div className="w-16 h-16 mb-2 flex items-center justify-center p-1 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-md">
+                  <svg viewBox="0 0 100 120" className="w-full h-full drop-shadow-sm" fill="none">
+                    <path d="M 50,5 L 85,25 L 85,85 C 85,105 50,115 50,115 C 50,115 15,105 15,85 L 15,25 Z" fill="#b91c1c" stroke="#f59e0b" strokeWidth="3" />
+                    <path d="M 50,15 L 75,30 L 75,75 C 75,90 50,100 50,100 C 50,100 25,90 25,75 L 25,30 Z" fill="#1e3a8a" />
+                    <circle cx="50" cy="55" r="18" fill="#f59e0b" />
+                    <path d="M 50,42 L 53,50 L 61,50 L 55,55 L 57,63 L 50,58 L 43,63 L 45,55 L 39,50 L 47,50 Z" fill="#ffffff" />
+                    <text x="50" y="85" textAnchor="middle" fill="#ffffff" fontSize="9" fontWeight="900" letterSpacing="0.5">JAYA RAYA</text>
+                  </svg>
                 </div>
+
+                <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 text-[11px] font-black tracking-widest uppercase mb-1">
+                  PERATURAN GUBERNUR PROVINSI DKI JAKARTA NOMOR 14
+                </div>
+                <h4 className="text-xl sm:text-2xl font-black text-white tracking-wider uppercase font-display drop-shadow-sm">
+                  BAGAN STRUKTUR ORGANISASI &amp; TATA KERJA
+                </h4>
+                <h5 className="text-base sm:text-lg font-extrabold text-sky-300 tracking-normal mt-0.5">
+                  PUSKESMAS KEPULAUAN SERIBU SELATAN
+                </h5>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Pemprov DKI Jakarta • Dinas Kesehatan Provinsi DKI Jakarta • Suku Dinas Kesehatan Kepulauan Seribu
+                </p>
               </div>
 
-              {/* Leader Role Badge */}
-              <span className="px-3 py-0.5 rounded-full bg-amber-500 text-slate-950 text-xs font-black uppercase tracking-wider mb-1.5 shadow-xs">
-                {leader.role}
-              </span>
-
-              <h5 className="font-extrabold text-sm text-white leading-snug">
-                {leader.name}
-              </h5>
-
-              {leader.nip && (
-                <p className="text-[11px] font-mono text-amber-200/90 mt-0.5">
-                  NIP: {leader.nip}
-                </p>
-              )}
-
-              {/* Hover Edit Hint */}
-              <span className="mt-2 text-[10px] text-amber-300/70 group-hover:text-amber-300 flex items-center gap-1 font-semibold">
-                <FileEdit className="w-3 h-3" />
-                Klik untuk ganti foto / data
-              </span>
-            </div>
-
-            {/* Vertical connector trunk */}
-            <div className="w-1 h-10 bg-amber-400/80 mt-1"></div>
-
-            {/* Horizontal branch bar spreading to all 5 clusters */}
-            <div className="w-[94%] h-1 bg-amber-400/80 relative">
-              {/* Connector drops to 5 columns */}
-              <div className="absolute left-[10%] -bottom-4 w-0.5 h-4 bg-amber-400"></div>
-              <div className="absolute left-[30%] -bottom-4 w-0.5 h-4 bg-amber-400"></div>
-              <div className="absolute left-[50%] -bottom-4 w-0.5 h-4 bg-amber-400"></div>
-              <div className="absolute left-[70%] -bottom-4 w-0.5 h-4 bg-amber-400"></div>
-              <div className="absolute left-[90%] -bottom-4 w-0.5 h-4 bg-amber-400"></div>
-            </div>
-          </div>
-
-          {/* LEVEL 2: THE 5 ILP CLUSTER COLUMNS */}
-          <div className="grid grid-cols-5 gap-5 w-full pt-4">
-            {clusters.map((cluster) => (
-              <div key={cluster.id} className="flex flex-col items-center">
-                {/* Column Cluster Header Pill */}
-                <div className="w-full text-center mb-3">
-                  <div className="p-2.5 rounded-2xl bg-gradient-to-r from-blue-900 to-indigo-900 border border-blue-400/40 shadow-md">
-                    <span className="block text-xs font-black text-amber-300 tracking-wide uppercase">
-                      {cluster.title}
-                    </span>
-                    <span className="block text-[10px] text-slate-300 font-medium truncate mt-0.5">
-                      {cluster.subtitle}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Coordinator Card */}
+              {/* LEVEL 1: KEPALA PUSKESMAS KECAMATAN */}
+              <div className="flex flex-col items-center relative mb-12">
                 <div 
-                  onClick={() => handleEditClick(cluster.coordinator, cluster.id, false, true)}
-                  className={`group relative cursor-pointer w-full p-3 rounded-2xl bg-slate-800/90 border ${
-                    isMatched(cluster.coordinator.name, cluster.coordinator.role)
-                      ? 'border-sky-400 shadow-md shadow-sky-500/10'
-                      : 'border-slate-700 opacity-60'
-                  } hover:border-amber-400 hover:scale-[1.02] transition flex items-center gap-2.5 mb-4 text-left`}
+                  onClick={() => handleEditClick(leader, undefined, true, false)}
+                  className={`group relative cursor-pointer p-4 rounded-3xl bg-gradient-to-b from-slate-800 to-slate-900 border-2 ${
+                    isMatched(leader.name, leader.role) ? 'border-amber-400 shadow-xl shadow-amber-500/20' : 'border-slate-700 opacity-60'
+                  } hover:border-amber-300 hover:scale-[1.03] transition-all duration-200 flex flex-col items-center text-center w-80 backdrop-blur-md`}
                 >
-                  <div className="relative w-11 h-11 rounded-xl overflow-hidden bg-slate-700 shrink-0 border border-amber-400/70 shadow-xs">
-                    {cluster.coordinator.photo ? (
+                  {/* Photo Avatar */}
+                  <div className="relative w-24 h-24 mb-3 rounded-2xl overflow-hidden border-2 border-amber-400 bg-slate-800 shadow-lg group-hover:ring-4 group-hover:ring-amber-400/30 transition-all">
+                    {leader.photo ? (
                       <img 
-                        src={cluster.coordinator.photo} 
-                        alt={cluster.coordinator.name}
+                        src={leader.photo} 
+                        alt={leader.name}
                         className="w-full h-full object-cover object-top"
                         referrerPolicy="no-referrer"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-slate-400">
-                        <User className="w-5 h-5" />
+                      <div className="w-full h-full flex items-center justify-center bg-slate-700 text-slate-300">
+                        <User className="w-10 h-10" />
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                      <Camera className="w-3.5 h-3.5 text-amber-300" />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white">
+                      <Camera className="w-6 h-6 text-amber-300 drop-shadow" />
                     </div>
                   </div>
 
-                  <div className="flex-1 min-w-0">
-                    <span className="inline-block text-[9px] font-extrabold uppercase tracking-wider text-amber-300 truncate max-w-full">
-                      {cluster.coordinator.role}
-                    </span>
-                    <h6 className="text-xs font-bold text-white truncate group-hover:text-amber-200 transition">
-                      {cluster.coordinator.name}
-                    </h6>
-                    <span className="text-[9px] text-slate-400 block group-hover:text-slate-300">
-                      Koordinator Klaster
-                    </span>
-                  </div>
+                  <span className="px-3 py-0.5 rounded-full bg-amber-500 text-slate-950 text-xs font-black uppercase tracking-wider mb-1.5 shadow-xs">
+                    {leader.role}
+                  </span>
+
+                  <h5 className="font-extrabold text-base text-white leading-snug">
+                    {leader.name}
+                  </h5>
+
+                  {leader.nip && (
+                    <p className="text-[11px] font-mono text-amber-200/90 mt-0.5">
+                      NIP: {leader.nip}
+                    </p>
+                  )}
+
+                  <span className="mt-2 text-[10px] text-amber-300/80 group-hover:text-amber-300 flex items-center gap-1 font-semibold">
+                    <FileEdit className="w-3 h-3" />
+                    Klik untuk ganti data / foto
+                  </span>
                 </div>
 
-                {/* Vertical line connecting coordinator to members */}
-                <div className="w-0.5 h-3 bg-slate-600 mb-2"></div>
+                {/* Trunk Down Connector */}
+                <div className="w-1 h-10 bg-amber-400/80 mt-1"></div>
 
-                {/* Cluster Sub-members Stack */}
-                <div className="w-full space-y-2.5">
-                  {cluster.members.map((member) => (
+                {/* Main Horizontal Branch distributing to the 4 main units of Pergub 14 */}
+                <div className="w-[92%] h-1 bg-amber-400/80 relative">
+                  <div className="absolute left-[12.5%] -bottom-4 w-0.5 h-4 bg-amber-400"></div>
+                  <div className="absolute left-[37.5%] -bottom-4 w-0.5 h-4 bg-amber-400"></div>
+                  <div className="absolute left-[62.5%] -bottom-4 w-0.5 h-4 bg-amber-400"></div>
+                  <div className="absolute left-[87.5%] -bottom-4 w-0.5 h-4 bg-amber-400"></div>
+                </div>
+              </div>
+
+              {/* LEVEL 2: THE 4 MAIN COLUMNS OF PERGUB 14 */}
+              <div className="grid grid-cols-4 gap-6 w-full pt-4">
+                {pergubUnits.map((unit) => (
+                  <div key={unit.id} className="flex flex-col items-center">
+                    {/* Unit Header Badge */}
+                    <div className="w-full text-center mb-3">
+                      <div className={`p-3 rounded-2xl bg-gradient-to-r ${unit.colorTheme} shadow-md border`}>
+                        <span className="block text-[10px] text-amber-300 font-black tracking-widest uppercase">
+                          {unit.code}
+                        </span>
+                        <h6 className="text-xs font-bold text-white tracking-wide mt-0.5">
+                          {unit.title}
+                        </h6>
+                        <p className="text-[10px] text-slate-300 font-medium leading-relaxed mt-1">
+                          {unit.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Unit Coordinator Card */}
                     <div 
-                      key={member.id}
-                      onClick={() => handleEditClick(member, cluster.id, false, false)}
-                      className={`group relative cursor-pointer p-2.5 rounded-xl bg-slate-850/80 border ${
-                        isMatched(member.name, member.role)
-                          ? 'border-slate-700 hover:border-amber-400'
-                          : 'border-slate-800 opacity-50'
-                      } hover:bg-slate-800 transition flex items-center gap-2.5 text-left`}
+                      onClick={() => handleEditClick(unit.coordinator, unit.id, false, true)}
+                      className={`group relative cursor-pointer w-full p-3 rounded-2xl bg-slate-900 border ${
+                        isMatched(unit.coordinator.name, unit.coordinator.role) ? 'border-amber-400/90 shadow-md' : 'border-slate-800 opacity-60'
+                      } hover:border-amber-300 hover:bg-slate-850 transition-all flex items-center gap-3 mb-4`}
                     >
-                      {/* Member Photo Avatar */}
-                      <div className="relative w-9 h-9 rounded-lg overflow-hidden bg-slate-750 shrink-0 border border-slate-600 group-hover:border-amber-400 transition">
-                        {member.photo ? (
+                      <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-amber-400/60 shrink-0 bg-slate-800">
+                        {unit.coordinator.photo ? (
                           <img 
-                            src={member.photo} 
-                            alt={member.name}
-                            className="w-full h-full object-cover object-top"
+                            src={unit.coordinator.photo} 
+                            alt={unit.coordinator.name}
+                            className="w-full h-full object-cover"
                             referrerPolicy="no-referrer"
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-slate-400">
-                            <User className="w-4 h-4" />
+                            <User className="w-6 h-6" />
                           </div>
                         )}
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                          <Camera className="w-3 h-3 text-amber-300" />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white">
+                          <Camera className="w-4 h-4 text-amber-300" />
                         </div>
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <span className="text-[10px] font-bold text-sky-200 block truncate group-hover:text-amber-300 transition leading-tight">
-                          {member.role}
+                        <span className="text-[10px] font-black uppercase text-amber-400 block truncate">
+                          {unit.coordinator.role}
                         </span>
-                        <span className="text-[11px] font-medium text-white block truncate mt-0.5">
-                          {member.name}
-                        </span>
+                        <h6 className="text-xs font-bold text-white truncate">
+                          {unit.coordinator.name}
+                        </h6>
+                        {unit.coordinator.nip && (
+                          <span className="text-[9px] font-mono text-slate-400 block truncate">
+                            NIP: {unit.coordinator.nip}
+                          </span>
+                        )}
                       </div>
                     </div>
-                  ))}
+
+                    {/* Sub-items Line & List */}
+                    <div className="w-0.5 h-3 bg-slate-700 mb-2"></div>
+
+                    <div className="w-full space-y-2">
+                      {unit.items.map((person) => {
+                        const matched = isMatched(person.name, person.role);
+                        return (
+                          <div 
+                            key={person.id}
+                            onClick={() => handleEditClick(person, unit.id, false, false)}
+                            className={`group relative cursor-pointer p-2.5 rounded-xl bg-slate-800/80 border ${
+                              matched ? 'border-slate-700 hover:border-blue-400 hover:bg-slate-800' : 'border-slate-800/40 opacity-40'
+                            } transition-all flex items-center gap-2.5`}
+                          >
+                            <div className="relative w-9 h-9 rounded-lg overflow-hidden border border-slate-600 shrink-0 bg-slate-700">
+                              {person.photo ? (
+                                <img 
+                                  src={person.photo} 
+                                  alt={person.name}
+                                  className="w-full h-full object-cover"
+                                  referrerPolicy="no-referrer"
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-slate-400">
+                                  <User className="w-4 h-4" />
+                                </div>
+                              )}
+                              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white">
+                                <Camera className="w-3.5 h-3.5 text-blue-300" />
+                              </div>
+                            </div>
+
+                            <div className="flex-1 min-w-0 text-left">
+                              <span className="text-[9px] font-semibold text-slate-300 block truncate">
+                                {person.role}
+                              </span>
+                              <h6 className="text-[11px] font-bold text-white truncate group-hover:text-amber-300 transition">
+                                {person.name}
+                              </h6>
+                              {person.nip && (
+                                <span className="text-[9px] font-mono text-slate-400 block truncate">
+                                  {person.nip}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* LEVEL 3: KELOMPOK JABATAN FUNGSIONAL NAKES (BOTTOM FOOTER TRAY) */}
+              <div className="w-full mt-10 pt-6 border-t border-slate-800/80">
+                <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 border border-slate-700/80 flex flex-col md:flex-row items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-blue-600/30 border border-blue-500/40 flex items-center justify-center text-sky-400 shrink-0">
+                      <Stethoscope className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h6 className="text-xs font-bold text-white uppercase tracking-wider">
+                        Kelompok Jabatan Fungsional Tenaga Kesehatan (Pergub DKI 14)
+                      </h6>
+                      <p className="text-[11px] text-slate-400">
+                        Dokter Umum • Dokter Gigi • Perawat • Bidan • Sanitarian • Nutrisionis • Apoteker • ATLM • Perekam Medis
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => openServiceDoc('struktur-pergub14')}
+                      className="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition flex items-center gap-1.5 shadow-sm"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      <span>Lihat PDF Dokumen Pergub 14</span>
+                    </button>
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
 
-          {/* Footer Note */}
-          <div className="mt-12 pt-6 border-t border-slate-800/80 w-full flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-2">
-            <div className="flex items-center gap-2">
-              <Info className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>
-                Pola tata kelola struktur Integrasi Layanan Primer (ILP) Puskesmas Kepulauan Seribu Selatan Tahun 2026.
-              </span>
             </div>
-            <span className="font-mono text-[11px] text-slate-400">
-              Update Otomatis • Terhubung Faskes Kepulauan
-            </span>
           </div>
-        </div>
-      </div>
-      </>
+        </>
       )}
 
-      {/* PHOTO & DETAIL EDITING MODAL ("dapat dimasukan foto") */}
+      {/* ================= MODAL EDIT PERSON / NAKES ================= */}
       {activeEditingPerson && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white text-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 animate-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-700 rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-5 text-white animate-in zoom-in-95">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold">
-                  <Camera className="w-4 h-4" />
-                </div>
-                <h4 className="font-black text-slate-900 text-base font-display">
-                  Perbarui Foto & Data Pejabat
+                <FileEdit className="w-5 h-5 text-amber-400" />
+                <h4 className="font-bold text-sm text-white">
+                  Edit Data &amp; Foto Pejabat / Staf
                 </h4>
               </div>
-              <button
+              <button 
                 onClick={() => setActiveEditingPerson(null)}
-                className="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition"
+                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="space-y-4 pt-4">
-              {/* Photo Preview & Upload Controls */}
-              <div className="flex items-center gap-4">
-                <div className="relative w-20 h-20 rounded-2xl overflow-hidden bg-slate-100 border-2 border-blue-600 shrink-0 shadow-md">
-                  {tempPhotoUrl ? (
-                    <img 
-                      src={tempPhotoUrl} 
-                      alt="Preview" 
-                      className="w-full h-full object-cover object-top"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-slate-400">
-                      <User className="w-8 h-8" />
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex-1 space-y-2">
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={handleFileUpload}
-                    accept="image/*"
-                    className="hidden"
+            {/* Photo Preview & Upload Controls */}
+            <div className="flex flex-col items-center gap-3">
+              <div className="relative w-28 h-28 rounded-2xl overflow-hidden border-2 border-amber-400 bg-slate-800 shadow-inner">
+                {tempPhotoUrl ? (
+                  <img 
+                    src={tempPhotoUrl} 
+                    alt="Preview" 
+                    className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
                   />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-slate-500">
+                    <User className="w-12 h-12" />
+                  </div>
+                )}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-1.5 transition shadow-sm"
+                >
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>Unggah Foto (JPG/PNG)</span>
+                </button>
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  onChange={handleFileUpload} 
+                  accept="image/*" 
+                  className="hidden" 
+                />
+
+                {tempPhotoUrl && (
                   <button
-                    onClick={() => fileInputRef.current?.click()}
                     type="button"
-                    className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition"
+                    onClick={() => setTempPhotoUrl('')}
+                    className="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-900/40 text-slate-300 hover:text-rose-400 text-xs transition"
+                    title="Hapus Foto"
                   >
-                    <Upload className="w-3.5 h-3.5" />
-                    <span>Upload Foto Baru</span>
+                    Hapus
                   </button>
-                  <p className="text-[10px] text-slate-500">
-                    Format JPG, PNG atau WebP (Maks 3MB). Foto akan langsung disimpan.
-                  </p>
-                </div>
+                )}
               </div>
+              <p className="text-[10px] text-slate-400 text-center">
+                Maksimal ukuran file 3MB. Foto otomatis disimpan ke penyimpanan lokal browser.
+              </p>
+            </div>
 
-              {/* Or Direct Image URL input */}
+            {/* Form Fields */}
+            <div className="space-y-3 text-xs">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Atau URL Foto (Web Link):
-                </label>
-                <input
-                  type="text"
-                  placeholder="https://images.unsplash.com/..."
-                  value={tempPhotoUrl}
-                  onChange={(e) => setTempPhotoUrl(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-hidden focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              {/* Editable Name */}
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Nama Lengkap & Gelar:
-                </label>
-                <input
-                  type="text"
-                  value={tempName}
+                <label className="block text-slate-300 font-semibold mb-1">Nama Lengkap &amp; Gelar:</label>
+                <input 
+                  type="text" 
+                  value={tempName} 
                   onChange={(e) => setTempName(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
-              {/* Editable Role */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Jabatan / Penugasan:
-                </label>
-                <input
-                  type="text"
-                  value={tempRole}
+                <label className="block text-slate-300 font-semibold mb-1">Jabatan / Satuan Pelaksana:</label>
+                <input 
+                  type="text" 
+                  value={tempRole} 
                   onChange={(e) => setTempRole(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
-              {/* Editable NIP (especially for leader) */}
-              {activeEditingPerson.isLeader && (
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
-                    NIP:
-                  </label>
-                  <input
-                    type="text"
-                    value={tempNip}
-                    onChange={(e) => setTempNip(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-              )}
+              <div>
+                <label className="block text-slate-300 font-semibold mb-1">NIP (Nomor Induk Pegawai):</label>
+                <input 
+                  type="text" 
+                  value={tempNip} 
+                  onChange={(e) => setTempNip(e.target.value)}
+                  placeholder="Contoh: 19850322 201001 2 031"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
             </div>
 
             {/* Modal Actions */}
-            <div className="flex items-center justify-end gap-2 pt-6 border-t border-slate-100 mt-5">
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
               <button
                 type="button"
                 onClick={() => setActiveEditingPerson(null)}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition"
+                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition"
               >
                 Batal
               </button>
               <button
                 type="button"
                 onClick={handleSavePerson}
-                className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md transition"
+                className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition flex items-center gap-1.5 shadow-md"
               >
                 <Check className="w-4 h-4" />
-                <span>Simpan Foto & Data</span>
+                <span>Simpan Perubahan</span>
               </button>
             </div>
           </div>
